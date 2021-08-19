@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from mbl.model.utils import (
     SpinOperators,
     Hamiltonian,
@@ -8,7 +9,7 @@ from mbl.model.utils import (
 
 class RandomHeisenberg(Hamiltonian):
 
-    def __init__(self, N: int, h: float, penalty: float, s_target: int):
+    def __init__(self, N: int, h: float, penalty: float, s_target: int, trial_id: int):
         """
 
         Args:
@@ -16,11 +17,13 @@ class RandomHeisenberg(Hamiltonian):
             h: Disorder strength.
             penalty: Penalty strength (or Lagrangian multiplier).
             s_target: The targeting total Sz charge sector.
+            trial_id: ID of the current disorder trial.
         """
         self.N = N
         self.h = h
         self.penalty = penalty
         self.s_target = s_target
+        self.trial_id = trial_id
         super(RandomHeisenberg, self).__init__(N, self._mpo)
         self._total_sz = TotalSz(N, self.eigvec).val
 
@@ -43,3 +46,18 @@ class RandomHeisenberg(Hamiltonian):
     @property
     def total_sz(self):
         return self._total_sz
+
+    @property
+    def df(self) -> pd.DataFrame:
+        n_row = len(self.eigval)
+        return pd.DataFrame(
+            {
+                'En': self.eigval,
+                'TotalSz': self._total_sz,
+                'SystemSize': [self.N] * n_row,
+                'Disorder': [self.h] * n_row,
+                'Penalty': [self.penalty] * n_row,
+                'STarget': [self.s_target] * n_row,
+                'TrialID': [self.trial_id] * n_row
+            }
+        )
