@@ -1,19 +1,23 @@
 import numpy as np
-import mbl
+from mbl.model.utils import (
+    SpinOperators,
+    Hamiltonian,
+    TotalSz
+)
 
 
-class RandomHeisenberg:
+class RandomHeisenberg(Hamiltonian):
 
     def __init__(self, N: int, h: float, penalty: float, s_target: int):
         self.N = N
         self.h = h
         self.penalty = penalty
         self.s_target = s_target
-        ham = mbl.Hamiltonian(N, self._mpo)
-        self._matrix = ham.matrix
+        super(RandomHeisenberg, self).__init__(N, self._mpo)
+        self._total_sz = TotalSz(N, self.eigvec).val
 
     def _mpo(self, site: int) -> np.ndarray:
-        Sp, Sm, Sz, I2, O2 = mbl.SpinOperators()
+        Sp, Sm, Sz, I2, O2 = SpinOperators()
 
         alpha = self.penalty * (0.25 + self.s_target ** 2 / self.N)
         beta = np.random.uniform(-self.h, self.h) - 2.0 * self.penalty * self.s_target
