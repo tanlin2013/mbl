@@ -9,6 +9,14 @@ from mbl.model.utils import (
 class RandomHeisenberg(Hamiltonian):
 
     def __init__(self, N: int, h: float, penalty: float, s_target: int):
+        """
+
+        Args:
+            N: System size.
+            h: Disorder strength.
+            penalty: Penalty strength (or Lagrangian multiplier).
+            s_target: The targeting total Sz charge sector.
+        """
         self.N = N
         self.h = h
         self.penalty = penalty
@@ -33,17 +41,5 @@ class RandomHeisenberg(Hamiltonian):
         )
 
     @property
-    def matrix(self) -> np.ndarray:
-        return self._matrix
-
-
-if __name__ == "__main__":
-
-    N = 2
-    h = 2
-    penalty = 0.0
-    s_target = 0
-
-    model = RandomHeisenberg(N, h, penalty, s_target)
-    print(model.matrix)
-    print(model.matrix.shape)
+    def total_sz(self):
+        return self._total_sz
