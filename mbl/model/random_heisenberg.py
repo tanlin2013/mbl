@@ -52,6 +52,7 @@ class RandomHeisenberg(Hamiltonian):
         n_row = len(self.eigval)
         return pd.DataFrame(
             {
+                'LevelID': list(range(n_row)),
                 'En': self.eigval,
                 'TotalSz': self._total_sz,
                 'SystemSize': [self.N] * n_row,
