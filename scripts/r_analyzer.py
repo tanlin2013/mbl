@@ -18,3 +18,5 @@ if __name__ == "__main__":
 
     r = agent.averaged_gap_ratio(df, AverageOrder.LevelFirst)
     print(r)
+    r2 = agent.averaged_gap_ratio(df, AverageOrder.DisorderFirst)
+    print(r2)
