@@ -1,6 +1,7 @@
 import pandas as pd
 import ray
 from tqdm import tqdm
+from pathlib import Path
 from mbl.model import RandomHeisenberg
 from mbl.distributed_computing import distribute
 
@@ -31,4 +32,4 @@ if __name__ == "__main__":
     merged_df = pd.concat(ray.get(jobs))
     ray.shutdown()
 
-    merged_df.to_csv('/Users/tandaolin/Desktop/random_heisenberg_config.csv', index=False)
+    merged_df.to_csv(f'{Path(__file__).parent}/random_heisenberg_config.csv', index=False)

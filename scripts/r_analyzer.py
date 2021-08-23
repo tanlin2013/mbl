@@ -1,4 +1,5 @@
 import pandas as pd
+from pathlib import Path
 from mbl.level_statistic import (
     LevelStatistic,
     AverageOrder
@@ -11,7 +12,7 @@ if __name__ == "__main__":
     h = 1.0
     total_sz = 0
 
-    raw_df = pd.read_csv('/Users/tandaolin/Desktop/random_heisenberg_config.csv')
+    raw_df = pd.read_csv(f'{Path(__file__).parent}/random_heisenberg_config.csv')
     agent = LevelStatistic(raw_df)
     df = agent.extract_gap(N, h, total_sz=total_sz)
     print(df.head(10))
