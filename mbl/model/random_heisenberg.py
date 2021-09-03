@@ -3,13 +3,14 @@ import pandas as pd
 from mbl.model.utils import (
     SpinOperators,
     Hamiltonian,
-    TotalSz
+    TotalSz,
+    Entanglement
 )
 
 
 class RandomHeisenberg(Hamiltonian):
 
-    def __init__(self, N: int, h: float, penalty: float, s_target: int, trial_id: int):
+    def __init__(self, N: int, h: float, penalty: float = 0, s_target: int = 0, trial_id: int = None):
         """
 
         Args:
@@ -26,6 +27,7 @@ class RandomHeisenberg(Hamiltonian):
         self.trial_id = trial_id
         super(RandomHeisenberg, self).__init__(N, self._mpo)
         self._total_sz = TotalSz(N, self.eigvec).val
+        self._entanglement_entropy = Entanglement(self.eigvec).von_neumann_entropy()
 
     def _mpo(self, site: int) -> np.ndarray:
         Sp, Sm, Sz, I2, O2 = SpinOperators()
@@ -55,6 +57,7 @@ class RandomHeisenberg(Hamiltonian):
                 'LevelID': list(range(n_row)),
                 'En': self.eigval,
                 'TotalSz': self._total_sz,
+                'EntanglementEntropy': self._entanglement_entropy,
                 'SystemSize': [self.N] * n_row,
                 'Disorder': [self.h] * n_row,
                 'Penalty': [self.penalty] * n_row,
