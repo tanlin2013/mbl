@@ -1,10 +1,13 @@
 .PHONY: test build
 
 build:
-	docker build --no-cache --force-rm -t mbl .
+	docker build --no-cache --rm -t mbl .
 
 run:
-	docker run --rm -i -t -p 8501:8501 mbl
+	docker run --rm -it -p 8501:8501 -v $(pwd)/data:/home/data mbl
+
+exec:
+	docker exec -it mbl /bin/bash
 
 test:
-	python -m unittest discover -s tests -p 'test_*.py'
+	python -m unittest discover -s test -p 'test_*.py'

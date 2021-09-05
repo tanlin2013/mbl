@@ -1,5 +1,5 @@
-import pandas as pd
 import ray
+import pandas as pd
 from tqdm import tqdm
 from pathlib import Path
 from mbl.model import RandomHeisenberg
@@ -13,14 +13,14 @@ def main(N: int, h: float, penalty: float, s_target: int, trial_id: int) -> pd.D
 
 if __name__ == "__main__":
 
-    N = 10
     penalty = 0.0
     s_target = 0
     n_conf = 500
 
     params = [
         (N, h, penalty, s_target, trial_id)
-        for h in [1.0, 4.0]
+        for N in [8, 10, 12]
+        for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
         for trial_id in range(n_conf)
     ]
 
@@ -32,4 +32,4 @@ if __name__ == "__main__":
     merged_df = pd.concat(ray.get(jobs))
     ray.shutdown()
 
-    merged_df.to_csv(f'{Path(__file__).parent}/random_heisenberg_config.csv', index=False)
+    merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_config.parquet', index=False)

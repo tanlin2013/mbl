@@ -128,4 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-.idea
+# iOS Finder
+.idea/
+
+# Data
+data/
