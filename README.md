@@ -19,9 +19,9 @@ Getting Started
 
 1. Installation
    
-    * using Docker (required to be built from source):
+    * using Docker:
         ```
-        make build & make run
+        docker run --rm -it -v $(PWD)/data:/home/data tanlin2013/mbl
         ```
     * using pip:
         ```
