@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Echo target
-        run: echo "Deploying to targeted machine, ${{ github.event.inputs.target }}"
+        run: echo "Deploying to targeted machine - ${{ github.event.inputs.target }}"
 
       - name: Deploy to workstation through ssh
         if: github.event.inputs.target == 'workstation'
@@ -24,7 +24,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            docker run --rm -it -v ~/projects/mbl/data:/home/data tanlin2013/mbl python scripts/sampler.py
+            docker run --rm -v ~/projects/mbl/data:/home/data tanlin2013/mbl python scripts/sampler.py
 
       - name: Deploy to cluster through ssh
         if: github.event.inputs.target == 'cluster'
