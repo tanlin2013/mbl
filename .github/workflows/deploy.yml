@@ -1,0 +1,37 @@
+name: CI deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Working machine'
+        required: true
+        default: 'workstation'
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo target
+        run: echo "Deploying to targeted machine, ${{ github.event.inputs.target }}"
+
+      - name: Deploy to workstation through ssh
+        if: github.event.inputs.target == 'workstation'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.WORKSTATION_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            docker run --rm -it -v ~/projects/mbl/data:/home/data tanlin2013/mbl python scripts/sampler.py
+
+      - name: Deploy to cluster through ssh
+        if: github.event.inputs.target == 'cluster'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.CLUSTER_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: | # TODO: submit job to HPC scheduling system
+            singularity run -B ~/projects/mbl/data:/home/data docker://tanlin2013/mbl python scripts/sampler.py

@@ -1,6 +1,7 @@
 # MBL: many-body localization
 ![build](https://github.com/tanlin2013/mbl/actions/workflows/build.yml/badge.svg)
 ![test](https://github.com/tanlin2013/mbl/actions/workflows/test.yml/badge.svg)
+![deploy](https://github.com/tanlin2013/mbl/actions/workflows/deploy.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [Dashboard](https://streamlit-mbl.herokuapp.com/) |
@@ -38,7 +39,7 @@ Getting Started
 
 License
 -------
-© Contributors, 2021. Licensed under a [MIT](https://github.com/tanlin2013/mbl/master/LICENSE) license.
+© Tan Tao-Lin, 2021. Licensed under a [MIT](https://github.com/tanlin2013/mbl/master/LICENSE) license.
 
 Reference
 -------
