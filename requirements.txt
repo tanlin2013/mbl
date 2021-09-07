@@ -6,3 +6,5 @@ tqdm==4.62.1
 plotly==5.2.1
 streamlit==0.87.0
 orjson==3.6.3
+fsspec==2021.8.1
+s3fs==2021.8.1
