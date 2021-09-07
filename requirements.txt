@@ -5,3 +5,4 @@ ray==1.5.2
 tqdm==4.62.1
 plotly==5.2.1
 streamlit==0.87.0
+orjson==3.6.3
