@@ -27,7 +27,9 @@ class RandomHeisenberg(Hamiltonian):
         self.trial_id = trial_id
         super(RandomHeisenberg, self).__init__(N, self._mpo)
         self._total_sz = TotalSz(N, self.eigvec).val
-        self._entanglement_entropy = Entanglement(self.eigvec).von_neumann_entropy()
+        _entanglement = Entanglement(self.eigvec)
+        self._edge_entropy = _entanglement.von_neumann_entropy(position=1)
+        self._bipartite_entropy = _entanglement.von_neumann_entropy(position=N//2)
 
     def _mpo(self, site: int) -> np.ndarray:
         Sp, Sm, Sz, I2, O2 = SpinOperators()
@@ -57,7 +59,8 @@ class RandomHeisenberg(Hamiltonian):
                 'LevelID': list(range(n_row)),
                 'En': self.eigval,
                 'TotalSz': self._total_sz,
-                'EntanglementEntropy': self._entanglement_entropy,
+                'EdgeEntropy': self._edge_entropy,
+                'BipartiteEntropy': self._bipartite_entropy,
                 'SystemSize': [self.N] * n_row,
                 'Disorder': [self.h] * n_row,
                 'Penalty': [self.penalty] * n_row,
