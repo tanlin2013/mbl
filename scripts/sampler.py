@@ -20,7 +20,7 @@ if __name__ == "__main__":
     params = [
         (N, h, penalty, s_target, trial_id)
         for N in [8, 10, 12]
-        for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
+        for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
         for trial_id in range(n_conf)
     ]
 
