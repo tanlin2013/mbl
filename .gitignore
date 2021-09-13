@@ -132,4 +132,5 @@ dmypy.json
 .idea/
 
 # Data
-data/
+data/*
+!data/.gitkeep
