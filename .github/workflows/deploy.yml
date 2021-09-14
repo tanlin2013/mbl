@@ -24,7 +24,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            docker run --entrypoint python --rm --pull=always -v ~/projects/mbl/data:/home/data tanlin2013/mbl scripts/sampler.py &
+            nohup \
+            docker run --entrypoint python --rm --pull=always -v ~/projects/mbl/data:/home/data tanlin2013/mbl scripts/sampler.py \
+            > foo.out 2> foo.err < /dev/null &
 
       - name: Deploy to cluster through ssh
         if: github.event.inputs.target == 'cluster'
