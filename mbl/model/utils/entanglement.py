@@ -8,6 +8,7 @@ class Entanglement:
 
     @staticmethod
     def singular_values(v: np.ndarray, position: int = 1) -> np.ndarray:
+        assert not np.isnan(v).any(), "v contains nan value"
         assert v.ndim == 1, "v is supposed to be an 1d array"
         assert 0 < position < len(v) - 1, \
             f"position can't be negative or larger than the system size {len(v)}, got {position}"
