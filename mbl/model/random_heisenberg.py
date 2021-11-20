@@ -68,3 +68,13 @@ class RandomHeisenberg(Hamiltonian):
                 'TrialID': [self.trial_id] * n_row
             }
         )
+
+
+class SpectralFoldedRandomHeisenberg(RandomHeisenberg):
+
+    def __init__(self, *args, **kwargs):
+        super(SpectralFoldedRandomHeisenberg, self).__init__(*args, **kwargs)
+
+    def _mpo(self, site: int) -> np.ndarray:
+        M = super(SpectralFoldedRandomHeisenberg, self)._mpo(site)
+        return np.tensordot(M, M, axes=(3, 2)).swapaxes(1, 3).swapaxes(3, 4).swapaxes(2, 4).reshape((36, 36, 2, 2))

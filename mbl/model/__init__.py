@@ -1,1 +1,1 @@
-from mbl.model.random_heisenberg import RandomHeisenberg
+from mbl.model.random_heisenberg import RandomHeisenberg, SpectralFoldedRandomHeisenberg

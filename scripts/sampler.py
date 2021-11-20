@@ -2,13 +2,13 @@ import ray
 import pandas as pd
 from tqdm import tqdm
 from pathlib import Path
-from mbl.model import RandomHeisenberg
+from mbl.model import RandomHeisenberg, SpectralFoldedRandomHeisenberg
 from mbl.distributed_computing import distribute
 
 
 @ray.remote
 def main(N: int, h: float, penalty: float, s_target: int, trial_id: int) -> pd.DataFrame:
-    return RandomHeisenberg(N, h, penalty, s_target, trial_id).df
+    return SpectralFoldedRandomHeisenberg(N, h, penalty, s_target, trial_id).df
 
 
 if __name__ == "__main__":
@@ -19,8 +19,8 @@ if __name__ == "__main__":
 
     params = [
         (N, h, penalty, s_target, trial_id)
-        for N in [8, 10, 12]
-        for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+        for N in [8, 10]
+        for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
         for trial_id in range(n_conf)
     ]
 
@@ -32,4 +32,4 @@ if __name__ == "__main__":
     merged_df = pd.concat(ray.get(jobs))
     ray.shutdown()
 
-    merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_config.parquet', index=False)
+    merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/spectral_folded_random_heisenberg_config.parquet', index=False)
