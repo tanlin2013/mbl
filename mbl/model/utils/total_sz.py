@@ -1,22 +1,28 @@
 import numpy as np
-from mbl.model.utils import (
+from tnpy.operators import (
     SpinOperators,
-    Hamiltonian
+    MPO,
+    FullHamiltonian
 )
 
 
-class TotalSz(Hamiltonian):
+class TotalSz(FullHamiltonian):
 
     def __init__(self, N: int, eigvec: np.ndarray):
-        super(TotalSz, self).__init__(N, self._mpo, solve=False)
+        self._mpo = MPO(N, self._elem)
+        super(TotalSz, self).__init__(self.mpo)
         self._val = np.diag(eigvec.T @ self.matrix @ eigvec)
 
-    def _mpo(self, site: int) -> np.ndarray:
+    def _elem(self, site: int) -> np.ndarray:
         Sp, Sm, Sz, I2, O2 = SpinOperators()
         return np.array(
             [[I2, Sz],
              [O2, I2]]
         )
+
+    @property
+    def mpo(self):
+        return self._mpo
 
     @property
     def val(self) -> np.ndarray:

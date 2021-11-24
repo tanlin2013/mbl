@@ -2,20 +2,24 @@ import ray
 import pandas as pd
 from tqdm import tqdm
 from pathlib import Path
-from mbl.model import RandomHeisenberg, SpectralFoldedRandomHeisenberg
+from mbl import model
 from mbl.distributed_computing import distribute
+
+
+flag = 'spectral_folded_random_heisenberg'
+camel_case_flag = ''.join(word.title() for word in flag.split('_'))
 
 
 @ray.remote
 def main(N: int, h: float, penalty: float, s_target: int, trial_id: int) -> pd.DataFrame:
-    return SpectralFoldedRandomHeisenberg(N, h, penalty, s_target, trial_id).df
+    return getattr(model, f'{camel_case_flag}ED')(N, h, penalty, s_target, trial_id).df
 
 
 if __name__ == "__main__":
 
     penalty = 0.0
     s_target = 0
-    n_conf = 500
+    n_conf = 100
 
     params = [
         (N, h, penalty, s_target, trial_id)
@@ -32,4 +36,4 @@ if __name__ == "__main__":
     merged_df = pd.concat(ray.get(jobs))
     ray.shutdown()
 
-    merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/spectral_folded_random_heisenberg_config.parquet', index=False)
+    merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/{flag}_config.parquet', index=False)
