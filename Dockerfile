@@ -1,7 +1,7 @@
-FROM python:3.9
+FROM tanlin2013/tnpy:latest
 MAINTAINER "TaoLin" <tanlin2013@gmail.com>
 
-ARG WORKDIR=/home
+ARG WORKDIR=/home/mbl
 ENV PYTHONPATH "${PYTHONPATH}:$WORKDIR"
 WORKDIR $WORKDIR
 

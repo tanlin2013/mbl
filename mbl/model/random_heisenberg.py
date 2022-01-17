@@ -1,5 +1,8 @@
+import numpy as np
 import pandas as pd
+from time import time
 from tnpy.exact_diagonalization import ExactDiagonalization
+from tnpy.tsdrg import TSDRG
 from tnpy.model import RandomHeisenberg, SpectralFoldedRandomHeisenberg
 from mbl.model.utils import (
     TotalSz,
@@ -54,3 +57,47 @@ class SpectralFoldedRandomHeisenbergED(RandomHeisenbergED, SpectralFoldedRandomH
 
     def __init__(self, *args, **kwargs):
         super(SpectralFoldedRandomHeisenbergED, self).__init__(*args, **kwargs)
+
+
+class RandomHeisenbergTSDRG:
+
+    def __init__(self, N: int, h: float, chi: int, penalty: float = 0, s_target: int = 0, trial_id: int = None, seed: int = None):
+        seed = int(time()) if seed is None else seed
+        self.model = RandomHeisenberg(N, h, penalty, s_target, trial_id, seed)
+        self.folded_model = SpectralFoldedRandomHeisenberg(N, h, penalty, s_target, trial_id, seed=self.model.seed)
+        self.tsdrg = TSDRG(self.folded_model.mpo, chi)
+        self.tsdrg.run()
+        self._evals = np.diag(self.tsdrg.energies(self.model.mpo))
+
+    @property
+    def sorting_order(self) -> np.ndarray:
+        return np.argsort(self._evals)
+
+    @property
+    def evals(self) -> np.ndarray:
+        return self._evals[self.sorting_order]
+
+    @property
+    def variance(self) -> np.ndarray:
+        var = self.tsdrg.energies(self.folded_model.mpo) - np.square(self.tsdrg.energies(self.model.mpo))
+        return np.sum(var[self.sorting_order], axis=1)
+
+    @property
+    def df(self) -> pd.DataFrame:
+        n_row = len(self.evals)
+        return pd.DataFrame(
+            {
+                'LevelID': list(range(n_row)),
+                'En': self.evals,
+                'Variance': self.variance,
+                'EdgeEntropy': self.tsdrg.entanglement_entropy(
+                    on_site=0,
+                    energy_level=np.argmin(self.sorting_order)
+                ),
+                'SystemSize': [self.model.N] * n_row,
+                'Disorder': [self.model.h] * n_row,
+                'Penalty': [self.model.penalty] * n_row,
+                'STarget': [self.model.s_target] * n_row,
+                'TrialID': [self.model.trial_id] * n_row
+            }
+        )

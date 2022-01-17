@@ -3,7 +3,11 @@ import numpy as np
 import pandas as pd
 from tensornetwork import ncon
 from tnpy.operators import SpinOperators
-from mbl.model import RandomHeisenbergED, SpectralFoldedRandomHeisenbergED
+from mbl.model import (
+    RandomHeisenbergED,
+    SpectralFoldedRandomHeisenbergED,
+    RandomHeisenbergTSDRG
+)
 
 
 class TesRandomHeisenbergED(unittest.TestCase):
@@ -72,6 +76,14 @@ class TestSpectralFoldedRandomHeisenbergED(unittest.TestCase):
             ncon([W2, W2], [(-1, '-a1', 1), (-2, 1, '-b2')]).reshape((36, 2, 2)),
             self.agent.mpo[1].tensor
         )
+
+
+class TestRandomHeisenbergTSDRG(unittest.TestCase):
+
+    agent = RandomHeisenbergTSDRG(N=10, h=10.0, chi=2**6, penalty=0, s_target=0, trial_id=0, seed=2021)
+
+    def test_df(self):
+        print(self.agent.df)
 
 
 if __name__ == '__main__':
