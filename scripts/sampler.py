@@ -15,7 +15,7 @@ def main(N: int, h: float, penalty: float, s_target: int, trial_id: int) -> pd.D
     return getattr(model, f'{camel_case_flag}ED')(N, h, penalty, s_target, trial_id).df
 
 
-@ray.remote
+@ray.remote(memory=10 * 1024 ** 3)
 def main2(N: int, h: float, chi: int, penalty: float, s_target: int, trial_id: int, seed: int) -> pd.DataFrame:
     return model.RandomHeisenbergTSDRG(N, h, chi, penalty, s_target, trial_id, seed).df
 
