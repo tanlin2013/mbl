@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from enum import Enum
-from typing import Union
 
 
 class AverageOrder(Enum):
@@ -24,13 +23,15 @@ class LevelStatistic:
         return np.append(r, np.nan)
 
     def extract_gap(self, N: int, h: float, penalty: float = 0.0, s_target: int = 0,
-                    total_sz: Union[int, None] = None, tol: float = 1e-12) -> pd.DataFrame:
+                    chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
         df = self.raw_df.query(
             f'(SystemSize == {N}) & '
             f'(Disorder == {h}) & '
             f'(Penalty == {penalty}) & '
             f'(STarget == {s_target})'
         )
+        if chi is not None:
+            df.query(f'TruncationDim == {chi}')
         if total_sz is not None:
             df = df.query(f'abs(TotalSz - {total_sz}) < {tol}')
         df['EnergyGap'] = df.groupby(['TrialID'])['En'].apply(lambda x: x.diff())

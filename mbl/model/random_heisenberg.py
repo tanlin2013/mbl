@@ -96,8 +96,10 @@ class RandomHeisenbergTSDRG:
                 ),
                 'SystemSize': [self.model.N] * n_row,
                 'Disorder': [self.model.h] * n_row,
+                'TruncationDim': [self.tsdrg.chi] * n_row,
                 'Penalty': [self.model.penalty] * n_row,
                 'STarget': [self.model.s_target] * n_row,
-                'TrialID': [self.model.trial_id] * n_row
+                'TrialID': [self.model.trial_id] * n_row,
+                'Seed': [self.model.seed] * n_row
             }
         )
