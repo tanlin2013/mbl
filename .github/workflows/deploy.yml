@@ -13,6 +13,7 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Echo target
         run: echo "Deploying to targeted machine - ${{ github.event.inputs.target }}"
 
@@ -25,8 +26,19 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             nohup \
-            docker run --entrypoint python --rm --pull=always -v ~/projects/mbl/data:/home/mbl/data tanlin2013/mbl scripts/sampler.py \
+            docker run --entrypoint python --rm --pull=always \
+            -v ~/data:/home/mbl/data tanlin2013/mbl scripts/sampler.py \
             > foo.out 2> foo.err < /dev/null &
+
+      - name: rsync deployments
+        if: github.event.inputs.target == 'cluster'
+        uses: burnett01/rsync-deployments@5.2
+        with:
+          switches: -avzr --delete
+          remote_path: '~/projects/'
+          remote_host: ${{ secrets.CLUSTER_HOST }}
+          remote_user: ${{ secrets.USERNAME }}
+          remote_key: ${{ secrets.KEY }}
 
       - name: Deploy to cluster through ssh
         if: github.event.inputs.target == 'cluster'
@@ -35,5 +47,6 @@ jobs:
           host: ${{ secrets.CLUSTER_HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          script: | # TODO: submit job to HPC scheduling system
-            singularity run -B ~/projects/mbl/data:/home/data docker://tanlin2013/mbl python scripts/sampler.py
+          script: |
+            singularity build --fakeroot mbl.sif singularity.def &&
+            singularity exec --bind ~/data:/data mbl.sif python scripts/sampler.py
