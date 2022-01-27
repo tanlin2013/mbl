@@ -30,17 +30,17 @@ jobs:
             -v ~/data:/home/mbl/data tanlin2013/mbl scripts/sampler.py \
             > foo.out 2> foo.err < /dev/null &
 
-      - name: rsync deployments
+      - name: Deploy to cluster with rsync
         if: github.event.inputs.target == 'cluster'
         uses: burnett01/rsync-deployments@5.2
         with:
           switches: -avzr --delete
-          remote_path: '~/projects/'
+          remote_path: '~/projects/mbl'
           remote_host: ${{ secrets.CLUSTER_HOST }}
           remote_user: ${{ secrets.USERNAME }}
           remote_key: ${{ secrets.KEY }}
 
-      - name: Deploy to cluster through ssh
+      - name: Run singularity on cluster
         if: github.event.inputs.target == 'cluster'
         uses: appleboy/ssh-action@master
         with:
@@ -48,5 +48,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
+            cd projects/mbl &&
             singularity build --fakeroot mbl.sif singularity.def &&
             singularity exec --bind ~/data:/data mbl.sif python scripts/sampler.py
