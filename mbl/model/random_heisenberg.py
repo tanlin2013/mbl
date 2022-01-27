@@ -1,38 +1,68 @@
+import logging
+import pickle
 import numpy as np
 import pandas as pd
 from time import time
+from tnpy.operators import FullHamiltonian
+from tnpy.model import RandomHeisenberg, TotalSz
 from tnpy.exact_diagonalization import ExactDiagonalization
-from tnpy.tsdrg import TSDRG
-from tnpy.model import RandomHeisenberg, SpectralFoldedRandomHeisenberg
-from mbl.model.utils import (
-    TotalSz,
-    Entanglement
+from tnpy.tsdrg import (
+    TreeTensorNetworkSDRG as tSDRG,
+    TreeTensorNetworkMeasurements
 )
 
 
-class RandomHeisenbergED(RandomHeisenberg):
+class RandomHeisenbergED:
 
-    def __init__(self, N: int, h: float, penalty: float = 0, s_target: int = 0, trial_id: int = None, seed: int = None):
+    def __init__(self, n: int, h: float, trial_id: int = None, seed: int = None,
+                 penalty: float = 0, s_target: int = 0, offset: float = 0, spectral_folding: bool = False):
         """
 
         Args:
-            N: System size.
+            n: System size.
             h: Disorder strength.
-            penalty: Penalty strength (or Lagrangian multiplier).
-            s_target: The targeting total Sz charge sector.
             trial_id: ID of the current disorder trial.
             seed: Random seed used to initialize the pseudo-random number generator.
+            penalty: Penalty strength (or Lagrangian multiplier).
+            s_target: The targeting total Sz charge sector.
+            offset:
+            spectral_folding:
         """
-        super(RandomHeisenbergED, self).__init__(N, h, penalty, s_target, trial_id, seed)
-        self.ed = ExactDiagonalization(self.mpo)
-        self._total_sz = TotalSz(N, self.ed.evecs).val
-        _entanglement = Entanglement(self.ed.evecs)
-        self._edge_entropy = _entanglement.von_neumann_entropy(position=1)
-        self._bipartite_entropy = _entanglement.von_neumann_entropy(position=N//2)
+        seed = int(time()) if seed is None else seed
+        self.model = RandomHeisenberg(n=n, h=h, trial_id=trial_id, seed=seed)
+        if spectral_folding:
+            logging.info("Using spectral folding method.")
+            self.folded_model = RandomHeisenberg(
+                n=n, h=h, trial_id=trial_id, seed=seed, penalty=penalty, s_target=s_target, offset=offset
+            )
+            self.ed = ExactDiagonalization(self.folded_model.mpo.square())
+            self._evals = np.diag(self.ed.evecs.T @ FullHamiltonian(self.model.mpo) @ self.ed.evecs)
+            self._sorting_order = np.argsort(self._evals)
+        else:
+            self.folded_model = self.model
+            self.ed = ExactDiagonalization(self.model.mpo)
+            self._evals = self.ed.evals
+            self._sorting_order = None
 
     @property
-    def total_sz(self):
-        return self._total_sz
+    def sorting_order(self) -> np.ndarray:
+        return self._sorting_order
+
+    @property
+    def evals(self) -> np.ndarray:
+        return self._evals if self.sorting_order is None else self._evals[self.sorting_order]
+
+    @property
+    def total_sz(self) -> np.ndarray:
+        _total_sz = FullHamiltonian(TotalSz(self.model.n).mpo).matrix
+        exp_val = np.diag(self.ed.evecs.T @ _total_sz @ self.ed.evecs)
+        return exp_val if self.sorting_order is None else exp_val[self.sorting_order]
+
+    def entanglement_entropy(self, site: int) -> np.ndarray:
+        entropy = np.array(
+            [self.ed.entanglement_entropy(site, level_idx) for level_idx in range(len(self.ed.matrix))]
+        )
+        return entropy if self.sorting_order is None else entropy[self.sorting_order]
 
     @property
     def df(self) -> pd.DataFrame:
@@ -40,38 +70,39 @@ class RandomHeisenbergED(RandomHeisenberg):
         return pd.DataFrame(
             {
                 'LevelID': list(range(n_row)),
-                'En': self.ed.evals,
-                'TotalSz': self._total_sz,
-                'EdgeEntropy': self._edge_entropy,
-                'BipartiteEntropy': self._bipartite_entropy,
-                'SystemSize': [self.N] * n_row,
-                'Disorder': [self.h] * n_row,
-                'Penalty': [self.penalty] * n_row,
-                'STarget': [self.s_target] * n_row,
-                'TrialID': [self.trial_id] * n_row
+                'En': self.evals.tolist(),
+                'TotalSz': self.total_sz.tolist(),
+                'EdgeEntropy': self.entanglement_entropy(site=0).tolist(),
+                'BipartiteEntropy': self.entanglement_entropy(site=self.model.n // 2 - 1).tolist(),
+                'SystemSize': [self.model.n] * n_row,
+                'Disorder': [self.model.h] * n_row,
+                'TrialID': [self.model.trial_id] * n_row,
+                'Seed': [self.model.seed] * n_row,
+                'Penalty': [self.folded_model.penalty] * n_row,
+                'STarget': [self.folded_model.s_target] * n_row,
+                'Offset': [self.folded_model.offset] * n_row
             }
         )
 
 
-class SpectralFoldedRandomHeisenbergED(RandomHeisenbergED, SpectralFoldedRandomHeisenberg):
+class RandomHeisenbergTSDRG(TreeTensorNetworkMeasurements):
 
-    def __init__(self, *args, **kwargs):
-        super(SpectralFoldedRandomHeisenbergED, self).__init__(*args, **kwargs)
-
-
-class RandomHeisenbergTSDRG:
-
-    def __init__(self, N: int, h: float, chi: int, penalty: float = 0, s_target: int = 0, trial_id: int = None, seed: int = None):
+    def __init__(self, n: int, h: float, chi: int, trial_id: int = None, seed: int = None,
+                 penalty: float = 0, s_target: int = 0, offset: float = 0):
         seed = int(time()) if seed is None else seed
-        self.model = RandomHeisenberg(N, h, penalty, s_target, trial_id, seed)
-        self.folded_model = SpectralFoldedRandomHeisenberg(N, h, penalty, s_target, trial_id, seed=self.model.seed)
-        self.tsdrg = TSDRG(self.folded_model.mpo, chi)
+        self.model = RandomHeisenberg(n=n, h=h, trial_id=trial_id, seed=seed)
+        self.folded_model = RandomHeisenberg(
+            n=n, h=h, trial_id=trial_id, seed=seed, penalty=penalty, s_target=s_target, offset=offset
+        )
+        self.tsdrg = tSDRG(self.folded_model.mpo.square(), chi=chi)
         self.tsdrg.run()
-        self._evals = np.diag(self.tsdrg.energies(self.model.mpo))
+        super(RandomHeisenbergTSDRG, self).__init__(self.tsdrg.tree)
+        self._evals = self.expectation_value(self.model.mpo)
+        self._sorting_order = np.argsort(self._evals)
 
     @property
     def sorting_order(self) -> np.ndarray:
-        return np.argsort(self._evals)
+        return self._sorting_order
 
     @property
     def evals(self) -> np.ndarray:
@@ -79,27 +110,41 @@ class RandomHeisenbergTSDRG:
 
     @property
     def variance(self) -> np.ndarray:
-        var = self.tsdrg.energies(self.folded_model.mpo) - np.square(self.tsdrg.energies(self.model.mpo))
-        return np.sum(var[self.sorting_order], axis=1)
+        var = self.expectation_value(self.model.mpo.square()) \
+              - np.square(self.expectation_value(self.model.mpo))
+        return var[self.sorting_order]
+
+    @property
+    def total_sz(self) -> np.ndarray:
+        return self.expectation_value(TotalSz(self.model.n).mpo)
+
+    @property
+    def edge_entropy(self) -> np.ndarray:
+        return np.array([
+            self.entanglement_entropy(site=0, level_idx=level_idx) for level_idx in range(self.tsdrg.chi)
+        ])[self.sorting_order]
 
     @property
     def df(self) -> pd.DataFrame:
-        n_row = len(self.evals)
+        n_row = self.tsdrg.chi
         return pd.DataFrame(
             {
                 'LevelID': list(range(n_row)),
-                'En': self.evals,
-                'Variance': self.variance,
-                'EdgeEntropy': self.tsdrg.entanglement_entropy(
-                    on_site=0,
-                    energy_level=np.argmin(self.sorting_order)
-                ),
-                'SystemSize': [self.model.N] * n_row,
-                'Disorder': [self.model.h] * n_row,
+                'En': self.evals.tolist(),
+                'Variance': self.variance.tolist(),
+                'TotalSz': self.total_sz.tolist(),
+                'EdgeEntropy': self.edge_entropy.tolist(),
                 'TruncationDim': [self.tsdrg.chi] * n_row,
-                'Penalty': [self.model.penalty] * n_row,
-                'STarget': [self.model.s_target] * n_row,
+                'SystemSize': [self.model.n] * n_row,
+                'Disorder': [self.model.h] * n_row,
                 'TrialID': [self.model.trial_id] * n_row,
-                'Seed': [self.model.seed] * n_row
+                'Seed': [self.model.seed] * n_row,
+                'Penalty': [self.folded_model.penalty] * n_row,
+                'STarget': [self.folded_model.s_target] * n_row,
+                'Offset': [self.folded_model.offset] * n_row
             }
         )
+
+    def save_tree(self, filename: str):
+        logging.info(f"Dumping tree into file {filename}.p")
+        pickle.dump(self.tsdrg.tree, open(f'{filename}.p', 'wb'))
