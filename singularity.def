@@ -1,0 +1,15 @@
+Bootstrap: docker
+From: tanlin2013/tnpy:latest
+Stage: build
+
+%labels
+    Author tanlin2013@gmail.com
+    Version 0.0.1
+
+%files
+    .
+
+%post
+    pip install --upgrade pip
+    pip install -r requirements.txt
+    python setup.py install
