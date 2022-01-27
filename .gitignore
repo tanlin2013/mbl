@@ -134,3 +134,6 @@ dmypy.json
 # Data
 data/*
 !data/.gitkeep
+
+# Dask
+dask-worker-space/

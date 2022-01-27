@@ -6,8 +6,8 @@ with open('requirements.txt') as f:
 
 setup(
     name='mbl',
-    version='0.0.1',
-    packages=['mbl', 'mbl.model', 'mbl.model.utils'],
+    version='0.0.3',
+    packages=['mbl', 'mbl.model'],
     url='https://github.com/tanlin2013/mbl',
     license='MIT',
     author='Tan Tao-Lin',
