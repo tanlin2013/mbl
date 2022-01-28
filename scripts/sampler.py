@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 from pathlib import Path
 from dask_jobqueue import SLURMCluster
-from mbl.distributed import Distribute
+from ..mbl.distributed import Distribute
 
 
 def main1(kwargs) -> pd.DataFrame:
