@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: 'Working machine'
+        description: 'Deploy on (workstation or cluster)'
         required: true
         default: 'workstation'
 
@@ -17,7 +17,7 @@ jobs:
       - name: Echo target
         run: echo "Deploying to targeted machine - ${{ github.event.inputs.target }}"
 
-      - name: Deploy to workstation through ssh
+      - name: Deploy built docker image to workstation
         if: github.event.inputs.target == 'workstation'
         uses: appleboy/ssh-action@master
         with:
@@ -30,7 +30,7 @@ jobs:
             -v ~/data:/home/mbl/data tanlin2013/mbl scripts/sampler.py \
             > foo.out 2> foo.err < /dev/null &
 
-      - name: Deploy to cluster with rsync
+      - name: Rsync repo to cluster
         if: github.event.inputs.target == 'cluster'
         uses: burnett01/rsync-deployments@5.2
         with:
@@ -40,7 +40,7 @@ jobs:
           remote_user: ${{ secrets.USERNAME }}
           remote_key: ${{ secrets.KEY }}
 
-      - name: Run singularity on cluster
+      - name: Build singularity and run sampler
         if: github.event.inputs.target == 'cluster'
         uses: appleboy/ssh-action@master
         with:
