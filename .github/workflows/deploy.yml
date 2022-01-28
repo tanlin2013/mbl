@@ -50,4 +50,6 @@ jobs:
           script: |
             cd projects/mbl &&
             singularity build --fakeroot mbl.sif singularity.def &&
-            singularity exec --bind ~/data:/data mbl.sif python scripts/sampler.py
+            conda activate &&
+            python scripts/slurm_jobs.py
+#            singularity exec -B /etc/slurm,/etc/passwd,/run/munge,/usr/lib64,/usr/bin/squeue,/usr/bin/sbatch,/usr/bin/scancel --bind ~/data:/data mbl.sif python scripts/sampler.py

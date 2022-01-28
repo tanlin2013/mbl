@@ -1,18 +1,21 @@
 import os
+import logging
 import pandas as pd
-import awswrangler as wr
 from pathlib import Path
 from dask_jobqueue import SLURMCluster
-from mbl.model import RandomHeisenbergED, RandomHeisenbergTSDRG
 from mbl.distributed import Distribute
 
 
 def main1(kwargs) -> pd.DataFrame:
+    from mbl.model import RandomHeisenbergED
     agent = RandomHeisenbergED(**kwargs)
     return agent.df
 
 
 def main2(kwargs) -> pd.DataFrame:
+    # import awswrangler as wr
+    from mbl.model import RandomHeisenbergTSDRG
+
     agent = RandomHeisenbergTSDRG(**kwargs)
     # agent.save_tree("")
     df = agent.df
@@ -31,9 +34,12 @@ def scopion():
         cores=32,
         memory="10G",
         processes=30,
-        project="random_heisenberg",
         queue='scopion1',
         walltime="00:30:00",
+        header_skip=["--mem"],
+        scheduler_options={"host": "192.168.1.254"},
+        # host='192.168.1.254',
+        # extra=['--no-dashboard'],
         env_extra=['module load singularity', ],  # ensure singularity is loaded
         python=f"singularity run {os.environ['SINGULARITY_CONTAINER']} python",  # use python in container
     )
@@ -57,13 +63,14 @@ if __name__ == "__main__":
             's_target': s_target,
             'offset': offset
         }
-        for n in [8]
+        for n in [8, 10]
         for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
-        for chi in [2 ** 4]
+        for chi in [2**4, 2**6, 2**8]
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
 
     cluster = scopion()
+    logging.info(cluster.job_script())
     cluster.adapt(
         minimum=4,
         maximum=48,
@@ -73,4 +80,5 @@ if __name__ == "__main__":
     results = Distribute.map_on_dask(main2, params, cluster)
     # wr.catalog.table(database="awswrangler_test", table="noaa")
     merged_df = pd.concat(results)
-    merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
+    merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
+    # merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
