@@ -1,9 +1,13 @@
-import os
+import sys
 import logging
 import pandas as pd
 from pathlib import Path
 from dask_jobqueue import SLURMCluster
-from ..mbl.distributed import Distribute
+try:
+    from mbl.distributed import Distribute
+except ImportError:
+    sys.path.append(str(Path(__file__).parents[1]))
+    from mbl.distributed import Distribute
 
 
 def main1(kwargs) -> pd.DataFrame:
