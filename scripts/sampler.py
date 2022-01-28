@@ -41,7 +41,7 @@ def scopion():
         # host='192.168.1.254',
         # extra=['--no-dashboard'],
         env_extra=['module load singularity', ],  # ensure singularity is loaded
-        python=f"singularity run {os.environ['SINGULARITY_CONTAINER']} python",  # use python in container
+        python=f"singularity run mbl.sif python",  # use python in container
     )
 
 
