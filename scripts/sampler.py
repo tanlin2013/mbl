@@ -21,8 +21,9 @@ def main1(kwargs) -> pd.DataFrame:
     return agent.df
 
 
-@ray.remote(memory=2 * 1024 ** 3)
+@ray.remote(memory=10 * 1024 ** 3)
 def main2(kwargs) -> pd.DataFrame:
+    print(kwargs)
     agent = RandomHeisenbergTSDRG(**kwargs)
     # agent.save_tree("")
     df = agent.df
@@ -30,6 +31,7 @@ def main2(kwargs) -> pd.DataFrame:
         df=df,
         path="s3://many-body-localization/data/",
         dataset=True,
+        mode="overwrite",
         database="random_heisenberg",
         table="tsdrg"
     )
@@ -76,8 +78,7 @@ if __name__ == "__main__":
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
 
-    # if "random_heisenberg" not in wr.catalog.databases().values:
-    #     wr.catalog.create_database("random_heisenberg")
+    params = params[32522:]
 
     # cluster = scopion()
     # print(cluster.job_script())
