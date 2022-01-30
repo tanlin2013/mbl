@@ -14,6 +14,7 @@ def main1(kwargs) -> pd.DataFrame:
         df=df,
         path="s3://many-body-localization/data/",
         dataset=True,
+        mode="overwrite",
         database="random_heisenberg",
         table="ed"
     )
@@ -75,6 +76,9 @@ if __name__ == "__main__":
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
 
+    # if "random_heisenberg" not in wr.catalog.databases().values:
+    #     wr.catalog.create_database("random_heisenberg")
+
     # cluster = scopion()
     # print(cluster.job_script())
     # cluster.adapt(
@@ -84,7 +88,7 @@ if __name__ == "__main__":
     #     wait_count=4  # scale down more gently
     # )
     results = Distributed.map_on_ray(main2, params)
-    # wr.catalog.table(database="random_heisenberg", table="tsdrg")
+    # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
     merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
