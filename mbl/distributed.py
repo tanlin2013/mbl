@@ -4,7 +4,7 @@ from dask.distributed import Client, progress
 from typing import Callable, Sequence, List
 
 
-class Distribute:
+class Distributed:
 
     @staticmethod
     def map_on_ray(func: Callable, params: Sequence) -> List:

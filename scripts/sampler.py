@@ -4,7 +4,7 @@ import pandas as pd
 from pathlib import Path
 from dask_jobqueue import SLURMCluster
 from mbl.model import RandomHeisenbergED, RandomHeisenbergTSDRG
-from mbl.distributed import Distribute
+from mbl.distributed import Distributed
 
 
 def main1(kwargs) -> pd.DataFrame:
@@ -12,7 +12,7 @@ def main1(kwargs) -> pd.DataFrame:
     return agent.df
 
 
-@ray.remote(memory=10 * 1024 ** 3)
+@ray.remote(memory=2 * 1024 ** 3)
 def main2(kwargs) -> pd.DataFrame:
     agent = RandomHeisenbergTSDRG(**kwargs)
     # agent.save_tree("")
@@ -63,7 +63,7 @@ if __name__ == "__main__":
         }
         for n in [8, 10, 12, 14, 16]
         for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
-        for chi in [2**4, 2**6, 2**8]
+        for chi in [2**4, 2**5, 2**6, 2**7]
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
 
@@ -75,8 +75,8 @@ if __name__ == "__main__":
     #     target_duration="1200",  # measured in CPU time per worker -> 120 seconds at 10 cores / worker
     #     wait_count=4  # scale down more gently
     # )
-    results = Distribute.map_on_ray(main2, params)
+    results = Distributed.map_on_ray(main2, params)
     # wr.catalog.table(database="awswrangler_test", table="noaa")
-    merged_df = pd.concat(results)
+    # merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
-    merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
+    # merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
