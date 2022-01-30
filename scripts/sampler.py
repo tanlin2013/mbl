@@ -1,6 +1,6 @@
 import ray
 import pandas as pd
-# import awswrangler as wr
+import awswrangler as wr
 from pathlib import Path
 from dask_jobqueue import SLURMCluster
 from mbl.model import RandomHeisenbergED, RandomHeisenbergTSDRG
@@ -9,6 +9,14 @@ from mbl.distributed import Distributed
 
 def main1(kwargs) -> pd.DataFrame:
     agent = RandomHeisenbergED(**kwargs)
+    df = agent.df
+    wr.s3.to_parquet(
+        df=df,
+        path="s3://many-body-localization/data/",
+        dataset=True,
+        database="random_heisenberg",
+        table="ed"
+    )
     return agent.df
 
 
@@ -17,13 +25,13 @@ def main2(kwargs) -> pd.DataFrame:
     agent = RandomHeisenbergTSDRG(**kwargs)
     # agent.save_tree("")
     df = agent.df
-    # wr.s3.to_parquet(
-    #     df=df,
-    #     path="",
-    #     dataset=True,
-    #     database="awswrangler_test",
-    #     table="noaa"
-    # )
+    wr.s3.to_parquet(
+        df=df,
+        path="s3://many-body-localization/data/",
+        dataset=True,
+        database="random_heisenberg",
+        table="tsdrg"
+    )
     return df
 
 
@@ -71,12 +79,12 @@ if __name__ == "__main__":
     # print(cluster.job_script())
     # cluster.adapt(
     #     minimum=4,
-    #     maximum=48,
+    #     maximum=32,
     #     target_duration="1200",  # measured in CPU time per worker -> 120 seconds at 10 cores / worker
     #     wait_count=4  # scale down more gently
     # )
     results = Distributed.map_on_ray(main2, params)
-    # wr.catalog.table(database="awswrangler_test", table="noaa")
-    # merged_df = pd.concat(results)
+    # wr.catalog.table(database="random_heisenberg", table="tsdrg")
+    merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
-    # merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
+    merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
