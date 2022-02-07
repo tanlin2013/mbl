@@ -21,7 +21,7 @@ def main1(kwargs) -> pd.DataFrame:
     return agent.df
 
 
-@ray.remote(memory=10 * 1024 ** 3)
+@ray.remote(memory=3 * 1024 ** 3)
 def main2(kwargs) -> pd.DataFrame:
     print(kwargs)
     agent = RandomHeisenbergTSDRG(**kwargs)
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
 
-    params = params[32522:]
+    params = params[49017:]  # 32522 + 16495 = 49017
 
     # cluster = scopion()
     # print(cluster.job_script())
