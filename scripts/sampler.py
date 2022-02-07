@@ -1,44 +1,64 @@
 import ray
 import pandas as pd
 import awswrangler as wr
+from botocore.exceptions import ClientError
 from pathlib import Path
-from dask_jobqueue import SLURMCluster
+from time import sleep
 from mbl.model import RandomHeisenbergED, RandomHeisenbergTSDRG
 from mbl.distributed import Distributed
+
+
+def retry(func, *args, **kwargs):
+    for attempt in range(3):
+        try:
+            func(*args, **kwargs)
+            break
+        except ClientError:
+            sleep(3)
 
 
 def main1(kwargs) -> pd.DataFrame:
     agent = RandomHeisenbergED(**kwargs)
     df = agent.df
-    wr.s3.to_parquet(
+    retry(
+        wr.s3.to_parquet,
         df=df,
-        path="s3://many-body-localization/data/",
+        path="s3://many-body-localization/dataframe/ed",
         dataset=True,
-        mode="overwrite",
+        mode="append",
         database="random_heisenberg",
         table="ed"
     )
-    return agent.df
+    return df
 
 
 @ray.remote(memory=3 * 1024 ** 3)
 def main2(kwargs) -> pd.DataFrame:
     print(kwargs)
     agent = RandomHeisenbergTSDRG(**kwargs)
-    # agent.save_tree("")
     df = agent.df
-    wr.s3.to_parquet(
+    retry(
+        wr.s3.to_parquet,
         df=df,
-        path="s3://many-body-localization/data/",
+        path="s3://many-body-localization/dataframe/tsdrg",
+        index=False,
         dataset=True,
-        mode="overwrite",
+        mode="append",
         database="random_heisenberg",
         table="tsdrg"
+    )
+    filename = "-".join([f"{k}_{v}" for k, v in kwargs.items()])
+    agent.save_tree(f"{Path(__file__).parents[1]}/data/{filename}")
+    retry(
+        wr.s3.upload,
+        local_file=f"{Path(__file__).parents[1]}/data/{filename}.p",
+        path=f"s3://many-body-localization/tree/{filename}.p"
     )
     return df
 
 
 def scopion():
+    from dask_jobqueue import SLURMCluster
     return SLURMCluster(
         cores=32,
         memory="10G",
@@ -72,13 +92,14 @@ if __name__ == "__main__":
             's_target': s_target,
             'offset': offset
         }
-        for n in [8, 10, 12, 14, 16]
+        for n in [8, 10, 12, 14, 16, 18]
         for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
         for chi in [2**4, 2**5, 2**6, 2**7]
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
 
-    params = params[49017:]  # 32522 + 16495 = 49017
+    # if "random_heisenberg" not in wr.catalog.databases().values:
+    #     wr.catalog.create_database("random_heisenberg")
 
     # cluster = scopion()
     # print(cluster.job_script())
