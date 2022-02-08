@@ -116,7 +116,7 @@ class RandomHeisenbergTSDRG(TreeTensorNetworkMeasurements):
 
     @property
     def total_sz(self) -> np.ndarray:
-        return self.expectation_value(TotalSz(self.model.n).mpo)
+        return self.expectation_value(TotalSz(self.model.n).mpo)[self.sorting_order]
 
     @property
     def edge_entropy(self) -> np.ndarray:
