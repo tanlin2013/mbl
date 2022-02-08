@@ -71,9 +71,60 @@ class TestRandomHeisenbergTSDRG(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super(TestRandomHeisenbergTSDRG, self).__init__(*args, **kwargs)
         self.agent = RandomHeisenbergTSDRG(
-            n=10, h=10.0, chi=2**6,
-            trial_id=0, seed=2021, penalty=0, s_target=0
+            n=6, h=0.1, chi=2**6, trial_id=0, seed=2021, penalty=0, s_target=0
+        )
+        self.ed_agent = RandomHeisenbergED(
+            n=6, h=0.1, trial_id=0, seed=2021, penalty=0, s_target=0
+        )
+
+    def test_evals(self):
+        np.testing.assert_allclose(
+            self.agent.evals,
+            self.ed_agent.evals,
+            atol=1e-12
+        )
+
+    def test_variance(self):
+        np.testing.assert_allclose(
+            self.agent.variance,
+            np.zeros(self.agent.tsdrg.chi),
+            atol=1e-12
+        )
+
+    def test_total_sz(self):
+        np.testing.assert_allclose(
+            self.agent.total_sz,
+            self.ed_agent.total_sz,
+            atol=1e-12
+        )
+
+    def test_edge_entropy(self):
+        np.testing.assert_allclose(
+            self.agent.edge_entropy,
+            np.nan_to_num(self.ed_agent.entanglement_entropy(0)),
+            atol=1e-12
         )
 
     def test_df(self):
-        print(self.agent.df)
+        n_row = self.agent.tsdrg.chi
+        pd.testing.assert_frame_equal(
+            pd.DataFrame(
+                {
+                    'LevelID': list(range(n_row)),
+                    'En': self.ed_agent.evals.tolist(),
+                    'Variance': np.zeros(n_row),
+                    'TotalSz': self.ed_agent.total_sz.tolist(),
+                    'EdgeEntropy': np.nan_to_num(self.ed_agent.entanglement_entropy(0)).tolist(),
+                    'TruncationDim': [self.agent.tsdrg.chi] * n_row,
+                    'SystemSize': [self.agent.model.n] * n_row,
+                    'Disorder': [self.agent.model.h] * n_row,
+                    'TrialID': [self.agent.model.trial_id] * n_row,
+                    'Seed': [self.agent.model.seed] * n_row,
+                    'Penalty': [self.agent.folded_model.penalty] * n_row,
+                    'STarget': [self.agent.folded_model.s_target] * n_row,
+                    'Offset': [self.agent.folded_model.offset] * n_row
+                }
+            ),
+            self.agent.df,
+            atol=1e-12
+        )
