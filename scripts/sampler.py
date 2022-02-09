@@ -33,7 +33,7 @@ def main1(kwargs) -> pd.DataFrame:
     return df
 
 
-# @ray.remote(num_cpus=1)
+# @ray.remote(num_cpus=1, memory=7 * 1024 ** 3)
 def main2(kwargs) -> pd.DataFrame:
     print(kwargs)
     agent = RandomHeisenbergTSDRG(**kwargs)
@@ -107,18 +107,21 @@ if __name__ == "__main__":
     # cluster = scopion()
     # print(cluster.job_script())
     cluster = LocalCluster(
-        n_workers=20,
-        memory_limit='8GB',
+        n_workers=30,
+        threads_per_worker=1,
+        memory_limit='8GiB',
+        memory_target_fraction=0.3,
+        memory_pause_fraction=0.4,
         dashboard_address=None
     )
-    cluster.adapt(
-        minimum=4,
-        maximum=24,
-        minimum_memory="20GB",
-        maximum_memory="28GB",
-        target_duration="1200",  # measured in CPU time per worker -> 120 seconds at 10 cores / worker
-        wait_count=4  # scale down more gently
-    )
+    # cluster.adapt(
+    #     minimum=26,
+    #     maximum=30,
+    #     minimum_memory="20GB",
+    #     maximum_memory="27GB",
+    #     target_duration="5s",
+    #     wait_count=4  # scale down more gently
+    # )
     results = Distributed.map_on_dask(main2, params, cluster)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     merged_df = pd.concat(results)
