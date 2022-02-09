@@ -56,7 +56,7 @@ def main2(kwargs) -> pd.DataFrame:
 
 def mem_aware_func(**kwargs):
     chi = kwargs.get('chi')
-    return max(2.5 * chi ** 4 * 8 / (1024 ** 3), 0.5 * 1024 ** 3)
+    return max(2.5 * chi ** 4 * 8 / (1024 ** 3), 1.5 * 1024 ** 3)
 
 
 def scopion():
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     #     target_duration="1200",  # measured in CPU time per worker -> 120 seconds at 10 cores / worker
     #     wait_count=4  # scale down more gently
     # )
-    results = Distributed.map_on_dask(main2, params)
+    results = Distributed.map_on_ray(main2, params, mem_aware_func)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
