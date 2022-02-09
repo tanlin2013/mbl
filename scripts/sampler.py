@@ -4,6 +4,7 @@ import awswrangler as wr
 from botocore.exceptions import ClientError
 from pathlib import Path
 from time import sleep
+from dask.distributed import LocalCluster
 from mbl.model import RandomHeisenbergED, RandomHeisenbergTSDRG
 from mbl.distributed import Distributed
 
@@ -105,13 +106,16 @@ if __name__ == "__main__":
 
     # cluster = scopion()
     # print(cluster.job_script())
-    # cluster.adapt(
-    #     minimum=4,
-    #     maximum=32,
-    #     target_duration="1200",  # measured in CPU time per worker -> 120 seconds at 10 cores / worker
-    #     wait_count=4  # scale down more gently
-    # )
-    results = Distributed.map_on_dask(main2, params)
+    cluster = LocalCluster
+    cluster.adapt(
+        minimum=4,
+        maximum=30,
+        minimum_memory="1GiB",
+        maximum_memory="5GiB",
+        target_duration="1200",  # measured in CPU time per worker -> 120 seconds at 10 cores / worker
+        wait_count=3  # scale down more gently
+    )
+    results = Distributed.map_on_dask(main2, params, cluster)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
