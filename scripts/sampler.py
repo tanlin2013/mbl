@@ -32,7 +32,7 @@ def main1(kwargs) -> pd.DataFrame:
     return df
 
 
-@ray.remote(memory=3 * 1024 ** 3)
+@ray.remote(num_cpus=1)
 def main2(kwargs) -> pd.DataFrame:
     print(kwargs)
     agent = RandomHeisenbergTSDRG(**kwargs)
@@ -47,14 +47,16 @@ def main2(kwargs) -> pd.DataFrame:
         database="random_heisenberg",
         table="tsdrg"
     )
+    path = Path(f"{Path(__file__).parents[1]}/data/tree")
+    path.mkdir(parents=True, exist_ok=True)
     filename = "-".join([f"{k}_{v}" for k, v in kwargs.items()])
-    agent.save_tree(f"{Path(__file__).parents[1]}/data/{filename}")
-    retry(
-        wr.s3.upload,
-        local_file=f"{Path(__file__).parents[1]}/data/{filename}.p",
-        path=f"s3://many-body-localization/tree/{filename}.p"
-    )
+    agent.save_tree(f"{path}/{filename}")
     return df
+
+
+def mem_aware_func(**kwargs):
+    chi = kwargs.get('chi')
+    return max(2.5 * chi ** 4 * 8 / (1024 ** 3), 0.5 * 1024 ** 3)
 
 
 def scopion():
@@ -109,7 +111,7 @@ if __name__ == "__main__":
     #     target_duration="1200",  # measured in CPU time per worker -> 120 seconds at 10 cores / worker
     #     wait_count=4  # scale down more gently
     # )
-    results = Distributed.map_on_ray(main2, params)
+    results = Distributed.map_on_ray(main2, params, mem_aware_func)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)

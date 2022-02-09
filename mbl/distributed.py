@@ -1,5 +1,6 @@
 import ray
 from tqdm import tqdm
+from ray.remote_function import RemoteFunction
 from dask.distributed import Client, progress
 from typing import Callable, Sequence, List
 
@@ -7,12 +8,13 @@ from typing import Callable, Sequence, List
 class Distributed:
 
     @staticmethod
-    def map_on_ray(func: Callable, params: Sequence) -> List:
+    def map_on_ray(func: Callable, params: Sequence, mem_aware_func: Callable = None) -> List:
         """
 
         Args:
             func:
             params:
+            mem_aware_func:
 
         Returns:
 
@@ -27,10 +29,12 @@ class Distributed:
             return func(*args, **kwargs)
 
         ray.init()
-        try:
-            jobs = [func.remote(i) for i in params]
-        except AttributeError:
-            jobs = [wrapped_func.remote(i) for i in params]
+        if isinstance(func, RemoteFunction):
+            jobs = [func.remote(i) for i in params] if mem_aware_func is None \
+                else [func.options(memory=mem_aware_func(**i)).remote(i) for i in params]
+        else:
+            jobs = [wrapped_func.remote(i) for i in params] if mem_aware_func is None \
+                else [wrapped_func.options(memory=mem_aware_func(**i)).remote(i) for i in params]
         for _ in tqdm(assignee(jobs), total=len(params)):
             pass
         results = ray.get(jobs)
