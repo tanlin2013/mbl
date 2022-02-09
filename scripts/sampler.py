@@ -114,6 +114,7 @@ if __name__ == "__main__":
     cluster.adapt(
         minimum=4,
         maximum=20,
+        minimum_memory="20GB",
         maximum_memory="28GB",
         target_duration="1200",  # measured in CPU time per worker -> 120 seconds at 10 cores / worker
         wait_count=4  # scale down more gently
