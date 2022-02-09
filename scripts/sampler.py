@@ -107,13 +107,13 @@ if __name__ == "__main__":
     # cluster = scopion()
     # print(cluster.job_script())
     cluster = LocalCluster(
-        n_workers=16,
+        n_workers=20,
         memory_limit='8GB',
         dashboard_address=None
     )
     cluster.adapt(
         minimum=4,
-        maximum=20,
+        maximum=24,
         minimum_memory="20GB",
         maximum_memory="28GB",
         target_duration="1200",  # measured in CPU time per worker -> 120 seconds at 10 cores / worker
