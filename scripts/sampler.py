@@ -110,19 +110,19 @@ if __name__ == "__main__":
         n_workers=30,
         threads_per_worker=1,
         memory_limit='8GiB',
-        memory_target_fraction=0.3,
-        memory_pause_fraction=0.4,
+        memory_target_fraction=0.2,
+        memory_pause_fraction=0.3,
         dashboard_address=None
     )
-    # cluster.adapt(
-    #     minimum=26,
-    #     maximum=30,
-    #     minimum_memory="20GB",
-    #     maximum_memory="27GB",
-    #     target_duration="5s",
-    #     wait_count=4  # scale down more gently
-    # )
-    results = Distributed.map_on_dask(main2, params, cluster)
+    cluster.adapt(
+        minimum=26,
+        maximum=30,
+        minimum_memory="26GiB",
+        maximum_memory="30GiB",
+        target_duration="1s",
+        wait_count=4  # scale down more gently
+    )
+    results = Distributed.map_on_dask(main2, params, cluster, batch_size=2000)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)

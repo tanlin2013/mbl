@@ -42,7 +42,7 @@ class Distributed:
         return results
 
     @staticmethod
-    def map_on_dask(func: Callable, params: Sequence, cluster=None) -> List:
+    def map_on_dask(func: Callable, params: Sequence, cluster=None, **kwargs) -> List:
         """
 
         Args:
@@ -54,6 +54,6 @@ class Distributed:
 
         """
         client = Client() if cluster is None else Client(cluster)
-        futures = client.map(func, params)
+        futures = client.map(func, params, **kwargs)
         progress(futures)
         return client.gather(futures)
