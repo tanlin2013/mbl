@@ -106,12 +106,16 @@ if __name__ == "__main__":
 
     # cluster = scopion()
     # print(cluster.job_script())
-    cluster = LocalCluster()
+    cluster = LocalCluster(
+        n_workers=20,
+        memory_limit='8GiB',
+        dashboard_address=None
+    )
     cluster.adapt(
         minimum=4,
-        maximum=30,
+        maximum=24,
         target_duration="1200",  # measured in CPU time per worker -> 120 seconds at 10 cores / worker
-        wait_count=3  # scale down more gently
+        wait_count=4  # scale down more gently
     )
     results = Distributed.map_on_dask(main2, params, cluster)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
