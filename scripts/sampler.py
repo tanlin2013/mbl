@@ -109,13 +109,10 @@ if __name__ == "__main__":
     cluster = LocalCluster(
         n_workers=30,
         threads_per_worker=1,
-        memory_limit='8GiB',
-        memory_target_fraction=0.2,
-        memory_pause_fraction=0.3,
-        dashboard_address=None
+        memory_limit=0
     )
     cluster.adapt(
-        minimum=26,
+        minimum=24,
         maximum=30,
         minimum_memory="26GiB",
         maximum_memory="30GiB",
