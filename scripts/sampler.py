@@ -109,20 +109,20 @@ if __name__ == "__main__":
     cluster = LocalCluster(
         n_workers=30,
         threads_per_worker=1,
-        memory_limit="auto",
+        memory_limit="30GiB",
         memory_target_fraction=0.1,
         memory_pause_fraction=0.95
     )
     cluster.adapt(
-        minimum=24,
+        minimum=20,
         maximum=30,
         minimum_memory="26GiB",
         maximum_memory="30GiB",
         target_duration="1s",
         wait_count=4  # scale down more gently
     )
-    results = Distributed.map_on_dask(main2, params, cluster, batch_size=2000)
+    # results = Distributed.map_on_dask(main2, params, cluster, batch_size=2000)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
-    merged_df = pd.concat(results)
+    # merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
-    merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
+    # merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
