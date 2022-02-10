@@ -107,20 +107,20 @@ if __name__ == "__main__":
     # cluster = scopion()
     # print(cluster.job_script())
     cluster = LocalCluster(
-        n_workers=30,
-        threads_per_worker=1,
+        n_workers=1,
+        threads_per_worker=32,
         memory_limit="30GiB",
-        memory_target_fraction=0.1,
-        memory_pause_fraction=0.95
+        memory_target_fraction=0.8,
+        memory_pause_fraction=0.9
     )
-    cluster.adapt(
-        minimum=20,
-        maximum=30,
-        minimum_memory="26GiB",
-        maximum_memory="30GiB",
-        target_duration="1s",
-        wait_count=4  # scale down more gently
-    )
+    # cluster.adapt(
+    #     minimum=10,
+    #     maximum=32,
+    #     minimum_memory="26GiB",
+    #     maximum_memory="28GiB",
+    #     target_duration="1s",
+    #     wait_count=1  # scale down more gently
+    # )
     results = Distributed.map_on_dask(main2, params, cluster, batch_size=2000)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     merged_df = pd.concat(results)
