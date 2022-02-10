@@ -121,8 +121,8 @@ if __name__ == "__main__":
         target_duration="1s",
         wait_count=4  # scale down more gently
     )
-    # results = Distributed.map_on_dask(main2, params, cluster, batch_size=2000)
+    results = Distributed.map_on_dask(main2, params, cluster, batch_size=2000)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
-    # merged_df = pd.concat(results)
+    merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
-    # merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
+    merged_df.to_parquet(f'{Path(__file__).parents[1]}/data/random_heisenberg_tsdrg.parquet', index=False)
