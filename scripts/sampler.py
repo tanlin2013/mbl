@@ -109,7 +109,9 @@ if __name__ == "__main__":
     cluster = LocalCluster(
         n_workers=30,
         threads_per_worker=1,
-        memory_limit=0
+        memory_limit="auto",
+        memory_target_fraction=0.1,
+        memory_pause_fraction=0.95
     )
     cluster.adapt(
         minimum=24,
