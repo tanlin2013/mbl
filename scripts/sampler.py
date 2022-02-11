@@ -125,7 +125,7 @@ if __name__ == "__main__":
     cluster.adapt(
         minimum=10,
         maximum=32,
-        memory_ratio=1.053,
+        memory_ratio=1.2,
         target_duration="30s",
         wait_count=2  # scale down more gently
     )
