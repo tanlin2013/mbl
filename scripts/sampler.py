@@ -1,4 +1,4 @@
-# import ray
+import ray
 import pandas as pd
 import awswrangler as wr
 from botocore.exceptions import ClientError
@@ -34,6 +34,7 @@ def main1(kwargs) -> pd.DataFrame:
     return df
 
 
+@ray.remote(num_cpus=1)
 def main2(kwargs) -> pd.DataFrame:
     print(kwargs)
     agent = RandomHeisenbergTSDRG(**kwargs)
@@ -54,14 +55,6 @@ def main2(kwargs) -> pd.DataFrame:
     # agent.save_tree(f"{path}/{filename}")
     del agent
     return df
-
-
-def resource_aware_func(**kwargs):
-    chi = kwargs.get('chi')
-    return {
-        'num_cpus': 1,
-        'memory': max(((1.2 * chi) ** 4) * 8, 1.5e+3)
-    }
 
 
 def scopion():
@@ -136,7 +129,7 @@ if __name__ == "__main__":
     #     target_duration="30s",
     #     wait_count=1  # scale down more gently
     # )
-    results = Distributed.map_on_ray(main2, params, resource_aware_func, chunk_size=32)
+    results = Distributed.map_on_ray(main2, params, chunk_size=7)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     # merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)

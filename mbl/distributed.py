@@ -1,6 +1,7 @@
 import ray
-import numpy as np
-from tqdm import tqdm, trange
+import psutil
+# import numpy as np
+from tqdm import tqdm
 from itertools import islice
 from ray.remote_function import RemoteFunction
 from dask.distributed import Client, progress
@@ -10,24 +11,28 @@ from typing import Callable, Sequence, List
 class Distributed:
 
     @staticmethod
-    def map_on_ray(func: Callable, params: Sequence,
-                   resource_aware_func: Callable = None, chunk_size: int = 32) -> List:
+    def get_workload():
+        cpu_load_1, _, _ = psutil.getloadavg()
+        mem = psutil.virtual_memory()
+        return cpu_load_1 / psutil.cpu_count() / (mem.available * 1e-9)
+
+    @staticmethod
+    def map_on_ray(func: Callable, params: Sequence, chunk_size: int = 32) -> List:
         """
 
         Args:
             func:
             params:
-            resource_aware_func:
             chunk_size:
 
         Returns:
 
         """
-        def chunk(obj_ids):
-            obj_ids = iter(obj_ids)
-            return iter(lambda: list(islice(obj_ids, chunk_size)), [])
+        def chunk(inputs):
+            inputs = iter(inputs)
+            return iter(lambda: list(islice(inputs, chunk_size)), [])
 
-        def assignee(obj_ids):
+        def watch(obj_ids):
             while obj_ids:
                 done, obj_ids = ray.wait(obj_ids)
                 yield ray.get(done[0])
@@ -35,12 +40,25 @@ class Distributed:
         if not ray.is_initialized:
             ray.init()
         func = ray.remote(func) if not isinstance(func, RemoteFunction) else func
-        results = []
-        for chunk_params in tqdm(chunk(params), desc='All chunks', total=int(np.ceil(len(params) / chunk_size))):
-            jobs = [func.remote(i) for i in chunk_params] if resource_aware_func is None \
-                else [func.options(resource_aware_func(**i)).remote(i) for i in chunk_params]
-            for done_job in tqdm(assignee(jobs), desc='Each chunk', position=1, total=len(jobs)):
+        jobs, results = [], []
+        # for chunk_params in tqdm(chunk(params), desc='All chunks', total=int(np.ceil(len(params) / chunk_size))):
+        #     jobs = [func.remote(i) for i in chunk_params]
+        #     for done_job in tqdm(watch(jobs), desc='Current chunk', position=1, total=len(jobs)):
+        #         results += [done_job]
+
+        def update(results, pbar):
+            for done_job in watch(jobs):
                 results += [done_job]
+                pbar.update(1)
+
+        inputs = iter(params)
+        with tqdm(desc='Completed jobs', total=len(params)) as pbar:
+            while len(params) > len(jobs):
+                if Distributed.get_workload() < 1:
+                    jobs += [func.remote(next(inputs))]
+                else:
+                    update(results, pbar)
+            update(results, pbar)
         ray.shutdown()
         return results
 
