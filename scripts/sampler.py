@@ -1,10 +1,12 @@
+import ray
+import numpy as np
 import pandas as pd
 import awswrangler as wr
 from botocore.exceptions import ClientError
 from pathlib import Path
 from time import sleep
-from dask import config
-from dask.distributed import LocalCluster
+# from dask import config
+# from dask.distributed import LocalCluster
 from mbl.model import RandomHeisenbergED, RandomHeisenbergTSDRG
 from mbl.distributed import Distributed
 
@@ -33,30 +35,33 @@ def main1(kwargs) -> pd.DataFrame:
     return df
 
 
-def main2(kwargs) -> pd.DataFrame:
+def main2(kwargs):
     print(kwargs)
-    agent = RandomHeisenbergTSDRG(**kwargs)
-    df = agent.df
-    # retry(
-    #     wr.s3.to_parquet,
-    #     df=df,
-    #     path="s3://many-body-localization/dataframe/tsdrg",
-    #     index=False,
-    #     dataset=True,
-    #     mode="append",
-    #     database="random_heisenberg",
-    #     table="tsdrg"
-    # )
-    # path = Path(f"{Path(__file__).parents[1]}/data/tree")
-    # path.mkdir(parents=True, exist_ok=True)
-    # filename = "-".join([f"{k}_{v}" for k, v in kwargs.items()])
-    # agent.save_tree(f"{path}/{filename}")
-    return df
-
-
-def mem_aware_func(**kwargs):
+    n = kwargs.get('n')
     chi = kwargs.get('chi')
-    return max(2.5 * chi ** 4 * 8 / (1024 ** 3), 1.5 * 1024 ** 3)
+    memory = (n - 1 - np.log2(chi)) * (chi ** 4) * 8
+
+    @ray.remote(num_cpus=1, memory=memory)
+    def actor() -> pd.DataFrame:
+        agent = RandomHeisenbergTSDRG(**kwargs)
+        df = agent.df
+        # retry(
+        #     wr.s3.to_parquet,
+        #     df=df,
+        #     path="s3://many-body-localization/dataframe/tsdrg",
+        #     index=False,
+        #     dataset=True,
+        #     mode="append",
+        #     database="random_heisenberg",
+        #     table="tsdrg"
+        # )
+        # path = Path(f"{Path(__file__).parents[1]}/data/tree")
+        # path.mkdir(parents=True, exist_ok=True)
+        # filename = "-".join([f"{k}_{v}" for k, v in kwargs.items()])
+        # agent.save_tree(f"{path}/{filename}")
+        del agent
+        return df
+    return actor
 
 
 def scopion():
@@ -94,42 +99,44 @@ if __name__ == "__main__":
             's_target': s_target,
             'offset': offset
         }
-        for n in [8, 10, 12, 14, 16, 18]
+        for n in [8, 10, 12, 14, 16, 18][::-1]
         for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
-        for chi in [2**4, 2**5, 2**6, 2**7]
+        for chi in [2**4, 2**5, 2**6, 2**7][::-1]
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
 
     # if "random_heisenberg" not in wr.catalog.databases().values:
     #     wr.catalog.create_database("random_heisenberg")
 
-    config.set(
-        {
-            # "distributed.comm.timeouts.tcp": "50s",
-            # "distributed.workers.memory.target": 1,
-            # "distributed.workers.memory.spill": False,
-            # "distributed.workers.memory.pause": 10,
-            "distributed.workers.memory.terminate": False
-        }
-    )
+    # config.set(
+    #     {
+    #         "distributed.comm.timeouts.tcp": "50s",
+    #         "distributed.workers.memory.target": 1,
+    #         "distributed.workers.memory.spill": False,
+    #         "distributed.workers.memory.pause": 10,
+    #         "distributed.workers.memory.terminate": False
+    #     }
+    # )
 
     # cluster = scopion()
     # print(cluster.job_script())
-    cluster = LocalCluster(
-        # n_workers=32,
-        threads_per_worker=1,
-        memory_limit="10GiB",
-        # memory_target_fraction=1,
-        # memory_pause_fraction=2
-    )
-    cluster.adapt(
-        minimum=10,
-        maximum=32,
-        memory_ratio=1.2,
-        target_duration="30s",
-        wait_count=2  # scale down more gently
-    )
-    results = Distributed.map_on_dask(main2, params, cluster, batch_size=2000)
+    # cluster = LocalCluster(
+    #     n_workers=32,
+    #     threads_per_worker=1,
+    #     memory_limit="700MiB",
+    #     memory_target_fraction=1,
+    #     memory_pause_fraction=2
+    # )
+    # cluster.adapt(
+    #     minimum=0,
+    #     maximum=32,
+    #     maximum_memory="28GiB",
+    #     memory_ratio=10,
+    #     n=10,  # number of workers to close by once
+    #     target_duration="30s",
+    #     wait_count=1  # scale down more gently
+    # )
+    results = Distributed.map_on_ray(main2, params)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     # merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
