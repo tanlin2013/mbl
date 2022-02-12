@@ -25,6 +25,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
+            yes | docker system prune &&
             nohup \
             docker run --entrypoint python --rm --pull=always --shm-size=10.07gb \
             -v ~/data:/home/mbl/data \
