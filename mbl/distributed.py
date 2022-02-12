@@ -36,10 +36,11 @@ class Distributed:
         func = ray.remote(func) if not isinstance(func, RemoteFunction) else func
         jobs = [func.remote(i) for i in params] if resource_aware_func is None \
             else [func.options(resource_aware_func(**i)).remote(i) for i in params]
-        for chunked_jod in tqdm(chunk(jobs), desc='chunk', total=chunk_size):
-            for _ in tqdm(assignee(list(chunked_jod)), desc='subtask', position=1, total=len(chunked_jod)):
+        results = []
+        for chunked_job in tqdm(chunk(jobs), desc='chunk', total=chunk_size):
+            for _ in tqdm(assignee(list(chunked_job)), desc='subtask', position=1, total=len(chunked_job)):
                 pass
-        results = ray.get(jobs)
+            results += ray.get(chunked_job)
         ray.shutdown()
         return results
 

@@ -36,7 +36,7 @@ def main1(kwargs) -> pd.DataFrame:
 
 
 def main2(kwargs) -> pd.DataFrame:
-    # print(kwargs)
+    print(kwargs)
     agent = RandomHeisenbergTSDRG(**kwargs)
     df = agent.df
     # retry(
