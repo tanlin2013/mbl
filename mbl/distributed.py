@@ -17,13 +17,14 @@ class Distributed:
         return cpu_load_1 / psutil.cpu_count() / (mem.available * 1e-9)
 
     @staticmethod
-    def map_on_ray(func: Callable, params: Sequence, chunk_size: int = 32) -> List:
+    def map_on_ray(func: Callable, params: Sequence, chunk_size: int = 32, max_workload: float = 0.5) -> List:
         """
 
         Args:
             func:
             params:
             chunk_size:
+            max_workload:
 
         Returns:
 
@@ -54,7 +55,7 @@ class Distributed:
         inputs = iter(params)
         with tqdm(desc='Completed jobs', total=len(params)) as pbar:
             while len(params) > len(jobs):
-                if Distributed.get_workload() < 1:
+                if Distributed.get_workload() < max_workload:
                     jobs += [func.remote(next(inputs))]
                 else:
                     update(results, pbar)
