@@ -8,13 +8,12 @@ from typing import Callable, Sequence, List
 class Distributed:
 
     @staticmethod
-    def map_on_ray(func: Callable, params: Sequence, mem_aware_func: Callable = None) -> List:
+    def map_on_ray(func: Callable, params: Sequence) -> List:
         """
 
         Args:
             func:
             params:
-            mem_aware_func:
 
         Returns:
 
@@ -30,11 +29,9 @@ class Distributed:
 
         ray.init()
         if isinstance(func, RemoteFunction):
-            jobs = [func.remote(i) for i in params] if mem_aware_func is None \
-                else [func.options(memory=mem_aware_func(**i)).remote(i) for i in params]
+            jobs = [func.remote(i) for i in params]
         else:
-            jobs = [wrapped_func.remote(i) for i in params] if mem_aware_func is None \
-                else [wrapped_func.options(memory=mem_aware_func(**i)).remote(i) for i in params]
+            jobs = [wrapped_func.remote(i) for i in params]
         for _ in tqdm(assignee(jobs), total=len(params)):
             pass
         results = ray.get(jobs)
@@ -42,7 +39,7 @@ class Distributed:
         return results
 
     @staticmethod
-    def map_on_dask(func: Callable, params: Sequence, cluster=None, **kwargs) -> List:
+    def map_on_dask(func: Callable, params: Sequence, cluster=None) -> List:
         """
 
         Args:
@@ -54,6 +51,6 @@ class Distributed:
 
         """
         client = Client() if cluster is None else Client(cluster)
-        futures = client.map(func, params, **kwargs)
+        futures = client.map(func, params)
         progress(futures)
         return client.gather(futures)
