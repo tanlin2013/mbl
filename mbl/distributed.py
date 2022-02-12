@@ -8,12 +8,13 @@ from typing import Callable, Sequence, List
 class Distributed:
 
     @staticmethod
-    def map_on_ray(func: Callable, params: Sequence) -> List:
+    def map_on_ray(func: Callable, params: Sequence, resource_aware_func: Callable = None) -> List:
         """
 
         Args:
             func:
             params:
+            resource_aware_func:
 
         Returns:
 
@@ -27,11 +28,14 @@ class Distributed:
         def wrapped_func(*args, **kwargs):
             return func(*args, **kwargs)
 
-        ray.init()
+        if not ray.is_initialized:
+            ray.init()
         if isinstance(func, RemoteFunction):
-            jobs = [func.remote(i) for i in params]
+            jobs = [func.remote(i) for i in params] if resource_aware_func is None \
+                else [func.options(resource_aware_func(**i)).remote(i) for i in params]
         else:
-            jobs = [wrapped_func.remote(i) for i in params]
+            jobs = [wrapped_func.remote(i) for i in params] if resource_aware_func is None \
+                else [wrapped_func.options(resource_aware_func(**i)).remote(i) for i in params]
         for _ in tqdm(assignee(jobs), total=len(params)):
             pass
         results = ray.get(jobs)
