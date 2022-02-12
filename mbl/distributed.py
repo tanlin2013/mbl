@@ -1,5 +1,6 @@
 import ray
 from tqdm import tqdm
+from itertools import islice
 from ray.remote_function import RemoteFunction
 from dask.distributed import Client, progress
 from typing import Callable, Sequence, List
@@ -8,36 +9,36 @@ from typing import Callable, Sequence, List
 class Distributed:
 
     @staticmethod
-    def map_on_ray(func: Callable, params: Sequence, resource_aware_func: Callable = None) -> List:
+    def map_on_ray(func: Callable, params: Sequence,
+                   resource_aware_func: Callable = None, chunk_size: int = 32) -> List:
         """
 
         Args:
             func:
             params:
             resource_aware_func:
+            chunk_size:
 
         Returns:
 
         """
+        def chunk(lst):
+            lst = iter(lst)
+            return iter(lambda: tuple(islice(lst, chunk_size)), ())
+
         def assignee(obj_ids):
             while obj_ids:
                 done, obj_ids = ray.wait(obj_ids)
                 yield ray.get(done[0])
 
-        @ray.remote
-        def wrapped_func(*args, **kwargs):
-            return func(*args, **kwargs)
-
         if not ray.is_initialized:
             ray.init()
-        if isinstance(func, RemoteFunction):
-            jobs = [func.remote(i) for i in params] if resource_aware_func is None \
-                else [func.options(resource_aware_func(**i)).remote(i) for i in params]
-        else:
-            jobs = [wrapped_func.remote(i) for i in params] if resource_aware_func is None \
-                else [wrapped_func.options(resource_aware_func(**i)).remote(i) for i in params]
-        for _ in tqdm(assignee(jobs), total=len(params)):
-            pass
+        func = ray.remote(func) if not isinstance(func, RemoteFunction) else func
+        jobs = [func.remote(i) for i in params] if resource_aware_func is None \
+            else [func.options(resource_aware_func(**i)).remote(i) for i in params]
+        for chunked_jod in tqdm(chunk(jobs), desc='chunk', total=chunk_size):
+            for _ in tqdm(assignee(list(chunked_jod)), desc='subtask', position=1, total=len(chunked_jod)):
+                pass
         results = ray.get(jobs)
         ray.shutdown()
         return results
