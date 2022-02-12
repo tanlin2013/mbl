@@ -41,7 +41,7 @@ class Distributed:
         if not ray.is_initialized:
             ray.init()
         func = ray.remote(func) if not isinstance(func, RemoteFunction) else func
-        jobs, results = [], []
+        results = []
         # for chunk_params in tqdm(chunk(params), desc='All chunks', total=int(np.ceil(len(params) / chunk_size))):
         #     jobs = [func.remote(i) for i in chunk_params]
         #     for done_job in tqdm(watch(jobs), desc='Current chunk', position=1, total=len(jobs)):
@@ -53,7 +53,9 @@ class Distributed:
                 pbar.update(1)
 
         inputs = iter(params)
+        jobs = [func.remote(next(inputs)) for _ in range(chunk_size)]
         with tqdm(desc='Completed jobs', total=len(params)) as pbar:
+            update(results, pbar)
             while len(params) > len(jobs):
                 if Distributed.get_workload() < max_workload:
                     jobs += [func.remote(next(inputs))]
