@@ -102,8 +102,8 @@ if __name__ == "__main__":
             'offset': offset
         }
         for n in [8, 10, 12, 14, 16, 18][::-1]
+        for chi in [2 ** 4, 2 ** 5, 2 ** 6, 2 ** 7][::-1]
         for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
-        for chi in [2**4, 2**5, 2**6, 2**7][::-1]
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
 
