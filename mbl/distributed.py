@@ -1,5 +1,6 @@
 import ray
-from tqdm import tqdm
+import numpy as np
+from tqdm import tqdm, trange
 from itertools import islice
 from ray.remote_function import RemoteFunction
 from dask.distributed import Client, progress
@@ -22,9 +23,9 @@ class Distributed:
         Returns:
 
         """
-        def chunk(lst):
-            lst = iter(lst)
-            return iter(lambda: tuple(islice(lst, chunk_size)), ())
+        def chunk(obj_ids):
+            obj_ids = iter(obj_ids)
+            return iter(lambda: list(islice(obj_ids, chunk_size)), [])
 
         def assignee(obj_ids):
             while obj_ids:
@@ -34,13 +35,12 @@ class Distributed:
         if not ray.is_initialized:
             ray.init()
         func = ray.remote(func) if not isinstance(func, RemoteFunction) else func
-        jobs = [func.remote(i) for i in params] if resource_aware_func is None \
-            else [func.options(resource_aware_func(**i)).remote(i) for i in params]
         results = []
-        for chunked_job in tqdm(chunk(jobs), desc='chunk', total=chunk_size):
-            for _ in tqdm(assignee(list(chunked_job)), desc='subtask', position=1, total=len(chunked_job)):
-                pass
-            results += ray.get(chunked_job)
+        for chunk_params in tqdm(chunk(params), desc='All chunks', total=int(np.ceil(len(params) / chunk_size))):
+            jobs = [func.remote(i) for i in chunk_params] if resource_aware_func is None \
+                else [func.options(resource_aware_func(**i)).remote(i) for i in chunk_params]
+            for done_job in tqdm(assignee(jobs), desc='Each chunk', position=1, total=len(jobs)):
+                results += [done_job]
         ray.shutdown()
         return results
 
