@@ -38,22 +38,22 @@ def main2(kwargs):
     print(kwargs)
     agent = RandomHeisenbergTSDRG(**kwargs)
     df = agent.df
-    # retry(
-    #     wr.s3.to_parquet,
-    #     df=df,
-    #     path="s3://many-body-localization/dataframe/tsdrg",
-    #     index=False,
-    #     dataset=True,
-    #     mode="append",
-    #     database="random_heisenberg",
-    #     table="tsdrg"
-    # )
-    # path = Path(f"{Path(__file__).parents[1]}/data/tree")
-    # path.mkdir(parents=True, exist_ok=True)
-    # filename = "-".join([f"{k}_{v}" for k, v in kwargs.items()])
-    # agent.save_tree(f"{path}/{filename}")
+    retry(
+        wr.s3.to_parquet,
+        df=df,
+        path="s3://many-body-localization/dataframe/tsdrg",
+        index=False,
+        dataset=True,
+        mode="append",
+        database="random_heisenberg",
+        table="tsdrg"
+    )
+    path = Path(f"{Path(__file__).parents[1]}/data/tree")
+    path.mkdir(parents=True, exist_ok=True)
+    filename = "-".join([f"{k}_{v}" for k, v in kwargs.items()])
+    agent.save_tree(f"{path}/{filename}")
     del agent
-    return df
+    # return df
 
 
 def scopion():
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     #     threads_per_worker=1,
     #     memory_limit="700MiB",
     # )
-    ray.init(num_cpus=10)
+    ray.init(num_cpus=8)
     results = Distributed.map_on_ray(main2, params)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     # merged_df = pd.concat(results)
