@@ -1,6 +1,6 @@
 import ray
 import psutil
-import numpy as np
+# import numpy as np
 from tqdm import tqdm
 from itertools import islice
 from ray.remote_function import RemoteFunction
@@ -41,10 +41,10 @@ class Distributed:
             ray.init()
         func = ray.remote(func) if not isinstance(func, RemoteFunction) else func
         results = []
-        for chunk_params in tqdm(chunk(params), desc='All chunks', total=int(np.ceil(len(params) / chunk_size))):
-            jobs = [func.remote(i) for i in chunk_params]
-            for done_job in tqdm(watch(jobs), desc='Current chunk', position=1, total=len(jobs)):
-                results += [done_job]
+        # for chunk_params in tqdm(chunk(params), desc='All chunks', total=int(np.ceil(len(params) / chunk_size))):
+        jobs = [func.remote(i) for i in params]
+        for done_job in tqdm(watch(jobs), total=len(jobs)):
+            results += [done_job]
         ray.shutdown()
         return results
 
