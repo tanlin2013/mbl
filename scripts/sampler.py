@@ -105,7 +105,7 @@ if __name__ == "__main__":
     #     threads_per_worker=1,
     #     memory_limit="700MiB",
     # )
-    ray.init(num_cpus=4)
+    ray.init(num_cpus=2)
     results = Distributed.map_on_ray(main2, params)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     # merged_df = pd.concat(results)
