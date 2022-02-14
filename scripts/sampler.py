@@ -18,6 +18,7 @@ def retry(func, *args, **kwargs):
             sleep(3)
 
 
+@ray.remote(num_cpus=1, memory=0.8 * 1024 ** 3)
 def main1(kwargs) -> pd.DataFrame:
     agent = RandomHeisenbergED(**kwargs)
     df = agent.df
@@ -84,15 +85,15 @@ if __name__ == "__main__":
         {
             'n': n,
             'h': h,
-            'chi': chi,
+            # 'chi': chi,
             'trial_id': trial_id,
             'seed': seed,
             'penalty': penalty,
             's_target': s_target,
             'offset': offset
         }
-        for n in [8, 10, 12, 14, 16, 18][::-1]
-        for chi in [2 ** 2, 2 ** 3, 2 ** 4][::-1]
+        for n in [8, 10, 12]
+        # for chi in [2 ** 3, 2 ** 4][::-1]
         for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
@@ -105,8 +106,8 @@ if __name__ == "__main__":
     #     threads_per_worker=1,
     #     memory_limit="700MiB",
     # )
-    ray.init(num_cpus=2)
-    results = Distributed.map_on_ray(main2, params)
+    # ray.init(num_cpus=2)
+    results = Distributed.map_on_ray(main1, params)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     # merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
