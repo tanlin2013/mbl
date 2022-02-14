@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 import pandas as pd
 from time import time
+from dataclasses import dataclass
 from tnpy.operators import FullHamiltonian
 from tnpy.model import RandomHeisenberg, TotalSz
 from tnpy.exact_diagonalization import ExactDiagonalization
@@ -10,6 +11,26 @@ from tnpy.tsdrg import (
     TreeTensorNetworkSDRG as tSDRG,
     TreeTensorNetworkMeasurements
 )
+
+
+@dataclass
+class Columns:
+    level_id: str = 'level_id'
+    en: str = 'en'
+    variance: str = 'variance'
+    total_sz: str = 'total_sz'
+    edge_entropy: str = 'edge_entropy'
+    bipartite_entropy: str = 'bipartite_entropy'
+    truncation_dim: str = 'truncation_dim'
+    system_size: str = 'system_size'
+    disorder: str = 'disorder'
+    trial_id: str = 'trial_id'
+    seed: str = 'seed'
+    penalty: str = 'penalty'
+    s_target: str = 's_target'
+    offset: str = 'offset'
+    energy_gap: str = 'energy_gap'
+    gap_ratio: str = 'gap_ratio'
 
 
 class RandomHeisenbergED:
@@ -69,18 +90,18 @@ class RandomHeisenbergED:
         n_row = len(self.ed.evecs)
         return pd.DataFrame(
             {
-                'LevelID': list(range(n_row)),
-                'En': self.evals.tolist(),
-                'TotalSz': self.total_sz.tolist(),
-                'EdgeEntropy': self.entanglement_entropy(site=0).tolist(),
-                'BipartiteEntropy': self.entanglement_entropy(site=self.model.n // 2 - 1).tolist(),
-                'SystemSize': [self.model.n] * n_row,
-                'Disorder': [self.model.h] * n_row,
-                'TrialID': [self.model.trial_id] * n_row,
-                'Seed': [self.model.seed] * n_row,
-                'Penalty': [self.folded_model.penalty] * n_row,
-                'STarget': [self.folded_model.s_target] * n_row,
-                'Offset': [self.folded_model.offset] * n_row
+                Columns.level_id: list(range(n_row)),
+                Columns.en: self.evals.tolist(),
+                Columns.total_sz: self.total_sz.tolist(),
+                Columns.edge_entropy: self.entanglement_entropy(site=0).tolist(),
+                Columns.bipartite_entropy: self.entanglement_entropy(site=self.model.n // 2 - 1).tolist(),
+                Columns.system_size: [self.model.n] * n_row,
+                Columns.disorder: [self.model.h] * n_row,
+                Columns.trial_id: [self.model.trial_id] * n_row,
+                Columns.seed: [self.model.seed] * n_row,
+                Columns.penalty: [self.folded_model.penalty] * n_row,
+                Columns.s_target: [self.folded_model.s_target] * n_row,
+                Columns.offset: [self.folded_model.offset] * n_row
             }
         )
 
@@ -129,19 +150,19 @@ class RandomHeisenbergTSDRG(TreeTensorNetworkMeasurements):
         n_row = self.tsdrg.chi
         return pd.DataFrame(
             {
-                'LevelID': list(range(n_row)),
-                'En': self.evals.tolist(),
-                'Variance': self.variance.tolist(),
-                'TotalSz': self.total_sz.tolist(),
-                'EdgeEntropy': self.edge_entropy.tolist(),
-                'TruncationDim': [self.tsdrg.chi] * n_row,
-                'SystemSize': [self.model.n] * n_row,
-                'Disorder': [self.model.h] * n_row,
-                'TrialID': [self.model.trial_id] * n_row,
-                'Seed': [self.model.seed] * n_row,
-                'Penalty': [self.folded_model.penalty] * n_row,
-                'STarget': [self.folded_model.s_target] * n_row,
-                'Offset': [self.folded_model.offset] * n_row
+                Columns.level_id: list(range(n_row)),
+                Columns.en: self.evals.tolist(),
+                Columns.variance: self.variance.tolist(),
+                Columns.total_sz: self.total_sz.tolist(),
+                Columns.edge_entropy: self.edge_entropy.tolist(),
+                Columns.truncation_dim: [self.tsdrg.chi] * n_row,
+                Columns.system_size: [self.model.n] * n_row,
+                Columns.disorder: [self.model.h] * n_row,
+                Columns.trial_id: [self.model.trial_id] * n_row,
+                Columns.seed: [self.model.seed] * n_row,
+                Columns.penalty: [self.folded_model.penalty] * n_row,
+                Columns.s_target: [self.folded_model.s_target] * n_row,
+                Columns.offset: [self.folded_model.offset] * n_row
             }
         )
 

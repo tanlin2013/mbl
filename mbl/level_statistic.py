@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import awswrangler as wr
 from enum import Enum
+from mbl.model.random_heisenberg import Columns
 
 
 class AverageOrder(Enum):
@@ -24,40 +25,37 @@ class LevelStatistic:
 
     def local_query(self, n: int, h: float, penalty: float = 0.0, s_target: int = 0,
                     chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
-        return self.raw_df.query(
-            f'(SystemSize == {n}) & '
-            f'(Disorder == {h}) & '
-            f'(Penalty == {penalty}) & '
-            f'(STarget == {s_target}) & '
-            f'(TruncationDim == {chi}) & '
-            f'(abs(TotalSz - {total_sz}) < {tol})'
-        )
+        query = f'({Columns.system_size} == {n}) & ' \
+            f'({Columns.disorder} == {h}) & ' \
+            f'({Columns.penalty} == {penalty}) & ' \
+            f'({Columns.s_target} == {s_target})'
+        if total_sz is not None:
+            query += f' & (abs({Columns.total_sz} - {total_sz}) < {tol})'
+        if chi is not None:
+            query += f' & ({Columns.truncation_dim} == {chi})'
+        return self.raw_df.query(query)
 
     @staticmethod
     def athena_query(n: int, h: float, penalty: float = 0.0, s_target: int = 0,
                      chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
-        return wr.athena.read_sql_query(
-            f'(systemsize = {n}) AND '
-            f'(disorder = {h}) AND '
-            f'(penalty = {penalty}) AND '
-            f'(starget = {s_target}) AND '
-            f'(truncationdim = {chi}) AND '
-            f'(ABS(totalsz - {total_sz}) < {tol})',
-            database="random_heisenberg",
-            categories=[
-                "levelid", "en", "variance", "totalsz",
-                "edgeentropy", "truncationdim", "systemsize",
-                "disorder", "trailid", "seed", "penalty",
-                "starget", "offset"
-            ]
-        )
+        table = 'ed' if chi is None else 'tsdrg'
+        query = f'SELECT * FROM {table} WHERE' \
+                f'({Columns.system_size} = {n}) AND ' \
+                f'({Columns.disorder} = {h}) AND ' \
+                f'({Columns.penalty} = {penalty}) AND ' \
+                f'({Columns.s_target} = {s_target})'
+        if total_sz is not None:
+            query += f' AND (ABS({Columns.total_sz} - {total_sz}) < {tol})'
+        if table == 'tsdrg':
+            query += f' AND ({Columns.truncation_dim} = {chi})'
+        return wr.athena.read_sql_query(query, database="random_heisenberg")
 
     def extract_gap(self, n: int, h: float, penalty: float = 0.0, s_target: int = 0,
                     chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
         df = self.local_query(**locals()) if self.raw_df is not None \
             else self.athena_query(**locals())
-        df['EnergyGap'] = df.groupby(['TrialID'])['En'].apply(lambda x: x.diff())
-        df['GapRatio'] = self.gap_ratio(df['EnergyGap'].to_numpy())
+        df[Columns.energy_gap] = df.groupby([Columns.trial_id])[Columns.en].apply(lambda x: x.diff())
+        df[Columns.gap_ratio] = self.gap_ratio(df[Columns.energy_gap].to_numpy())
         return df.reset_index(drop=True)
 
     @staticmethod
@@ -67,11 +65,11 @@ class LevelStatistic:
 
     @staticmethod
     def level_average(df: pd.DataFrame) -> pd.Series:
-        return df.groupby(['TrialID'])['GapRatio'].mean()
+        return df.groupby([Columns.trial_id])[Columns.gap_ratio].mean()
 
     @staticmethod
     def disorder_average(df: pd.DataFrame) -> pd.Series:
-        return df.groupby(['LevelID'])['GapRatio'].mean()
+        return df.groupby([Columns.trial_id])[Columns.gap_ratio].mean()
 
     @staticmethod
     def averaged_gap_ratio(df: pd.DataFrame,
