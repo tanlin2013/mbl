@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import awswrangler as wr
 from enum import Enum
-from mbl.model.random_heisenberg import Columns
+from mbl.model import Columns
 
 
 class AverageOrder(Enum):
@@ -53,9 +53,9 @@ class LevelStatistic:
     def extract_gap(self, n: int, h: float, penalty: float = 0.0, s_target: int = 0,
                     chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
         df = self.local_query(**locals()) if self.raw_df is not None \
-            else self.athena_query(**locals())
+            else LevelStatistic.athena_query(n, h, penalty, s_target, chi, total_sz, tol)
         df[Columns.energy_gap] = df.groupby([Columns.trial_id])[Columns.en].apply(lambda x: x.diff())
-        df[Columns.gap_ratio] = self.gap_ratio(df[Columns.energy_gap].to_numpy())
+        df[Columns.gap_ratio] = LevelStatistic.gap_ratio(df[Columns.energy_gap].to_numpy())
         return df.reset_index(drop=True)
 
     @staticmethod
