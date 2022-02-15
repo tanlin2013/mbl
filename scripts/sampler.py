@@ -92,8 +92,8 @@ if __name__ == "__main__":
             's_target': s_target,
             'offset': offset
         }
-        for n in [8, 10, 12, 14, 16, 18, 20][::-1]
-        for chi in [2 ** 3, 2 ** 4, 2 ** 5, 2 ** 6][::-1]
+        for n in [8, 10, 12, 14, 16, 18, 20]
+        for chi in [2 ** 3, 2 ** 4, 2 ** 5, 2 ** 6]
         for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
@@ -106,7 +106,7 @@ if __name__ == "__main__":
     #     threads_per_worker=1,
     #     memory_limit="700MiB",
     # )
-    ray.init(num_cpus=20)
+    ray.init(num_cpus=16)
     results = Distributed.map_on_ray(main2, params)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     # merged_df = pd.concat(results)
