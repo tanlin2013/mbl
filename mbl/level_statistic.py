@@ -54,7 +54,7 @@ class LevelStatistic:
                     chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
         df = self.local_query(**locals()) if self.raw_df is not None \
             else LevelStatistic.athena_query(n, h, penalty, s_target, chi, total_sz, tol)
-        df[Columns.energy_gap] = df.groupby([Columns.trial_id])[Columns.en].apply(lambda x: x.diff())
+        df[Columns.energy_gap] = df.groupby([Columns.seed])[Columns.en].apply(lambda x: x.diff())
         df[Columns.gap_ratio] = LevelStatistic.gap_ratio(df[Columns.energy_gap].to_numpy())
         return df.reset_index(drop=True)
 
