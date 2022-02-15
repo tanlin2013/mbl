@@ -39,20 +39,20 @@ def main2(kwargs):
     print(kwargs)
     agent = RandomHeisenbergTSDRG(**kwargs)
     df = agent.df
-    retry(
-        wr.s3.to_parquet,
-        df=df,
-        path="s3://many-body-localization/dataframe/tsdrg",
-        index=False,
-        dataset=True,
-        mode="append",
-        database="random_heisenberg",
-        table="tsdrg"
-    )
-    path = Path(f"{Path(__file__).parents[1]}/data/tree")
-    path.mkdir(parents=True, exist_ok=True)
-    filename = "-".join([f"{k}_{v}" for k, v in kwargs.items()])
-    agent.save_tree(f"{path}/{filename}")
+    # retry(
+    #     wr.s3.to_parquet,
+    #     df=df,
+    #     path="s3://many-body-localization/dataframe/tsdrg",
+    #     index=False,
+    #     dataset=True,
+    #     mode="append",
+    #     database="random_heisenberg",
+    #     table="tsdrg"
+    # )
+    # path = Path(f"{Path(__file__).parents[1]}/data/tree")
+    # path.mkdir(parents=True, exist_ok=True)
+    # filename = "-".join([f"{k}_{v}" for k, v in kwargs.items()])
+    # agent.save_tree(f"{path}/{filename}")
     del agent
     # return df
 
@@ -85,15 +85,15 @@ if __name__ == "__main__":
         {
             'n': n,
             'h': h,
-            # 'chi': chi,
+            'chi': chi,
             'trial_id': trial_id,
             'seed': seed,
             'penalty': penalty,
             's_target': s_target,
             'offset': offset
         }
-        for n in [8, 10, 12]
-        # for chi in [2 ** 3, 2 ** 4][::-1]
+        for n in [8, 10, 12, 14, 16, 18, 20][::-1]
+        for chi in [2 ** 3, 2 ** 4, 2 ** 5, 2 ** 6, 2 ** 7][::-1]
         for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
         for trial_id, seed in enumerate(range(1900, 1900 + n_conf))
     ]
@@ -106,8 +106,8 @@ if __name__ == "__main__":
     #     threads_per_worker=1,
     #     memory_limit="700MiB",
     # )
-    # ray.init(num_cpus=2)
-    results = Distributed.map_on_ray(main1, params)
+    ray.init(num_cpus=6)
+    results = Distributed.map_on_ray(main2, params)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     # merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
