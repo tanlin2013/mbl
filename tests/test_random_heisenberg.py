@@ -72,10 +72,10 @@ class TestRandomHeisenbergTSDRG(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super(TestRandomHeisenbergTSDRG, self).__init__(*args, **kwargs)
         self.agent = RandomHeisenbergTSDRG(
-            n=6, h=0.1, chi=2**6, trial_id=0, seed=2021, penalty=0, s_target=0
+            n=6, h=0.5, chi=2**6
         )
         self.ed_agent = RandomHeisenbergED(
-            n=6, h=0.1, trial_id=0, seed=2021, penalty=0, s_target=0
+            self.agent.model.n, self.agent.model.h, seed=self.agent.model.seed
         )
 
     def test_evals(self):
