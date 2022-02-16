@@ -66,7 +66,7 @@ if __name__ == "__main__":
     h = st.sidebar.radio('Disorder strength h', (0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0))
     chi = st.sidebar.radio('Truncation dim', (2 ** 3, 2 ** 4, 2 ** 5, 2 ** 6)) if table == 'tsdrg' else None
     total_sz = st.sidebar.radio("Restrict Total Sz in", (None, 0, 1))
-    options_n_conf = (8, 10) if table == 'ed' else (10, 20, 30, 40)
+    options_n_conf = (8, 10) if table == 'ed' else (10, 20, 30, 40, 50)
     n_conf = st.sidebar.radio(
         "Number of disorder trials "
         "(can't be too large, just because we can't draw too many dots in the plot)",
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     r2 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.DisorderFirst)
     st.write(f'(Disorder-then-level) averaged `r = {r2}`')
     st.write(f'Relative difference is `{abs(r1 - r2)/max(r1, r2) * 100} %`')
-    st.write('**Note**: Theoretical value is ~0.531 for the delocalized phase and ~0.386 for the localized phase.')
+    st.write('**Note**: Theoretical value is ~0.5307 for the delocalized phase and ~0.3863 for the localized phase.')
 
     st.markdown('### 2. Data Table')
     st.dataframe(df)
