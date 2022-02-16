@@ -1,5 +1,3 @@
-apt update
-apt-get install -y gfortran libblas-dev liblapack-dev graphviz
 mkdir -p ~/.streamlit/
 echo "\
 [server]\n\
