@@ -1,8 +1,9 @@
 from setuptools import setup
 
 
-with open('requirements/simulation.txt') as f:
+with open('requirements.txt') as f:
     required = f.read().splitlines()
+    required += ['tnpy==0.0.9']
 
 setup(
     name='mbl',

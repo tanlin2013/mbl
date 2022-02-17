@@ -8,7 +8,8 @@ WORKDIR $WORKDIR
 # Install required python packages
 COPY . $WORKDIR
 RUN pip install --upgrade pip
-RUN pip install -r requirements/simulation.txt
+RUN pip install -r requirements.txt
+RUN pip install tnpy==0.0.9
 
 # Install mbl
 RUN python setup.py install
