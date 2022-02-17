@@ -1,4 +1,4 @@
-import orjson
+import orjson  # https://plotly.com/python/renderers/#performance
 import numpy as np
 import pandas as pd
 import streamlit as st
