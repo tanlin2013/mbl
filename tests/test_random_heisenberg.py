@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import pandas as pd
-from mbl.model import (
+from mbl.experiment import (
     RandomHeisenbergED,
     RandomHeisenbergTSDRG,
     Columns

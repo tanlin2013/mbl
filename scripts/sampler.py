@@ -5,7 +5,7 @@ from botocore.exceptions import ClientError
 from pathlib import Path
 from time import sleep
 # from dask.distributed import LocalCluster
-from mbl.model import RandomHeisenbergED, RandomHeisenbergTSDRG
+from mbl.experiment import RandomHeisenbergED, RandomHeisenbergTSDRG
 from mbl.distributed import Distributed
 
 

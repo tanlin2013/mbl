@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import awswrangler as wr
 from enum import Enum
-from mbl.model import Columns
+from mbl.experiment import Columns
 
 
 class AverageOrder(Enum):
