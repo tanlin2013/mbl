@@ -6,8 +6,8 @@ import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.io as pio
 from itertools import count
+from mbl.name_space import Columns
 from mbl.level_statistic import (
-    Columns,
     LevelStatistic,
     AverageOrder
 )

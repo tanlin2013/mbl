@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 import pandas as pd
 from time import time
-from dataclasses import dataclass
+from mbl.name_space import Columns
 from tnpy.operators import FullHamiltonian
 from tnpy.model import RandomHeisenberg, TotalSz
 from tnpy.exact_diagonalization import ExactDiagonalization
@@ -11,26 +11,6 @@ from tnpy.tsdrg import (
     TreeTensorNetworkSDRG as tSDRG,
     TreeTensorNetworkMeasurements
 )
-
-
-@dataclass
-class Columns:
-    level_id: str = 'level_id'
-    en: str = 'en'
-    variance: str = 'variance'
-    total_sz: str = 'total_sz'
-    edge_entropy: str = 'edge_entropy'
-    bipartite_entropy: str = 'bipartite_entropy'
-    truncation_dim: str = 'truncation_dim'
-    system_size: str = 'system_size'
-    disorder: str = 'disorder'
-    trial_id: str = 'trial_id'
-    seed: str = 'seed'
-    penalty: str = 'penalty'
-    s_target: str = 's_target'
-    offset: str = 'offset'
-    energy_gap: str = 'energy_gap'
-    gap_ratio: str = 'gap_ratio'
 
 
 class RandomHeisenbergED:
