@@ -1,7 +1,7 @@
 from setuptools import setup
 
 
-with open('requirements.txt') as f:
+with open('requirements/simulation.txt') as f:
     required = f.read().splitlines()
 
 setup(
