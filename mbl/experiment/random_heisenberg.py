@@ -130,7 +130,7 @@ class RandomHeisenbergTSDRG(TreeTensorNetworkMeasurements):
         return self._evals[self.sorting_order]
 
     @property
-    def variance(self) -> np.ndarray:
+    def variance(self) -> np.ndarray:  # TODO: check off-diagonal warning
         var = self.expectation_value(self.model.mpo.square()) \
               - np.square(self.expectation_value(self.model.mpo))
         return var[self.sorting_order]
