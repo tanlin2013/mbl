@@ -1,8 +1,8 @@
-name: CI test
+name: test
 
 on:
   workflow_run:
-    workflows: [ "CI docker build" ]
+    workflows: [ "docker-build" ]
     types:
       - completed
 
