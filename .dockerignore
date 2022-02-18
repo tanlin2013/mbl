@@ -1,0 +1,11 @@
+/.git
+/.github
+/tests
+.dockerignore
+.gitignore
+Dockerfile
+LICENCE
+makefile
+Procfile
+README.md
+streamlit.sh
