@@ -60,11 +60,15 @@ def scatter_with_error_bar(df: pd.DataFrame, x: str, y: str, title: str):
 
 if __name__ == "__main__":
 
-    table = st.sidebar.radio('Database table', ('ed', 'tsdrg'))
+    st.set_page_config(layout="wide")
+
+    table = st.sidebar.radio("Database table", ('ed', 'tsdrg'))
     options_n = (8, 10, 12) if table == 'ed' else (8, 10, 12, 14, 16, 18, 20)
-    n = st.sidebar.radio('System size N', options_n)
-    h = st.sidebar.radio('Disorder strength h', (0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0))
-    chi = st.sidebar.radio('Truncation dim', (2 ** 3, 2 ** 4, 2 ** 5, 2 ** 6)) if table == 'tsdrg' else None
+    n = st.sidebar.radio("System size n", options_n)
+    options_h = (0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0)
+    h = st.sidebar.radio("Disorder strength h", options_h)
+    options_chi = (2 ** 3, 2 ** 4, 2 ** 5, 2 ** 6)
+    chi = st.sidebar.radio("Truncation dim chi", options_chi) if table == 'tsdrg' else None
     total_sz = st.sidebar.radio("Restrict Total Sz in", (None, 0, 1))
     options_n_conf = (8, 10, 20, 30, 40, 50, None)
     n_conf = st.sidebar.radio(
@@ -73,21 +77,26 @@ if __name__ == "__main__":
     )
 
     st.markdown('# Level statistics of Heisenberg model with random transversed field')
-    st.write("Please wait, for every first click on the sidebar, it may take a while to load the data.")
+    st.write('Please wait, it may take a while to load the data.')
 
     df = load_data(n, h, chi=chi, total_sz=total_sz)
 
-    st.markdown('### 1. Gap ratio parameter (r-value)')
+    st.markdown('### 1. Data Table')
+    st.dataframe(df)
+
+    st.markdown('### 2. Gap ratio parameter (r-value)')
     r1 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.LevelFirst)
     st.write(f'(Level-then-disorder) averaged `r = {r1}`')
     r2 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.DisorderFirst)
     st.write(f'(Disorder-then-level) averaged `r = {r2}`')
     st.write(f'Relative difference is `{abs(r1 - r2)/max(r1, r2) * 100} %`')
-    st.write('**Note**: Theoretical value is ~0.5307 for the delocalized phase and ~0.3863 for the localized phase.')
+    st.write('**Note**: Theoretical value is')
+    st.write('* Ergodic phase: ~`0.5307`.')
+    st.write('* Localized phase: ~`0.3863`.')
 
-    st.markdown('### 2. Data Table')
-    st.dataframe(df)
-
+    st.markdown('### 3. Visualization')
+    st.markdown('#### 3.a. Interactive')
+    st.write('**Hint**: Change parameters on the sidebar.')
     plot_pairs = [
         (Columns.en, Columns.level_id),
         (Columns.gap_ratio, Columns.en),
