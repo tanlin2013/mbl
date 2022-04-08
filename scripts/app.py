@@ -17,10 +17,10 @@ pio.renderers.default = 'iframe'
 
 
 @st.cache(persist=True)
-def load_data(n: int, h: float, chi: int, total_sz: int, n_conf: int, filename: str = None):
+def load_data(n: int, h: float, chi: int, total_sz: int, filename: str = None):
     raw_df = pd.read_parquet(filename) if filename is not None else None
     agent = LevelStatistic(raw_df)
-    df = agent.extract_gap(n, h, chi=chi, total_sz=total_sz).query(f'{Columns.trial_id} < {n_conf}')
+    df = agent.extract_gap(n, h, chi=chi, total_sz=total_sz)
     if chi is not None:
         df['error'] = np.sqrt(df[Columns.variance].to_numpy() / chi)
     return df
@@ -66,17 +66,16 @@ if __name__ == "__main__":
     h = st.sidebar.radio('Disorder strength h', (0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0))
     chi = st.sidebar.radio('Truncation dim', (2 ** 3, 2 ** 4, 2 ** 5, 2 ** 6)) if table == 'tsdrg' else None
     total_sz = st.sidebar.radio("Restrict Total Sz in", (None, 0, 1))
-    options_n_conf = (8, 10) if table == 'ed' else (10, 20, 30, 40, 50)
+    options_n_conf = (8, 10, 20, 30, 40, 50, None)
     n_conf = st.sidebar.radio(
-        "Number of disorder trials "
-        "(can't be too large, just because we can't draw too many dots in the plot)",
+        "Number of disorder trials for making plots (The larger, the slower. None means using all samples)",
         options_n_conf
     )
 
     st.markdown('# Level statistics of Heisenberg model with random transversed field')
     st.write("Please wait, for every first click on the sidebar, it may take a while to load the data.")
 
-    df = load_data(n, h, chi=chi, total_sz=total_sz, n_conf=n_conf)
+    df = load_data(n, h, chi=chi, total_sz=total_sz)
 
     st.markdown('### 1. Gap ratio parameter (r-value)')
     r1 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.LevelFirst)
@@ -99,17 +98,22 @@ if __name__ == "__main__":
         (Columns.gap_ratio, Columns.total_sz)
     ]
 
-    st.markdown('### 3. Plots')
+    if n_conf is not None:
+        grouped = df.groupby([Columns.seed])
+        mini_df = pd.concat([grouped.get_group(g) for g in list(grouped.groups)[:n_conf]])
+    else:
+        mini_df = df.copy()
+
     for k, v in zip(count(start=1), plot_pairs):
         if not (Columns.total_sz in v and total_sz is not None):
             try:
                 if table == 'ed':
                     st.write(
-                        density_histogram_2d(df, v[0], v[1], f'Fig. {k}:')
+                        density_histogram_2d(mini_df, v[0], v[1], f'Fig. {k}:')
                     )
                 elif table == 'tsdrg':
                     st.write(
-                        scatter_with_error_bar(df, v[0], v[1], f'Fig. {k}:')
+                        scatter_with_error_bar(mini_df, v[0], v[1], f'Fig. {k}:')
                     )
             except KeyError:
                 pass
