@@ -3,6 +3,7 @@ import pandas as pd
 import awswrangler as wr
 from enum import Enum
 from mbl.name_space import Columns
+from typing import List
 
 
 class AverageOrder(Enum):
@@ -23,32 +24,43 @@ class LevelStatistic:
     def raw_df(self, raw_df: pd.DataFrame):
         self._raw_df = raw_df
 
-    def local_query(self, n: int, h: float, penalty: float = 0.0, s_target: int = 0,
+    @staticmethod
+    def base_query_elements(n: int, h: float, penalty: float = 0.0, s_target: int = 0) -> List[str]:
+        return [
+            f'({Columns.system_size} = {n})',
+            f'({Columns.disorder} = {h})',
+            f'({Columns.penalty} = {penalty})',
+            f'({Columns.s_target} = {s_target})'
+        ]
+
+    def local_query(self, n: int, h: float, penalty: float = 0.0, s_target: int = 0, seed: int = None,
                     chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
-        query = f'({Columns.system_size} == {n}) & ' \
-            f'({Columns.disorder} == {h}) & ' \
-            f'({Columns.penalty} == {penalty}) & ' \
-            f'({Columns.s_target} == {s_target})'
+        query = LevelStatistic.base_query_elements(n, h, penalty, s_target)
+        if seed is not None:
+            query.append(f'({Columns.seed} = {seed})')
         if total_sz is not None:
-            query += f' & (abs({Columns.total_sz} - {total_sz}) < {tol})'
+            query.append(f'(abs({Columns.total_sz} - {total_sz}) < {tol})')
         if chi is not None:
-            query += f' & ({Columns.truncation_dim} == {chi})'
-        return self.raw_df.query(query)
+            query.append(f'({Columns.truncation_dim} = {chi})')
+        return self.raw_df.query(
+            ' & '.join(query).replace('=', '==')
+        )
 
     @staticmethod
-    def athena_query(n: int, h: float, penalty: float = 0.0, s_target: int = 0,
+    def athena_query(n: int, h: float, penalty: float = 0.0, s_target: int = 0, seed: int = None,
                      chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
-        table = 'ed' if chi is None else 'tsdrg'
-        query = f'SELECT * FROM {table} WHERE' \
-                f'({Columns.system_size} = {n}) AND ' \
-                f'({Columns.disorder} = {h}) AND ' \
-                f'({Columns.penalty} = {penalty}) AND ' \
-                f'({Columns.s_target} = {s_target})'
+        query = LevelStatistic.base_query_elements(n, h, penalty, s_target)
+        if seed is not None:
+            query.append(f'({Columns.seed} = {seed})')
         if total_sz is not None:
-            query += f' AND (ABS({Columns.total_sz} - {total_sz}) < {tol})'
-        if table == 'tsdrg':
-            query += f' AND ({Columns.truncation_dim} = {chi})'
-        return wr.athena.read_sql_query(query, database="random_heisenberg")
+            query.append(f'(ABS({Columns.total_sz} - {total_sz}) < {tol})')
+        if chi is not None:
+            query.append(f'({Columns.truncation_dim} = {chi})')
+        table = 'ed' if chi is None else 'tsdrg'
+        return wr.athena.read_sql_query(
+            f"SELECT * FROM {table} WHERE {' AND '.join(query)}",
+            database="random_heisenberg"
+        )
 
     def extract_gap(self, n: int, h: float, penalty: float = 0.0, s_target: int = 0,
                     chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
