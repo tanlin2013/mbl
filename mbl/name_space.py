@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(frozen=True)
 class Columns:
     level_id: str = 'level_id'
     en: str = 'en'
