@@ -62,12 +62,15 @@ class LevelStatistic:
             database="random_heisenberg"
         )
 
-    def extract_gap(self, n: int, h: float, penalty: float = 0.0, s_target: int = 0,
+    def extract_gap(self, n: int, h: float, penalty: float = 0.0, s_target: int = 0, seed: int = None,
                     chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
         df = self.local_query(**locals()) if self.raw_df is not None \
-            else LevelStatistic.athena_query(n, h, penalty, s_target, chi, total_sz, tol)
-        df[Columns.energy_gap] = df.groupby([Columns.seed])[Columns.en].apply(lambda x: x.diff())
-        df[Columns.gap_ratio] = LevelStatistic.gap_ratio(df[Columns.energy_gap].to_numpy())
+            else LevelStatistic.athena_query(n, h, penalty, s_target, seed, chi, total_sz, tol)
+        df.drop_duplicates(subset=[Columns.level_id], keep='first', inplace=True)
+        # df[Columns.level_id] = df.groupby([Columns.seed]).cumcount()
+        df[Columns.energy_gap] = df.groupby([Columns.seed])[Columns.en].diff()
+        df[Columns.gap_ratio] = df.groupby([Columns.seed])[Columns.energy_gap]\
+            .transform(lambda x: LevelStatistic.gap_ratio(x.to_numpy()))
         return df.reset_index(drop=True)
 
     @staticmethod
@@ -77,11 +80,11 @@ class LevelStatistic:
 
     @staticmethod
     def level_average(df: pd.DataFrame) -> pd.Series:
-        return df.groupby([Columns.trial_id])[Columns.gap_ratio].mean()
+        return df.groupby([Columns.seed])[Columns.gap_ratio].mean()
 
     @staticmethod
     def disorder_average(df: pd.DataFrame) -> pd.Series:
-        return df.groupby([Columns.trial_id])[Columns.gap_ratio].mean()
+        return df.groupby([Columns.level_id])[Columns.gap_ratio].mean()
 
     @staticmethod
     def averaged_gap_ratio(df: pd.DataFrame,
