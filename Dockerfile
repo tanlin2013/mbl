@@ -8,7 +8,7 @@ EXPOSE 8080
 
 # Install required python packages
 COPY . $WORKDIR
-RUN pip install --upgrade pip &&
+RUN pip install --upgrade pip && \
     pip install -r requirements.txt && \
     pip install tnpy==0.0.9 && \
     python setup.py install && \
