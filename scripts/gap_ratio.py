@@ -25,13 +25,12 @@ def fetch_gap_ratio(kwargs):
     df = LevelStatistic().extract_gap(**kwargs)
     df = pd.DataFrame(
         {
-            Columns.system_size: [kwargs.get['n']],
-            Columns.disorder: [kwargs.get['h']],
-            Columns.penalty: [kwargs.get['penalty']],
-            Columns.s_target: [kwargs.get['s_target']],
-            Columns.truncation_dim: [kwargs.get['chi']],
-            Columns.total_sz: [kwargs.get['total_sz']],
-            Columns.offset: [kwargs.get['offset']],
+            Columns.system_size: [kwargs.get('n')],
+            Columns.disorder: [kwargs.get('h')],
+            Columns.truncation_dim: [kwargs.get('chi')],
+            Columns.penalty: [kwargs.get('penalty')],
+            Columns.s_target: [kwargs.get('s_target')],
+            Columns.offset: [0.0],
             Columns.gap_ratio: [LevelStatistic.averaged_gap_ratio(df)]
         }
     )
@@ -65,4 +64,3 @@ if __name__ == "__main__":
 
     ray.init(num_cpus=16)
     results = Distributed.map_on_ray(fetch_gap_ratio, params)
-
