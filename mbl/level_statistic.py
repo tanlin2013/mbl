@@ -62,8 +62,17 @@ class LevelStatistic:
                     chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
         df = self.local_query(n, h, penalty, s_target, seed, chi, total_sz, tol) if self.raw_df is not None \
             else LevelStatistic.athena_query(n, h, penalty, s_target, seed, chi, total_sz, tol)
-        df.drop_duplicates(subset=[Columns.level_id], keep='first', inplace=True)
-        # df[Columns.level_id] = df.groupby([Columns.seed]).cumcount()
+        df.drop_duplicates(
+            subset=[
+                Columns.system_size,
+                Columns.disorder,
+                Columns.penalty,
+                Columns.s_target,
+                Columns.seed,
+                Columns.level_id
+            ],
+            keep='first', inplace=True
+        )
         df[Columns.energy_gap] = df.groupby([Columns.seed])[Columns.en].diff()
         df[Columns.gap_ratio] = df.groupby([Columns.seed])[Columns.energy_gap]\
             .transform(lambda x: LevelStatistic.gap_ratio(x.to_numpy()))
