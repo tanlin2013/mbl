@@ -1,4 +1,4 @@
-numpy==1.22.3
+numpy==1.22.1
 pandas==1.4.0
 botocore==1.23.24
 fsspec==2022.1.0
