@@ -33,12 +33,12 @@ class LevelStatistic:
             f'({Columns.penalty} = {penalty})',
             f'({Columns.s_target} = {s_target})'
         ]
+        if chi is not None:
+            query.append(f'({Columns.truncation_dim} = {chi})')
         if seed is not None:
             query.append(f'({Columns.seed} = {seed})')
         if total_sz is not None:
             query.append(f'(ABS({Columns.total_sz} - {total_sz}) < {tol})')
-        if chi is not None:
-            query.append(f'({Columns.truncation_dim} = {chi})')
         return query
 
     def local_query(self, n: int, h: float, penalty: float = 0.0, s_target: int = 0, seed: int = None,
