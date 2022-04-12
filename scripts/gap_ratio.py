@@ -21,18 +21,17 @@ def retry(func, *args, **kwargs):
 
 
 @ray.remote(num_cpus=1)
-def fetch_gap_ratio(n: int, h: float, penalty: float = 0, s_target: int = 0,
-                    offset: float = 0, chi: int = None, total_sz: int = None):
-    df = LevelStatistic().extract_gap(**locals())
+def fetch_gap_ratio(kwargs):
+    df = LevelStatistic().extract_gap(**kwargs)
     df = pd.DataFrame(
         {
-            Columns.system_size: [n],
-            Columns.disorder: [h],
-            Columns.penalty: [penalty],
-            Columns.s_target: [s_target],
-            Columns.truncation_dim: [chi],
-            Columns.total_sz: [total_sz],
-            Columns.offset: [offset],
+            Columns.system_size: [kwargs.get['n']],
+            Columns.disorder: [kwargs.get['h']],
+            Columns.penalty: [kwargs.get['penalty']],
+            Columns.s_target: [kwargs.get['s_target']],
+            Columns.truncation_dim: [kwargs.get['chi']],
+            Columns.total_sz: [kwargs.get['total_sz']],
+            Columns.offset: [kwargs.get['offset']],
             Columns.gap_ratio: [LevelStatistic.averaged_gap_ratio(df)]
         }
     )
