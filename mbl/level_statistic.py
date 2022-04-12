@@ -52,7 +52,7 @@ class LevelStatistic:
     def athena_query(n: int, h: float, penalty: float = 0.0, s_target: int = 0, seed: int = None,
                      chi: int = None, total_sz: int = None, tol: float = 1e-12) -> pd.DataFrame:
         query = LevelStatistic.query_elements(**locals())
-        table = 'ed' if chi is None else 'tsdrg'
+        table = 'ed2' if chi is None else 'tsdrg2'
         return wr.athena.read_sql_query(
             f"SELECT * FROM {table} WHERE {' AND '.join(query)}",
             database="random_heisenberg"
