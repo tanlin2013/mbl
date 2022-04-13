@@ -22,6 +22,7 @@ def fetch_gap_ratio(kwargs):
     df = LevelStatistic().extract_gap(**kwargs)
     df = pd.DataFrame(
         {
+            'algorithm': ['tsdrg'],
             Columns.system_size: [kwargs.get('n')],
             Columns.disorder: [kwargs.get('h')],
             Columns.truncation_dim: [kwargs.get('chi')],
