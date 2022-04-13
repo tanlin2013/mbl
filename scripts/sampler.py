@@ -5,8 +5,10 @@ from botocore.exceptions import ClientError
 from pathlib import Path
 from time import sleep
 # from dask.distributed import LocalCluster
+from mbl.name_space import Columns
 from mbl.experiment import RandomHeisenbergED, RandomHeisenbergTSDRG
 from mbl.distributed import Distributed
+from mbl.level_statistic import LevelStatistic
 
 
 def retry(func, *args, **kwargs):
@@ -28,8 +30,15 @@ def main1(kwargs) -> pd.DataFrame:
         path="s3://many-body-localization/dataframe/ed",
         dataset=True,
         mode="append",
+        partition_cols=[
+            Columns.system_size,
+            Columns.disorder,
+            Columns.penalty,
+            Columns.s_target,
+            Columns.offset
+        ],
         database="random_heisenberg",
-        table="ed"
+        table="ed2"
     )
     return df
 
@@ -46,8 +55,16 @@ def main2(kwargs):
         index=False,
         dataset=True,
         mode="append",
+        partition_cols=[
+            Columns.system_size,
+            Columns.disorder,
+            Columns.truncation_dim,
+            Columns.penalty,
+            Columns.s_target,
+            Columns.offset
+        ],
         database="random_heisenberg",
-        table="tsdrg"
+        table="tsdrg2"
     )
     path = Path(f"{Path(__file__).parents[1]}/data/tree")
     path.mkdir(parents=True, exist_ok=True)
@@ -55,6 +72,39 @@ def main2(kwargs):
     agent.save_tree(f"{path}/{filename}")
     del agent
     # return df
+
+
+@ray.remote(num_cpus=1)
+def main3(kwargs):
+    df = LevelStatistic().extract_gap(
+        n=kwargs.get('n'), h=kwargs.get('h'), seed=kwargs.get('seed'),
+        chi=kwargs.get('chi'),
+    )
+    if len(df.index) < kwargs.get('chi'):
+        agent = RandomHeisenbergTSDRG(**kwargs)
+        df = agent.df
+        retry(
+            wr.s3.to_parquet,
+            df=df,
+            path="s3://many-body-localization/dataframe/tsdrg",
+            index=False,
+            dataset=True,
+            mode="append",
+            partition_cols=[
+                Columns.system_size,
+                Columns.disorder,
+                Columns.truncation_dim,
+                Columns.penalty,
+                Columns.s_target,
+                Columns.offset
+            ],
+            database="random_heisenberg",
+            table="tsdrg2"
+        )
+        path = Path(f"{Path(__file__).parents[1]}/data/tree")
+        path.mkdir(parents=True, exist_ok=True)
+        filename = "-".join([f"{k}_{v}" for k, v in kwargs.items()])
+        agent.save_tree(f"{path}/{filename}")
 
 
 def scopion():
@@ -107,7 +157,7 @@ if __name__ == "__main__":
     #     memory_limit="700MiB",
     # )
     ray.init(num_cpus=16)
-    results = Distributed.map_on_ray(main2, params)
+    results = Distributed.map_on_ray(main3, params)
     # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
     # merged_df = pd.concat(results)
     # merged_df.to_parquet(f'~/data/random_heisenberg_tsdrg.parquet', index=False)
