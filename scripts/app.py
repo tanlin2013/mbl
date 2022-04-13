@@ -5,6 +5,7 @@ import streamlit as st
 import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.io as pio
+import plotly.graph_objects as go
 from itertools import count
 from mbl.name_space import Columns
 from mbl.level_statistic import (
@@ -24,6 +25,13 @@ def load_data(n: int, h: float, chi: int, total_sz: int, filename: str = None):
     if chi is not None:
         df['error'] = np.sqrt(df[Columns.variance].to_numpy() / chi)
     return df
+
+
+@st.cache(persist=True)
+def fetch_gap_ratio(n: int, h: float, chi: int = None, total_sz: int = None) -> float:
+    return LevelStatistic().averaged_gap_ratio(
+        load_data(**locals())
+    )
 
 
 @st.cache(persist=True)
@@ -48,7 +56,6 @@ def scatter_with_error_bar(df: pd.DataFrame, x: str, y: str, title: str):
         df,
         x=x,
         y=y,
-        # color=Columns.seed,
         error_x=error_x,
         error_y=error_y,
         marginal_x='histogram',
@@ -102,6 +109,7 @@ if __name__ == "__main__":
         (Columns.gap_ratio, Columns.en),
         (Columns.en, Columns.edge_entropy),
         (Columns.gap_ratio, Columns.edge_entropy),
+        (Columns.gap_ratio, Columns.bipartite_entropy),
         (Columns.en, Columns.energy_gap),
         (Columns.en, Columns.total_sz),
         (Columns.gap_ratio, Columns.total_sz)
@@ -124,5 +132,59 @@ if __name__ == "__main__":
                     st.write(
                         scatter_with_error_bar(mini_df, v[0], v[1], f'Fig. {k}:')
                     )
+            except ValueError:
+                pass
             except KeyError:
                 pass
+
+    st.markdown('#### 3.b. Scaling')
+
+    hs = [0.5, 3.0, 4.0, 6.0, 10.0]
+    fig = go.Figure()
+    for h in hs:
+        r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for n in options_n]
+        fig.add_trace(go.Scatter(
+            x=options_n, y=r,
+            name=f'h = {h}', mode='lines+markers', line={'dash': 'dash'}, marker={'size': 10}
+        ))
+    fig.update_layout(title='Fig. Finite size scaling of averaged gap ratio',
+                      xaxis_title='System size n',
+                      yaxis_title='Averaged gap ratio r')
+    st.write(fig)
+
+    fig = go.Figure()
+    for n in options_n:
+        r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for h in hs]
+        fig.add_trace(go.Scatter(
+            x=hs, y=r,
+            name=f'n = {n}', mode='lines+markers', line={'dash': 'dash'}, marker={'size': 10}
+        ))
+    fig.update_layout(title='Fig. Finite size scaling of averaged gap ratio',
+                      xaxis_title='Disorder strength h',
+                      yaxis_title='Averaged gap ratio r')
+    st.write(fig)
+
+    if table == 'tsdrg':
+        fig = go.Figure()
+        for chi in options_chi:
+            r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for n in options_n]
+            fig.add_trace(go.Scatter(
+                x=options_n, y=r,
+                name=f'chi = {chi}', mode='lines+markers', line={'dash': 'dash'}, marker={'size': 10}
+            ))
+        fig.update_layout(title='Fig. Finite size scaling of averaged gap ratio',
+                          xaxis_title='System size n',
+                          yaxis_title='Averaged gap ratio r')
+        st.write(fig)
+
+        fig = go.Figure()
+        for chi in options_chi:
+            r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for h in hs]
+            fig.add_trace(go.Scatter(
+                x=hs, y=r,
+                name=f'chi = {chi}', mode='lines+markers', line={'dash': 'dash'}, marker={'size': 10}
+            ))
+        fig.update_layout(title='Fig. Finite size scaling of averaged gap ratio',
+                          xaxis_title='Disorder strength h',
+                          yaxis_title='Averaged gap ratio r')
+        st.write(fig)
