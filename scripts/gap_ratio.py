@@ -31,6 +31,7 @@ def fetch_gap_ratio(kwargs):
             Columns.penalty: [kwargs.get('penalty')],
             Columns.s_target: [kwargs.get('s_target')],
             Columns.offset: [0.0],
+            Columns.total_sz: [df[Columns.total_sz].iloc[-1]],
             Columns.gap_ratio: [LevelStatistic.averaged_gap_ratio(df)]
         }
     )
@@ -54,8 +55,7 @@ if __name__ == "__main__":
             'h': h,
             'chi': chi,
             'penalty': 0,
-            's_target': 0,
-            'offset': 0
+            's_target': 0
         }
         for n in [8, 10, 12, 14, 16, 18, 20]
         for chi in [2 ** 3, 2 ** 4, 2 ** 5, 2 ** 6]
