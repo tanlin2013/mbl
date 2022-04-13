@@ -1,5 +1,6 @@
 import ray
 import awswrangler as wr
+from awswrangler.exceptions import QueryFailed
 from botocore.exceptions import ClientError
 from time import sleep
 from mbl.name_space import Columns
@@ -17,6 +18,8 @@ def retry(func, *args, **kwargs):
             break
         except ClientError:
             sleep(3)
+        except QueryFailed:
+            pass
 
 
 @ray.remote(num_cpus=1)
@@ -32,13 +35,13 @@ def main(kwargs):
         partition_cols=[
             Columns.system_size,
             Columns.disorder,
+            Columns.truncation_dim,
             Columns.penalty,
             Columns.s_target,
-            Columns.truncation_dim,
             Columns.offset
         ],
         database="random_heisenberg",
-        table="tsdrg"
+        table="tsdrg2"
     )
 
 
