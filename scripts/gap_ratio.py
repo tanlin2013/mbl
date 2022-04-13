@@ -5,10 +5,7 @@ from botocore.exceptions import ClientError
 from time import sleep
 from mbl.name_space import Columns
 from mbl.distributed import Distributed
-from mbl.level_statistic import (
-    LevelStatistic,
-    AverageOrder
-)
+from mbl.level_statistic import LevelStatistic
 
 
 def retry(func, *args, **kwargs):
@@ -28,10 +25,7 @@ def fetch_gap_ratio(kwargs):
             Columns.system_size: [kwargs.get('n')],
             Columns.disorder: [kwargs.get('h')],
             Columns.truncation_dim: [kwargs.get('chi')],
-            Columns.penalty: [kwargs.get('penalty')],
-            Columns.s_target: [kwargs.get('s_target')],
-            Columns.offset: [0.0],
-            Columns.total_sz: [df[Columns.total_sz].iloc[-1]],
+            Columns.total_sz: [kwargs.get('total_sz')],
             Columns.gap_ratio: [LevelStatistic.averaged_gap_ratio(df)]
         }
     )
@@ -54,12 +48,12 @@ if __name__ == "__main__":
             'n': n,
             'h': h,
             'chi': chi,
-            'penalty': 0,
-            's_target': 0
+            'total_sz': total_sz
         }
         for n in [8, 10, 12, 14, 16, 18, 20]
         for chi in [2 ** 3, 2 ** 4, 2 ** 5, 2 ** 6]
         for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
+        for total_sz in [None, 0, 1]
     ]
 
     ray.init(num_cpus=16)
