@@ -1,18 +1,22 @@
-FROM tanlin2013/tnpy:latest
+FROM python:3.9
 MAINTAINER "TaoLin" <tanlin2013@gmail.com>
 
 ARG WORKDIR=/home/mbl
-ENV PYTHONPATH "${PYTHONPATH}:$WORKDIR"
+ENV PYTHONPATH "${PYTHONPATH}:$WORKDIR" \
+    PATH="/root/.local/bin:$PATH"
 WORKDIR $WORKDIR
-EXPOSE 8080
+COPY . $WORKDIR
+
+# Install fortran, blas, lapack
+RUN apt update && \
+    apt-get install -y --no-install-recommends \
+      gfortran libblas-dev liblapack-dev graphviz
+RUN apt-get -y clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install required python packages
-COPY . $WORKDIR
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt && \
-    pip install tnpy==0.0.9 && \
-    python setup.py install && \
-    rm requirements.txt setup.py && \
-    rm -rf mbl
+RUN curl -sSL https://install.python-poetry.org | python3 - && \
+    poetry config virtualenvs.create false --local && \
+    poetry install --no-dev --extra "tnpy mlops distributed"
 
 ENTRYPOINT /bin/bash
