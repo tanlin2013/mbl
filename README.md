@@ -1,6 +1,6 @@
 # MBL: many-body localization
 ![build](https://github.com/tanlin2013/mbl/actions/workflows/build.yml/badge.svg)
-![test](https://github.com/tanlin2013/mbl/actions/workflows/test.yml/badge.svg)
+![tests](https://github.com/tanlin2013/mbl/actions/workflows/tests.yml/badge.svg)
 ![deploy](https://github.com/tanlin2013/mbl/actions/workflows/deploy.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
