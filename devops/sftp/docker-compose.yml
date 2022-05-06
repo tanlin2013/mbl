@@ -1,0 +1,13 @@
+services:
+  sftp:
+      image: atmoz/sftp
+      container_name: sftp-server
+      volumes:
+          - /data/TaoLin_shared/sftp:/home/data
+          - /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+          - /etc/ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
+          - /home/tanlin2013/.ssh/id_rsa.pub:/home/tanlin2013/.ssh/keys/id_rsa.pub
+      ports:
+          - "8888:22"
+      command: tanlin2013::1003
+      restart: unless-stopped
