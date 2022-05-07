@@ -37,8 +37,7 @@ export class FargateStack extends Stack {
             image: ecs.ContainerImage.fromAsset(path.join(__dirname, '..')),
             environment: {
                 'HOST': props.dbEndpointAddr,
-                'PORT': '3306',
-                'DATABASE': 'mlflowdb',
+                'DATABASE': 'MlflowDB',
                 'USERNAME': 'master',
                 'ARTIFACTPATH': 'data/mlflow',
             },

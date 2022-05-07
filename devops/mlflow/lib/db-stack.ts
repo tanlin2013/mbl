@@ -30,11 +30,9 @@ export class DBStack extends Stack {
             engine: rds.DatabaseClusterEngine.AURORA_MYSQL,
             defaultDatabaseName: 'MlflowDB',
             vpc: props.vpc,
-            vpcSubnets: {
-                subnetType: ec2.SubnetType.PRIVATE_ISOLATED
-            },
-            credentials: rds.Credentials.fromUsername('master', { password: props.dbSecret.secretValue }),
+            vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
             securityGroups: [sgRDS],
+            credentials: rds.Credentials.fromUsername('master', { password: props.dbSecret.secretValue }),
             removalPolicy: RemovalPolicy.DESTROY,
             deletionProtection: false
         })
