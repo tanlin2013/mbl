@@ -193,3 +193,6 @@ dask-worker-space/
 
 # Poetry
 poetry.lock
+
+# AWS cdk
+!devops/mlflow/lib
