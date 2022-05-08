@@ -1,12 +1,12 @@
+from typing import Callable, Sequence, List
+
 import ray
 from tqdm import tqdm
 from ray.remote_function import RemoteFunction
 from dask.distributed import Client, progress
-from typing import Callable, Sequence, List
 
 
 class Distributed:
-
     @staticmethod
     def map_on_ray(func: Callable, params: Sequence) -> List:
         """
@@ -18,7 +18,8 @@ class Distributed:
         Returns:
 
         """
-        def watch(obj_ids):
+
+        def watch(obj_ids: List[ray.ObjectID]):
             while obj_ids:
                 done, obj_ids = ray.wait(obj_ids)
                 yield ray.get(done[0])
@@ -28,7 +29,7 @@ class Distributed:
         func = ray.remote(func) if not isinstance(func, RemoteFunction) else func
         jobs = [func.remote(i) for i in params]
         results = []
-        for done_job in tqdm(watch(jobs), desc='Completed jobs', total=len(jobs)):
+        for done_job in tqdm(watch(jobs), desc="Completed jobs", total=len(jobs)):
             results.append(done_job)
         ray.shutdown()
         return results
