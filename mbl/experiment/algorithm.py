@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 from mlflow import log_metric, log_param, log_artifact
 from tnpy.operators import FullHamiltonian, MatrixProductOperator
-from tnpy.model import ModelBase, TotalSz
+from tnpy.model import Model1D, TotalSz
 from tnpy.exact_diagonalization import ExactDiagonalization
 from tnpy.tsdrg import TreeTensorNetworkSDRG
 
@@ -15,11 +15,11 @@ from mbl.name_space import Columns
 
 
 class Experiment1D(abc.ABC):
-    def __init__(self, model: ModelBase):
+    def __init__(self, model: Model1D):
         self._model = model
 
     @property
-    def model(self) -> ModelBase:
+    def model(self) -> Model1D:
         return self._model
 
     @abc.abstractmethod
@@ -32,7 +32,7 @@ class Experiment1D(abc.ABC):
 
 
 class EDExperiment(Experiment1D):
-    def __init__(self, model: ModelBase):
+    def __init__(self, model: Model1D):
         super().__init__(model)
         self._ed = ExactDiagonalization(self._mpo_run_method())
         self._evals = self._ed.evals
@@ -67,7 +67,7 @@ class EDExperiment(Experiment1D):
 
 
 class TSDRGExperiment(Experiment1D):
-    def __init__(self, model: ModelBase, chi: int):
+    def __init__(self, model: Model1D, chi: int):
         super().__init__(model)
         log_param(Columns.truncation_dim, chi)
         self._tsdrg = TreeTensorNetworkSDRG(self._mpo_run_method(), chi=chi)
