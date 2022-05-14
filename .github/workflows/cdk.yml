@@ -1,0 +1,33 @@
+name: cdk_deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'cdk deploy or destroy'
+        required: true
+        default: 'deploy'
+
+jobs:
+  cdk:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Run cdk command
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: github.event.inputs.command
+          cdk_stack: '*'
+          cdk_args: '--all --require-approval never'
+          actions_comment: false
+          working_dir: 'devops/mlflow/'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
