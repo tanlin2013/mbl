@@ -5,13 +5,10 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from mlflow import log_metric, log_param, log_artifact
 from tnpy.operators import FullHamiltonian, MatrixProductOperator
 from tnpy.model import Model1D, TotalSz
 from tnpy.exact_diagonalization import ExactDiagonalization
 from tnpy.tsdrg import TreeTensorNetworkSDRG
-
-from mbl.name_space import Columns
 
 
 class Experiment1D(abc.ABC):
@@ -69,7 +66,6 @@ class EDExperiment(Experiment1D):
 class TSDRGExperiment(Experiment1D):
     def __init__(self, model: Model1D, chi: int):
         super().__init__(model)
-        log_param(Columns.truncation_dim, chi)
         self._tsdrg = TreeTensorNetworkSDRG(self._mpo_run_method(), chi=chi)
         self._tsdrg.run()
         self._evals = self.tsdrg.measurements.expectation_value(self.model.mpo)
@@ -115,9 +111,8 @@ class TSDRGExperiment(Experiment1D):
     def compute_df(self) -> pd.DataFrame:
         return NotImplemented
 
-    def save_tree(self, filename: str, artifact_path: str = None):
-        filename = Path(f"{filename}.p")
+    def save_tree(self, filename: str):
+        assert Path(filename).suffix == ".p"
         logging.info(f"Dumping tree into file {filename}")
         with open(filename, "wb") as f:
             pickle.dump(self.tsdrg.tree, f)
-        log_artifact(str(filename), artifact_path=artifact_path)
