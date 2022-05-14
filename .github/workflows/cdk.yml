@@ -4,9 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       command:
-        description: 'cdk deploy or destroy'
+        description: 'cdk command (eg. deploy or destroy)'
         required: true
         default: 'deploy'
+      args:
+        description: 'cdk args'
+        required: true
+        default: '--all --require-approval never'
 
 jobs:
   cdk:
@@ -24,7 +28,7 @@ jobs:
         with:
           cdk_subcommand: github.event.inputs.command
           cdk_stack: '*'
-          cdk_args: '--all --require-approval never'
+          cdk_args: github.event.inputs.args
           actions_comment: false
           working_dir: 'devops/mlflow/'
         env:
