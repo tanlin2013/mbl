@@ -4,7 +4,10 @@ import pandas as pd
 
 from mbl.name_space import Columns
 from mbl.schema import RandomHeisenbergEDSchema, RandomHeisenbergFoldingTSDRGSchema
-from mbl.experiment import RandomHeisenbergED, RandomHeisenbergFoldingTSDRG
+from mbl.experiment.random_heisenberg import (
+    RandomHeisenbergED,
+    RandomHeisenbergFoldingTSDRG,
+)
 
 
 class TestRandomHeisenbergED:
