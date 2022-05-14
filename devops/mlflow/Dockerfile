@@ -1,9 +1,7 @@
-FROM python:3.8.0
+FROM python:3.9
 
-RUN pip install \
-    mlflow==1.23.1 \
-    pymysql==1.0.2 \
-    boto3 && \
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt && \
     mkdir /mlflow/
 
 EXPOSE 5000
