@@ -26,7 +26,7 @@ def scopion():
         scheduler_options={"host": "192.168.1.254"},
         # host='192.168.1.254',
         # extra=['--no-dashboard'],
-        env_extra=["module load singularity", ],  # ensure singularity is loaded
+        env_extra=["module load singularity",],  # ensure singularity is loaded
         python=f"singularity run mbl.sif python",  # use python in container
     )
 
@@ -63,8 +63,10 @@ def get_config():
     "-N", "--experiment_name", default="random_heisenberg-tsdrg-energy_bounds", type=str
 )
 @click.option("--save_artifact", default=True, type=bool)
-@click.option("--num_cpus", default=16, type=int)
-@click.option("--cpu", default=1, type=int)
+@click.option(
+    "--num_cpus", default=16, type=int, help="Number of total available cpus."
+)
+@click.option("--cpu", default=1, type=int, help="Number of cpu per task.")
 @click.option("--memory", default=1, type=float, help="Memory size per task in GB.")
 def main(
     tracking_uri: str,
