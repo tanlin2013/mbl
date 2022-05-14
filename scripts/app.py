@@ -1,4 +1,3 @@
-import orjson  # https://plotly.com/python/renderers/#performance
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -8,7 +7,7 @@ import plotly.io as pio
 import plotly.graph_objects as go
 from itertools import count
 from mbl.name_space import Columns
-from mbl.level_statistic import (
+from mbl.analysis.level_statistic import (
     LevelStatistic,
     AverageOrder
 )
@@ -65,6 +64,19 @@ def scatter_with_error_bar(df: pd.DataFrame, x: str, y: str, title: str):
     return fig
 
 
+@st.cache(persist=True)
+def scaling_line(xs, zs, x_label: str, z_label: str, title: str, xaxis_title: str):
+    fig = go.Figure()
+    for z in zs:
+        r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for x in xs]
+        fig.add_trace(go.Scatter(
+            x=xs, y=r,
+            name=f'{z_label} = {z}', mode='lines+markers', line={'dash': 'dash'}, marker={'size': 10}
+        ))
+    fig.update_layout(title=title, xaxis_title=xaxis_title, yaxis_title='Averaged gap ratio r')
+    return fig
+
+
 if __name__ == "__main__":
 
     st.set_page_config(layout="wide")
@@ -86,15 +98,22 @@ if __name__ == "__main__":
     st.markdown('# Level statistics of Heisenberg model with random transversed field')
     st.write('Please wait, it may take a while to load the data.')
 
+    st.markdown('### The Model')
+    st.latex(r'''
+    H = \sum_{i\in[1,N]} \mathbf{S}_i\cdot\mathbf{S}_{i+1} + h_i S_i^z
+    ''')
+
+    st.markdown('### Algorithm')
+
     df = load_data(n, h, chi=chi, total_sz=total_sz)
 
     st.markdown('### 1. Data Table')
     st.dataframe(df)
 
     st.markdown('### 2. Gap ratio parameter (r-value)')
-    r1 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.LevelFirst)
+    r1 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.LEVEL_FIRST)
     st.write(f'(Level-then-disorder) averaged `r = {r1}`')
-    r2 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.DisorderFirst)
+    r2 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.DISORDER_FIRST)
     st.write(f'(Disorder-then-level) averaged `r = {r2}`')
     st.write(f'Relative difference is `{abs(r1 - r2)/max(r1, r2) * 100} %`')
     st.write('**Note**: Theoretical value is')
@@ -164,7 +183,11 @@ if __name__ == "__main__":
                       yaxis_title='Averaged gap ratio r')
     st.write(fig)
 
-    if table == 'tsdrg':
+    yes_button = st.select_slider(
+        "Start computing (the following 2 plots are relatively time-consuming)",
+        options=[True, False]
+    )
+    if table == 'tsdrg' and yes_button:
         fig = go.Figure()
         for chi in options_chi:
             r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for n in options_n]
