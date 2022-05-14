@@ -5,7 +5,7 @@ from botocore.exceptions import ClientError
 from time import sleep
 from mbl.name_space import Columns
 from mbl.distributed import Distributed
-from mbl.level_statistic import LevelStatistic
+from mbl.analysis.level_statistic import LevelStatistic
 
 
 def retry(func, *args, **kwargs):
