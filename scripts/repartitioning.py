@@ -4,10 +4,8 @@ from awswrangler.exceptions import QueryFailed
 from botocore.exceptions import ClientError
 from time import sleep
 from mbl.name_space import Columns
-from mbl.distributed import Distributed
-from mbl.level_statistic import (
-    LevelStatistic,
-    AverageOrder
+from mbl.analysis.level_statistic import (
+    LevelStatistic
 )
 
 
@@ -61,11 +59,27 @@ if __name__ == "__main__":
         for h in [0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0]
     ]
 
-    Distributed.map_on_ray(main, params)
+    # Distributed.map_on_ray(main, params)
+
+    query_final_state = wr.athena.repair_table(
+        table='tsdrg',
+        database='random_heisenberg'
+    )
+    print(query_final_state)
 
     print(
         wr.catalog.get_partitions(
             database='random_heisenberg',
-            table='ed',
+            table='tsdrg',
         )
     )
+
+    # print(wr.catalog.get_tables(database='random_heisenberg'))
+
+    # wr.catalog.add_parquet_partitions(
+    #     database='random_heisenberg',
+    #     table='tsdrg',
+    #     partitions_values={
+    #         's3://many-body-localization/dataframe/tsdrg/system_size=8/': ['8']
+    #     }
+    # )
