@@ -17,6 +17,6 @@ RUN apt-get -y clean && \
 # Install required python packages
 RUN curl -sSL https://install.python-poetry.org | python3 - && \
     poetry config virtualenvs.create false --local && \
-    poetry install --no-dev --extra "tnpy mlops distributed"
+    poetry install --no-dev --extras "tnpy mlops distributed"
 
 ENTRYPOINT /bin/bash
