@@ -4,13 +4,20 @@ on:
   workflow_dispatch:
     inputs:
       command:
+        type: choice
         description: 'cdk command (eg. deploy or destroy)'
         required: true
-        default: 'deploy'
+        options:
+          - deploy
+          - destroy
+      stack:
+        description: 'cdk stack'
+        required: true
+        default: '--all'
       args:
         description: 'cdk args'
         required: true
-        default: '--all --require-approval never'
+        default: '--require-approval never'
 
 jobs:
   cdk:
@@ -27,7 +34,7 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: github.event.inputs.command
-          cdk_stack: '*'
+          cdk_stack: github.event.inputs.stack
           cdk_args: github.event.inputs.args
           actions_comment: false
           working_dir: 'devops/mlflow/'

@@ -4,9 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       target:
+        type: choice
         description: 'Deploy to (workstation or cluster)'
         required: true
         default: 'workstation'
+        options:
+          - workstation
+          - cluster
 
 jobs:
   deploy2workstation:
