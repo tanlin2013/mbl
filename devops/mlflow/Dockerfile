@@ -1,5 +1,9 @@
 FROM python:3.9
 
+ARG WORKDIR=/home
+WORKDIR $WORKDIR
+COPY requirements.txt $WORKDIR
+
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt && \
     mkdir /mlflow/
