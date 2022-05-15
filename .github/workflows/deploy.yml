@@ -18,7 +18,7 @@ jobs:
     if: github.event.inputs.target == 'workstation'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Echo target
         run: echo "Deploying to targeted machine - ${{ github.event.inputs.target }}"
 
@@ -63,7 +63,7 @@ jobs:
     if: github.event.inputs.target == 'cluster'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Echo target
         run: echo "Deploying to targeted machine - ${{ github.event.inputs.target }}"
 
