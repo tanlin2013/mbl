@@ -23,22 +23,40 @@ jobs:
   cdk:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-      -
-        name: Run cdk command
-        uses: youyo/aws-cdk-github-actions@v2
+#      -
+#        name: Run cdk command
+#        uses: youyo/aws-cdk-github-actions@v2
+#        with:
+#          cdk_subcommand: github.event.inputs.command
+#          cdk_stack: github.event.inputs.stack
+#          cdk_args: github.event.inputs.args
+#          actions_comment: false
+#          working_dir: 'devops/mlflow/'
+#        env:
+#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - uses: actions/setup-node@v2
         with:
-          cdk_subcommand: github.event.inputs.command
-          cdk_stack: github.event.inputs.stack
-          cdk_args: github.event.inputs.args
-          actions_comment: false
-          working_dir: 'devops/mlflow/'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          node-version: "17.9.0"
+      -
+        name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      -
+        name: Deploy stack
+        run: |
+          cd devops/mlflow
+          cdk ${{ github.event.inputs.command }} \
+              ${{ github.event.inputs.stack }} \
+              ${{ github.event.inputs.args }}
