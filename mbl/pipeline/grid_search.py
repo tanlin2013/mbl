@@ -3,10 +3,11 @@ from pathlib import Path
 from dataclasses import dataclass
 from typing import Dict, Union, List
 
+import validators
 import awswrangler as wr
-from mlflow import log_params, log_metric, log_artifact
 from ray import tune
 from ray.tune.integration.mlflow import MLflowLoggerCallback, mlflow_mixin
+from mlflow import log_params, log_metric, log_artifact
 
 from mbl.name_space import Columns
 from mbl.experiment.random_heisenberg import (
@@ -15,40 +16,45 @@ from mbl.experiment.random_heisenberg import (
 )
 
 
-class GridSearch(abc.ABC):
-    def __init__(self, tracking_uri: str):
-        self._tracking_uri = tracking_uri
-
-    @abc.abstractmethod
-    def experiment(self):
-        return NotImplemented
-
-    def run(
-        self,
-        config: Dict[str, Dict[str, List]],
-        experiment_name: str,
-        tags: Dict[str, str] = None,
-        save_artifact: bool = True,
+def run(
+    experiment,
+    config: Dict[str, Dict[str, List]],
+    tracking_uri: str,
+    experiment_name: str,
+    tags: Dict[str, str] = None,
+    save_artifact: bool = True,
+    num_samples: int = 1,
+    *args,
+    **kwargs,
+):
+    assert not isinstance(
+        validators.url(tracking_uri), validators.ValidationFailure
+    )
+    tune.run(
+        experiment,
+        config=config,
+        callbacks=[
+            MLflowLoggerCallback(
+                tracking_uri=tracking_uri,
+                experiment_name=experiment_name,
+                tags=tags,
+                save_artifact=save_artifact,
+            )
+        ],
+        num_samples=num_samples,
         *args,
         **kwargs,
-    ):
-        tune.run(
-            self.experiment,
-            config=config,
-            callbacks=[
-                MLflowLoggerCallback(
-                    tracking_uri=self._tracking_uri,
-                    experiment_name=experiment_name,
-                    tags=tags,
-                    save_artifact=save_artifact,
-                )
-            ],
-            num_samples=1,
-            *args,
-            **kwargs,
-        )
+    )
 
 
+@mlflow_mixin
+class GridSearch(abc.ABC, tune.Trainable):
+    @abc.abstractmethod
+    def setup(self, config: Dict[str, Union[int, float, str]]):
+        return NotImplemented
+
+
+@mlflow_mixin
 class RandomHeisenbergTSDRGGridSearch(GridSearch):
     @dataclass
     class Metadata:
@@ -56,20 +62,14 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
         database: str = "random_heisenberg"
         table: str = "tsdrg"
 
-    def __init__(self, tracking_uri: str, local_path: str, artifact_path: str = None):
-        super().__init__(tracking_uri)
-        self._local_path = local_path
-        self._artifact_path = artifact_path
-
-    @mlflow_mixin
-    def experiment(self, **params: Dict[str, Union[int, float]]):
-        log_params(params)
-        experiment = RandomHeisenbergTSDRG(**params)
-        filename = Path(self._local_path) / (
-            "-".join([f"{k}_{v}" for k, v in params.items()]) + ".p"
+    def setup(self, config: Dict[str, Union[int, float, str]]):
+        log_params(config)
+        experiment = RandomHeisenbergTSDRG(**config)
+        filename = Path(config["local_path"]) / (
+            "-".join([f"{k}_{v}" for k, v in config.items()]) + ".p"
         )
         experiment.save_tree(str(filename))
-        log_artifact(str(filename), self._artifact_path)
+        log_artifact(str(filename), config["artifact_path"])
         df = experiment.compute_df()
         log_metric(key="mean_variance", value=df[Columns.variance].mean())
 
@@ -93,6 +93,7 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
         )
 
 
+@mlflow_mixin
 class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     @dataclass
     class Metadata:
@@ -100,20 +101,14 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
         database: str = "random_heisenberg"
         table: str = "folding_tsdrg"
 
-    def __init__(self, tracking_uri: str, local_path: str, artifact_path: str = None):
-        super().__init__(tracking_uri)
-        self._local_path = local_path
-        self._artifact_path = artifact_path
-
-    @mlflow_mixin
-    def experiment(self, **params: Dict[str, Union[int, float]]):
-        log_params(params)
-        experiment = RandomHeisenbergFoldingTSDRG(**params)
-        filename = Path(self._local_path) / (
-            "-".join([f"{k}_{v}" for k, v in params.items()]) + ".p"
+    def setup(self, config: Dict[str, Union[int, float, str]]):
+        log_params(config)
+        experiment = RandomHeisenbergFoldingTSDRG(**config)
+        filename = Path(config["local_path"]) / (
+            "-".join([f"{k}_{v}" for k, v in config.items()]) + ".p"
         )
         experiment.save_tree(str(filename))
-        log_artifact(str(filename), self._artifact_path)
+        log_artifact(str(filename), config["artifact_path"])
         df = experiment.compute_df()
         log_metric(key="mean_variance", value=df[Columns.variance].mean())
 

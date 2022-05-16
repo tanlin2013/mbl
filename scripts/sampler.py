@@ -1,5 +1,6 @@
 import os
 import click
+from pathlib import Path
 
 import yaml
 import ray
@@ -7,6 +8,7 @@ from ray import tune
 
 from mbl.name_space import Columns
 from mbl.pipeline.grid_search import (
+    run,
     RandomHeisenbergTSDRGGridSearch,
     RandomHeisenbergFoldingTSDRGGridSearch,
 )
@@ -26,14 +28,14 @@ def scopion():
         scheduler_options={"host": "192.168.1.254"},
         # host='192.168.1.254',
         # extra=['--no-dashboard'],
-        env_extra=["module load singularity",],  # ensure singularity is loaded
-        python=f"singularity run mbl.sif python",  # use python in container
+        env_extra=["module load singularity"],  # ensure singularity is loaded
+        python="singularity run mbl.sif python",  # use python in container
     )
 
 
-def get_config():
-    with open("run_config.yml", "r") as f:
-        data = yaml.load(f)
+def config_parser(local_path: str, artifact_path: str):
+    with open(Path(__file__).parent / "run_config.yml", "r", encoding="utf-8") as f:
+        data = yaml.load(f, Loader=yaml.Loader)
     return {
         "n": tune.grid_search(data[Columns.system_size]),
         "h": tune.grid_search(data[Columns.disorder]),
@@ -51,6 +53,8 @@ def get_config():
         "s_target": data[Columns.s_target],
         "offset": data[Columns.offset],
         "overall_const": data[Columns.overall_const],
+        "local_path": local_path,
+        "artifact_path": artifact_path,
     }
 
 
@@ -78,10 +82,10 @@ def main(
     memory: float,
 ):
     ray.init(num_cpus=num_cpus)
-    RandomHeisenbergTSDRGGridSearch(
-        tracking_uri=tracking_uri, local_path=os.getcwd(), artifact_path=artifact_path
-    ).run(
-        config=get_config(),
+    run(
+        experiment=RandomHeisenbergTSDRGGridSearch,
+        config=config_parser(local_path=os.getcwd(), artifact_path=artifact_path),
+        tracking_uri=tracking_uri,
         experiment_name=experiment_name,
         save_artifact=save_artifact,
         resources_per_trial={"cpu": cpu, "memory": memory * 1024 ** 3},
