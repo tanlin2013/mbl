@@ -13,6 +13,16 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 * `cdk diff`        compare deployed stack with current state
 * `cdk synth`       emits the synthesized CloudFormation template
 
+## Arguments
+For `deploy`, use
+```
+cdk deploy --all --require-approval never
+```
+for `destroy`, use
+```
+cdk destroy --all --force
+```
+
 ## Reference
 
 This repo follows closely with this [tutorial](https://github.com/aws-samples/amazon-sagemaker-mlflow-fargate).

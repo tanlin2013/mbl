@@ -5,17 +5,17 @@ on:
     inputs:
       command:
         type: choice
-        description: 'cdk command (eg. deploy or destroy)'
+        description: 'cdk command (eg. `deploy` or `destroy`)'
         required: true
         options:
           - deploy
           - destroy
       stack:
-        description: 'cdk stack'
+        description: 'cdk stack (name of stack or `--all`)'
         required: true
         default: '--all'
       args:
-        description: 'cdk args'
+        description: 'cdk args (eg. `--force` or `--require-approval never`)'
         required: true
         default: '--require-approval never'
 
