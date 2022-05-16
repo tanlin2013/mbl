@@ -13,6 +13,7 @@ numpy = "1.21.6"
 pandas = "1.4.2"
 pandera = "0.10.1"
 awswrangler = "2.15.1"
+validators = "^0.19.0"
 tnpy = { version = "0.1.1a2", optional = true }
 apache-airflow = { version = "2.2.5", optional = true }
 mlflow = { version = "1.25.1", optional = true }
