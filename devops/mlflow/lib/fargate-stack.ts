@@ -48,11 +48,6 @@ export class FargateStack extends Stack {
                         parameterName: '/mlflow/sftp/user'
                     })
                 ),
-                'SFTPPASSWORD': ecs.Secret.fromSsmParameter(
-                    StringParameter.fromSecureStringParameterAttributes(this, 'SFTPPASSWORD', {
-                        parameterName: '/mlflow/sftp/password'
-                    })
-                ),
                 'SFTPHOST': ecs.Secret.fromSsmParameter(
                     StringParameter.fromSecureStringParameterAttributes(this, 'SFTPHOST', {
                         parameterName: '/mlflow/sftp/host'
