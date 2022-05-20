@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       command:
-        type: choice
         description: 'cdk command (eg. `deploy` or `destroy`)'
+        type: choice
         required: true
         options:
           - deploy
