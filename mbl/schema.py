@@ -48,7 +48,7 @@ class RandomHeisenbergTSDRGSchema(pa.SchemaModel):
     penalty: Series[float] = pa.Field(coerce=True)
     s_target: Series[int]
     offset: Series[float] = pa.Field(coerce=True)
-    overall_const: Series[float]
+    overall_const: Series[float] = pa.Field(coerce=True)
 
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
