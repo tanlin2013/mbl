@@ -4,17 +4,26 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        type: choice
         description: 'Deploy to (workstation or cluster)'
+        type: choice
         required: true
         default: 'workstation'
         options:
           - workstation
           - cluster
+          - sftp
       tracking_uri:
         description: 'Mlflow tracking server endpoint'
-        required: true
-        default: 'https://'
+        required: false
+        default: 'http://mlflow-xxxxx.elb.xx-region.amazonaws.com:80'
+      docker_compose_cmd:
+        description: 'Run docker compose command'
+        type: choice
+        required: false
+        default: 'up -d'
+        options:
+          - up -d
+          - down
 
 jobs:
   deploy2workstation:
@@ -93,3 +102,33 @@ jobs:
             conda activate &&
             nohup python scripts/sampler.py > foo.out 2> foo.err < /dev/null &
 #            singularity exec -B /etc/slurm,/etc/passwd,/run/munge,/usr/lib64,/usr/bin/squeue,/usr/bin/sbatch,/usr/bin/scancel --bind ~/data:/data mbl.sif python scripts/sampler.py
+
+  #######################################################
+
+  deploysftp:
+    name: Deploy sftp on workstation
+    if: github.event.inputs.target == 'sftp'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Echo target
+        run: echo "Deploying to targeted machine - ${{ github.event.inputs.target }}"
+
+      - name: Rsync repo to workstation
+        uses: burnett01/rsync-deployments@5.2
+        with:
+          switches: -avzr --delete
+          remote_path: '~/projects/mbl'
+          remote_host: ${{ secrets.WORKSTATION_HOST }}
+          remote_user: ${{ secrets.USERNAME }}
+          remote_key: ${{ secrets.KEY }}
+
+      - name: Deploy sftp server on workstation
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.WORKSTATION_HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd projects/mbl/devops/sftp &&
+            docker compose ${{ github.event.inputs.docker_compose_cmd }}
