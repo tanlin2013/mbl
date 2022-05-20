@@ -196,3 +196,6 @@ poetry.lock
 
 # AWS cdk
 !devops/mlflow/lib
+
+# Mlflow
+mlruns/
