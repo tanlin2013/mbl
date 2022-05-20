@@ -84,6 +84,7 @@ class RandomHeisenbergTSDRG(TSDRGExperiment):
         overall_const: float = 1,
     ):
         seed = int(time()) if seed is None else seed
+        self._overall_const = overall_const
         super().__init__(
             model=RandomHeisenberg(
                 n=n,
@@ -96,7 +97,6 @@ class RandomHeisenbergTSDRG(TSDRGExperiment):
             ),
             chi=chi,
         )
-        self._overall_const = overall_const
 
     def _mpo_run_method(self) -> MatrixProductOperator:
         return self._overall_const * self._model.mpo
