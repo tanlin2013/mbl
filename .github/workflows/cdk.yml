@@ -41,7 +41,7 @@ jobs:
 #          cdk_stack: github.event.inputs.stack
 #          cdk_args: github.event.inputs.args
 #          actions_comment: false
-#          working_dir: 'devops/mlflow/'
+#          working_dir: 'mlflow-tracker/aws/'
 #        env:
 #          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
 #          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -61,7 +61,7 @@ jobs:
       -
         name: Deploy stack
         run: |
-          cd devops/mlflow
+          cd mlflow-tracker/aws
           yarn
           yarn cdk ${{ github.event.inputs.command }} \
                     ${{ github.event.inputs.stack }} \

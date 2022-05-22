@@ -195,7 +195,7 @@ dask-worker-space/
 poetry.lock
 
 # AWS cdk
-!devops/mlflow/lib
+!mlflow-tracker/aws/lib
 
 # Mlflow
 mlruns/
