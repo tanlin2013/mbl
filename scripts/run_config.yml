@@ -22,11 +22,14 @@ truncation_dim:
   - 64
 seed:
   start: 1900
-  end: 2400
+  end: 1903
   step: 1
 overall_const:
   - 1
   - -1
-penalty: 0
-s_target: 0
-offset: 0
+penalty:
+  - 0
+s_target:
+  - 0
+offset:
+  - 0
