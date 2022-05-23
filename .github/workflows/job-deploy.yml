@@ -15,6 +15,10 @@ on:
         description: 'Mlflow tracking server endpoint'
         required: false
         default: 'http://mlflow-xxxxx.elb.xx-region.amazonaws.com:80'
+      args:
+        description: 'Arguments pass to job template'
+        required: false
+        default: '--num_cpus 24 --memory 2'
 
 jobs:
   deploy2workstation:
@@ -42,18 +46,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            nohup \
-            docker run \
-            --rm \
-            --pull=always \
-            --shm-size=10.07gb \
-            --network="host" \
-            -v ~/projects/mbl/scripts:/home/mbl/scripts \
-            -v ~/.aws:/root/.aws \
-            --entrypoint python \
-            tanlin2013/mbl scripts/sampler.py \
+            cd projects/mbl &&
+            docker compose run -d mbl \
+            python scripts/sampler.py \
             -U ${{ github.event.inputs.tracking_uri }} \
-            > data/foo.out 2> data/foo.err < /dev/null &
+            ${{ github.event.inputs.args }}
 
       - name: Prune dangling images
         uses: appleboy/ssh-action@master
