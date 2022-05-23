@@ -21,8 +21,8 @@ truncation_dim:
   - 32
   - 64
 seed:
-  start: 1900
-  end: 1903
+  start: 2000
+  end: 2500
   step: 1
 overall_const:
   - 1
