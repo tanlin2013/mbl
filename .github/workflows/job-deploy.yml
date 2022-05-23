@@ -1,4 +1,4 @@
-name: deploy
+name: job-deploy
 
 on:
   workflow_dispatch:
@@ -11,19 +11,10 @@ on:
         options:
           - workstation
           - cluster
-          - sftp
       tracking_uri:
         description: 'Mlflow tracking server endpoint'
         required: false
         default: 'http://mlflow-xxxxx.elb.xx-region.amazonaws.com:80'
-      docker_compose_cmd:
-        description: 'Run docker compose command'
-        type: choice
-        required: false
-        default: 'up -d'
-        options:
-          - up -d
-          - down
 
 jobs:
   deploy2workstation:
@@ -54,9 +45,7 @@ jobs:
             nohup \
             docker run --entrypoint python --rm --pull=always --shm-size=10.07gb \
             -v ~/projects/mbl/scripts:/home/mbl/scripts \
-            -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -e AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }} \
+            -v ~/.aws:/home/mbl/.aws \
             tanlin2013/mbl scripts/sampler.py \
             -U ${{ github.event.inputs.tracking_uri }} \
             > data/foo.out 2> data/foo.err < /dev/null &
@@ -102,33 +91,3 @@ jobs:
             conda activate &&
             nohup python scripts/sampler.py > foo.out 2> foo.err < /dev/null &
 #            singularity exec -B /etc/slurm,/etc/passwd,/run/munge,/usr/lib64,/usr/bin/squeue,/usr/bin/sbatch,/usr/bin/scancel --bind ~/data:/data mbl.sif python scripts/sampler.py
-
-  #######################################################
-
-  deploysftp:
-    name: Deploy sftp on workstation
-    if: github.event.inputs.target == 'sftp'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Echo target
-        run: echo "Deploying to targeted machine - ${{ github.event.inputs.target }}"
-
-      - name: Rsync repo to workstation
-        uses: burnett01/rsync-deployments@5.2
-        with:
-          switches: -avzr --delete
-          remote_path: '~/projects/mbl'
-          remote_host: ${{ secrets.WORKSTATION_HOST }}
-          remote_user: ${{ secrets.USERNAME }}
-          remote_key: ${{ secrets.KEY }}
-
-      - name: Deploy sftp server on workstation
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.WORKSTATION_HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          script: |
-            cd projects/mbl/devops/sftp &&
-            docker compose ${{ github.event.inputs.docker_compose_cmd }}
