@@ -7,6 +7,9 @@ ENV PYTHONPATH="${PYTHONPATH}:$WORKDIR" \
 WORKDIR $WORKDIR
 COPY . $WORKDIR
 
+# Ray dashboard
+EXPOSE 8265
+
 # Install fortran, blas, lapack
 RUN apt update && \
     apt-get install -y --no-install-recommends \
