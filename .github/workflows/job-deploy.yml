@@ -43,9 +43,14 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             nohup \
-            docker run --entrypoint python --rm --pull=always --shm-size=10.07gb \
+            docker run \
+            --rm \
+            --pull=always \
+            --shm-size=10.07gb \
+            --network="host" \
             -v ~/projects/mbl/scripts:/home/mbl/scripts \
             -v ~/.aws:/home/mbl/.aws \
+            --entrypoint python \
             tanlin2013/mbl scripts/sampler.py \
             -U ${{ github.event.inputs.tracking_uri }} \
             > data/foo.out 2> data/foo.err < /dev/null &
