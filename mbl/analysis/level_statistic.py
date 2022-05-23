@@ -32,8 +32,9 @@ class LevelStatistic:
     def raw_df(self, raw_df: pd.DataFrame):
         self._raw_df = raw_df
 
-    @staticmethod
+    @classmethod
     def query_elements(
+        cls,
         n: int,
         h: float,
         penalty: float = 0.0,
@@ -68,15 +69,16 @@ class LevelStatistic:
         total_sz: int = None,
         tol: float = 1e-12,
     ) -> pd.DataFrame:
-        query = LevelStatistic.query_elements(
+        query = self.query_elements(
             n, h, penalty, s_target, seed, chi, total_sz, tol
         )
         return self.raw_df.query(
             " & ".join(query).replace("=", "==").replace("ABS", "abs")
         )
 
+    @classmethod
     def athena_query(
-        self,
+        cls,
         n: int,
         h: float,
         penalty: float = 0.0,
@@ -86,13 +88,13 @@ class LevelStatistic:
         total_sz: int = None,
         tol: float = 1e-12,
     ) -> pd.DataFrame:
-        query = LevelStatistic.query_elements(
+        query = cls.query_elements(
             n, h, penalty, s_target, seed, chi, total_sz, tol
         )
-        table = self.Metadata.ed_table if chi is None else self.Metadata.tsdrg_table
+        table = cls.Metadata.ed_table if chi is None else cls.Metadata.tsdrg_table
         return wr.athena.read_sql_query(
             f"SELECT * FROM {table} WHERE {' AND '.join(query)}",
-            database=self.Metadata.database,
+            database=cls.Metadata.database,
         )
 
     def extract_gap(

@@ -11,8 +11,9 @@ class EnergyBounds:
         database: str = "random_heisenberg"
         table: str = "tsdrg"
 
-    @staticmethod
+    @classmethod
     def query_elements(
+        cls,
         n: int,
         h: float,
         overall_const: float = 1,
@@ -31,8 +32,9 @@ class EnergyBounds:
             f"({Columns.seed} = {seed})",
         ]
 
+    @classmethod
     def athena_query(
-        self,
+        cls,
         n: int,
         h: float,
         overall_const: float = 1,
@@ -41,7 +43,7 @@ class EnergyBounds:
         seed: int = None,
         chi: int = None,
     ):
-        query_elements = self.query_elements(
+        query_elements = cls.query_elements(
             n=n,
             h=h,
             overall_const=overall_const,
@@ -52,8 +54,8 @@ class EnergyBounds:
         )
         return wr.athena.read_sql_query(
             f"SELECT {Columns.en} "
-            f"FROM {self.Metadata.table} "
+            f"FROM {cls.Metadata.table} "
             f"WHERE {' AND '.join(query_elements)} "
             f"ORDER BY {Columns.en}",
-            database=self.Metadata.database,
+            database=cls.Metadata.database,
         )
