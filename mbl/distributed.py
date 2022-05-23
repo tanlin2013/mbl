@@ -19,7 +19,7 @@ class Distributed:
 
         """
 
-        def watch(obj_ids: List[ray.ObjectID]):
+        def watch(obj_ids: List[ray.ObjectRef]):
             while obj_ids:
                 done, obj_ids = ray.wait(obj_ids)
                 yield ray.get(done[0])
