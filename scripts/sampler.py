@@ -50,7 +50,7 @@ def config_parser():
 
 
 @click.command()
-@click.option("-U", "--tracking_uri", default="http://localhost:8787", type=str)
+@click.option("-U", "--tracking_uri", default="http://localhost:8888", type=str)
 @click.option("-E", "--mlflow_s3_endpoint", default="http://localhost:9000", type=str)
 @click.option(
     "-N", "--experiment_name", default="random_heisenberg-tsdrg-energy_bounds", type=str
