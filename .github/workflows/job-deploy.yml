@@ -49,7 +49,7 @@ jobs:
             --shm-size=10.07gb \
             --network="host" \
             -v ~/projects/mbl/scripts:/home/mbl/scripts \
-            -v ~/.aws:/home/mbl/.aws \
+            -v ~/.aws:~/.aws \
             --entrypoint python \
             tanlin2013/mbl scripts/sampler.py \
             -U ${{ github.event.inputs.tracking_uri }} \
