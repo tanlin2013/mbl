@@ -199,3 +199,4 @@ poetry.lock
 
 # Mlflow
 mlruns/
+!mlflow-tracker/minio/.env
