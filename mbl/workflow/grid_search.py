@@ -73,6 +73,7 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
         mlflow.log_artifact(str(filename))
         df = experiment.compute_df()
         mlflow.log_metric(key="mean_variance", value=df[Columns.variance].mean())
+        mlflow.log_dict(df.to_dict(), "df.json")
         RandomHeisenbergTSDRGGridSearch.to_s3_parquet(df)
 
     @classmethod
@@ -116,6 +117,7 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
         mlflow.log_artifact(str(filename))
         df = experiment.compute_df()
         mlflow.log_metric(key="mean_variance", value=df[Columns.variance].mean())
+        mlflow.log_dict(df.to_dict(), "df.json")
         RandomHeisenbergFoldingTSDRGGridSearch.to_s3_parquet(df)
 
     @classmethod
