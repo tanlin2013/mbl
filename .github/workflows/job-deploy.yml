@@ -48,7 +48,7 @@ jobs:
           script: |
             cd projects/mbl &&
             docker compose run -d mbl \
-            python scripts/sampler.py \
+            scripts/sampler.py \
             -U ${{ github.event.inputs.tracking_uri }} \
             ${{ github.event.inputs.args }}
 

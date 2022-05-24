@@ -1,10 +1,11 @@
 services:
   mbl:
-    image: tanlin2013/mbl
+    image: tanlin2013/mbl:latest
     pull_policy: always
     shm_size: 10.07gb
     network_mode: "host"
     volumes:
       - ~/projects/mbl/scripts:/home/mbl/scripts
       - ~/.aws:/root/.aws
-    command: python scripts/sampler.py
+    entrypoint: python
+    command: scripts/sampler.py
