@@ -1,7 +1,9 @@
 # MBL: many-body localization
-![build](https://github.com/tanlin2013/mbl/actions/workflows/build.yml/badge.svg)
-![tests](https://github.com/tanlin2013/mbl/actions/workflows/tests.yml/badge.svg)
-![deploy](https://github.com/tanlin2013/mbl/actions/workflows/deploy.yml/badge.svg)
+[![docker-build](https://github.com/tanlin2013/mbl/actions/workflows/build.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/build.yml)
+[![tests](https://github.com/tanlin2013/mbl/actions/workflows/tests.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/tests.yml)
+[![job-deploy](https://github.com/tanlin2013/mbl/actions/workflows/job-deploy.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/job-deploy.yml)
+[![service-deploy](https://github.com/tanlin2013/mbl/actions/workflows/service-deploy.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/service-deploy.yml)
+[![cdk-deploy](https://github.com/tanlin2013/mbl/actions/workflows/aws-cdk.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/aws-cdk.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [Dashboard](https://streamlit-mbl.herokuapp.com/) |
