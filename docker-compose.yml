@@ -5,7 +5,6 @@ services:
     shm_size: 10.07gb
     network_mode: "host"
     volumes:
-      - /data/TaoLin_shared/tree:/home/mbl/data
       - ~/projects/mbl/scripts:/home/mbl/scripts
       - ~/.aws:/root/.aws
     command: python scripts/sampler.py
