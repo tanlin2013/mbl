@@ -4,8 +4,19 @@ services:
     pull_policy: always
     shm_size: 10.07gb
     network_mode: "host"
+    ports:
+      - "8265:8265"
     volumes:
       - ~/projects/mbl/scripts:/home/mbl/scripts
       - ~/.aws:/root/.aws
+      - ray:/root/ray_results
     entrypoint: python
     command: scripts/sampler.py
+
+volumes:
+  ray:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/TaoLin_shared/docker/volumes/ray_results
