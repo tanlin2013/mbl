@@ -15,6 +15,7 @@ from mbl.experiment.random_heisenberg import (
     RandomHeisenbergTSDRG,
     RandomHeisenbergFoldingTSDRG,
 )
+from mbl.analysis.energy_bounds import EnergyBounds
 
 
 def run(
@@ -110,6 +111,8 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     @mlflow_mixin
     def experiment(config: Dict[str, Union[int, float, str]]):
         boto3.setup_default_session(profile_name="minio")
+        config.pop("mlflow")
+        config.update(EnergyBounds.retrieve(**config))  # TODO: this can be a bottleneck
         mlflow.log_params(config)
         experiment = RandomHeisenbergFoldingTSDRG(**config)
         filename = Path("-".join([f"{k}_{v}" for k, v in config.items()]) + ".p")
