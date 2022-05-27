@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Dict
 
 import awswrangler as wr
 
@@ -42,7 +43,7 @@ class EnergyBounds:
         s_target: int = 0,
         seed: int = None,
         chi: int = None,
-    ):
+    ) -> float:
         query_elements = cls.query_elements(
             n=n,
             h=h,
@@ -56,6 +57,55 @@ class EnergyBounds:
             f"SELECT {Columns.en} "
             f"FROM {cls.Metadata.table} "
             f"WHERE {' AND '.join(query_elements)} "
-            f"ORDER BY {Columns.en}",
+            f"ORDER BY {Columns.en} "
+            f"LIMIT 1",
             database=cls.Metadata.database,
-        )
+        )[Columns.en][0]
+
+    @classmethod
+    def retrieve(
+        cls,
+        n: int,
+        h: float,
+        penalty: float = 0.0,
+        s_target: int = 0,
+        seed: int = None,
+        chi: int = None,
+        **kwargs,
+    ) -> Dict[str, float]:
+        """
+        Naive setup for energy bounds without considering
+        the effect of truncation errors and finite-size effect.
+
+        Args:
+            n:
+            h:
+            penalty:
+            s_target:
+            seed:
+            chi:
+            **kwargs:
+
+        Returns:
+
+        """
+        return {
+            Columns.max_en: cls.athena_query(
+                n=n,
+                h=h,
+                overall_const=-1,
+                penalty=penalty,
+                s_target=s_target,
+                seed=seed,
+                chi=chi,
+            ),
+            Columns.min_en: cls.athena_query(
+                n=n,
+                h=h,
+                overall_const=1,
+                penalty=penalty,
+                s_target=s_target,
+                seed=seed,
+                chi=chi,
+            ),
+        }
