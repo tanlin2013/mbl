@@ -18,7 +18,7 @@ on:
       args:
         description: 'Arguments pass to job template'
         required: false
-        default: '--num_cpus 24 --memory 2'
+        default: '--num_cpus 28 --memory 4'
 
 jobs:
   deploy2workstation:
