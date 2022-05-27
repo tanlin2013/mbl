@@ -184,10 +184,6 @@ dmypy.json
 cython_debug/
 
 ### mbl specific
-# Data
-data/*
-!data/.gitkeep
-
 # Dask
 dask-worker-space/
 
