@@ -7,7 +7,7 @@ services:
         container_name: mlflow_s3
         ports:
             - "9000:9000"
-            - "8786:9001"
+            - "9001:9001"
         command: server /data --console-address ':9001' --address ':9000'
         environment:
             - MINIO_ROOT_USER=${AWS_ACCESS_KEY_ID}
@@ -46,7 +46,7 @@ services:
         volumes:
             - dbdata:/var/lib/mysql
 
-    web:
+    mlflow:
         restart: always
         build: ./mlflow
         image: mlflow_server
@@ -55,12 +55,29 @@ services:
             - mc
             - db
         ports:
-            - "8888:5000"
+            - "5000:5000"
+        networks:
+            - frontend
         environment:
+            - MLFLOW_TRACKING_USERNAME=${MLFLOW_TRACKING_USERNAME}
+            - MLFLOW_TRACKING_PASSWORD=${MLFLOW_TRACKING_PASSWORD}
+            - MLFLOW_TRACKING_TOKEN=${MLFLOW_TRACKING_TOKEN}
             - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
             - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
         command: mlflow server --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE} --default-artifact-root s3://mlflow/ --host 0.0.0.0
+
+    nginx:
+        restart: always
+        build: ./nginx
+        image: nginx
+        container_name: nginx
+        depends_on:
+            - mlflow
+        ports:
+            - "8080:80"
+        networks:
+            - frontend
 
 volumes:
     dbdata:
@@ -75,3 +92,7 @@ volumes:
             type: none
             o: bind
             device: /data/TaoLin_shared/docker/volumes/minio_minio_data/_data
+
+networks:
+    frontend:
+        driver: bridge
