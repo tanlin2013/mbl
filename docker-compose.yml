@@ -2,7 +2,7 @@ services:
   mbl:
     image: tanlin2013/mbl:latest
     pull_policy: always
-    shm_size: 10.07gb
+    shm_size: 10.24gb
     network_mode: "host"
     ports:
       - "8265:8265"
