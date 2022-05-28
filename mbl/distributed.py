@@ -1,9 +1,10 @@
-from typing import Callable, Sequence, List
+from typing import Callable, Sequence, List, Dict
 
 import ray
 from tqdm import tqdm
 from ray.remote_function import RemoteFunction
 from dask.distributed import Client, progress
+from dask_jobqueue import SLURMCluster
 
 
 class Distributed:
@@ -50,3 +51,24 @@ class Distributed:
         futures = client.map(func, params)
         progress(futures)
         return client.gather(futures)
+
+
+def scopion(config: Dict = None) -> SLURMCluster:
+    config = (
+        {
+            "cores": 32,
+            "memory": "10G",
+            "processes": 30,
+            "queue": "scopion1",
+            "walltime": "00:30:00",
+            "header_skip": ["--mem"],
+            "scheduler_options": {"host": "192.168.1.254"},
+            # host: '192.168.1.254',
+            # extra: ['--no-dashboard'],
+            "env_extra": ["module load singularity"],  # ensure singularity is loaded
+            "python": "singularity run mbl.sif python",  # use python in container
+        }
+        if config is None
+        else config
+    )
+    return SLURMCluster(config)
