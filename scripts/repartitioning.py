@@ -83,3 +83,11 @@ if __name__ == "__main__":
     #         's3://many-body-localization/dataframe/tsdrg/system_size=8/': ['8']
     #     }
     # )
+
+    # if "random_heisenberg" not in wr.catalog.databases().values:
+    #     wr.catalog.create_database("random_heisenberg")
+    # print(wr.catalog.table(database="random_heisenberg", table="tsdrg"))
+
+    # wr.s3.delete_objects(path)
+    # wr.catalog.delete_table_if_exists(database="awswrangler_test", table="noaa");
+    # wr.catalog.delete_database('awswrangler_test')
