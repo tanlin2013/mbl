@@ -8,6 +8,9 @@ services:
         ports:
             - "9000:9000"
             - "9001:9001"
+        networks:
+            - frontend
+            - backend
         command: server /data --console-address ':9001' --address ':9000'
         environment:
             - MINIO_ROOT_USER=${AWS_ACCESS_KEY_ID}
@@ -20,6 +23,8 @@ services:
         depends_on:
             - minio
         container_name: mc
+        networks:
+            - backend
         env_file:
             - .env
         entrypoint: >
@@ -38,6 +43,8 @@ services:
         container_name: mlflow_db
         ports:
             - "3306:3306"
+        networks:
+            - backend
         environment:
             - MYSQL_DATABASE=${MYSQL_DATABASE}
             - MYSQL_USER=${MYSQL_USER}
@@ -58,6 +65,7 @@ services:
             - "5000:5000"
         networks:
             - frontend
+            - backend
         environment:
             - MLFLOW_TRACKING_USERNAME=${MLFLOW_TRACKING_USERNAME}
             - MLFLOW_TRACKING_PASSWORD=${MLFLOW_TRACKING_PASSWORD}
@@ -97,4 +105,6 @@ volumes:
 
 networks:
     frontend:
+        driver: bridge
+    backend:
         driver: bridge
