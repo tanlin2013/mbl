@@ -78,6 +78,8 @@ services:
             - "8080:80"
         networks:
             - frontend
+        volumes:
+            - /opt/docker/nginx/cert:/etc/nginx/cert
 
 volumes:
     dbdata:
