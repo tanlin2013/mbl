@@ -82,5 +82,28 @@ The MLflow tracking server is composed of 4 docker containers:
     curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
     ```
 
+## Customization
+
+### Nginx Frontend
+
+#### SSL certification (https)
+
+To enable https with SSL certification, 
+it's required to mount public key and private key (in `.cert` or `.pem`) into 
+the container path `/etc/nginx/cert`. 
+One should put them in the path `/opt/docker/nginx/cert` of the based system.
+
+#### Configuration files
+Configuration files are placed in `/mlflow-tracker/minio/nginx` of this repo.
+
+### Environment file
+One should replace the default environment file `/mlflow-tracker/minio/.env` 
+in this repo, with your own one. 
+Preferably in this path `/opt/docker/mlflow/.env` of the based system.
+Or, one can overwrite it with
+```
+docker compose --env-file <path/to/your/.env> up 
+```
+
 ## References
 https://github.com/sachua/mlflow-docker-compose
