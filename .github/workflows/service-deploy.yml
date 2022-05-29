@@ -47,7 +47,9 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd projects/mbl/mlflow-tracker/minio &&
-            docker compose ${{ github.event.inputs.docker_compose_cmd }}
+            docker compose \
+            --env-file /opt/docker/mlflow/.env \
+            ${{ github.event.inputs.docker_compose_cmd }}
 
       - name: Deploy sftp server on workstation
         if: github.event.inputs.service == 'sftp'
