@@ -15,9 +15,9 @@ on:
         description: 'Run docker compose command'
         type: choice
         required: false
-        default: 'up -d'
+        default: 'up --build -d'
         options:
-          - up -d
+          - up --build -d
           - down
 
 jobs:
