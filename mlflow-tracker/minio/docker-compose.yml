@@ -91,6 +91,7 @@ services:
             - /etc/letsencrypt:/etc/letsencrypt
         extra_hosts:
             - "localhost:127.0.0.1"
+        command: certbot --nginx --rsa-key-size 4096 --no-redirect --staple-ocsp -d do-doublets.phys.nthu.edu.tw
 
 volumes:
     dbdata:
