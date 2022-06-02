@@ -87,8 +87,8 @@ services:
             - "8443:443"
         networks:
             - frontend
-#        volumes:
-#            - /opt/docker/nginx/cert:/etc/nginx/cert
+        volumes:
+            - /etc/letsencrypt:/etc/letsencrypt
         extra_hosts:
             - "localhost:127.0.0.1"
 
