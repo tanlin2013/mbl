@@ -79,7 +79,6 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
 
     @classmethod
     def to_s3_parquet(cls, df: pd.DataFrame):
-        boto3.setup_default_session(profile_name="default")
         wr.s3.to_parquet(
             df=df,
             path=cls.AthenaMetadata.s3_path,
@@ -97,6 +96,7 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
             ],
             database=cls.AthenaMetadata.database,
             table=cls.AthenaMetadata.table,
+            boto3_session=boto3.Session(profile_name="default"),
         )
 
 
@@ -110,8 +110,8 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     @staticmethod
     @mlflow_mixin
     def experiment(config: Dict[str, Union[int, float, str]]):
-        config.pop("mlflow")
         config = RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds(config)
+        config.pop("mlflow")
         boto3.setup_default_session(profile_name="minio")
         mlflow.log_params(config)
         experiment = RandomHeisenbergFoldingTSDRG(**config)
@@ -127,13 +127,16 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     def retrieve_energy_bounds(
         cls, config: Dict[str, Union[int, float, str]]
     ) -> Dict[str, Union[int, float, str]]:
-        boto3.setup_default_session(profile_name="default")
-        config.update(EnergyBounds.retrieve(**config))  # TODO: this can be a bottleneck
+        # TODO: this can be a bottleneck
+        config.update(
+            EnergyBounds.retrieve(
+                **config, boto3_session=boto3.Session(profile_name="default")
+            )
+        )
         return config
 
     @classmethod
     def to_s3_parquet(cls, df: pd.DataFrame):
-        boto3.setup_default_session(profile_name="default")
         wr.s3.to_parquet(
             df=df,
             path=cls.AthenaMetadata.s3_path,
@@ -151,4 +154,5 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
             ],
             database=cls.AthenaMetadata.database,
             table=cls.AthenaMetadata.table,
+            boto3_session=boto3.Session(profile_name="default"),
         )

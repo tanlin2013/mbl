@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict
 
+from boto3 import Session
 import awswrangler as wr
 
 from mbl.name_space import Columns
@@ -43,6 +44,7 @@ class EnergyBounds:
         s_target: int = 0,
         seed: int = None,
         chi: int = None,
+        boto3_session: Session = None,
     ) -> float:
         query_elements = cls.query_elements(
             n=n,
@@ -60,6 +62,7 @@ class EnergyBounds:
             f"ORDER BY {Columns.en} "
             f"LIMIT 1",
             database=cls.Metadata.database,
+            boto3_session=boto3_session,
         )[Columns.en][0]
 
     @classmethod
@@ -71,6 +74,7 @@ class EnergyBounds:
         s_target: int = 0,
         seed: int = None,
         chi: int = None,
+        boto3_session: Session = None,
         **kwargs,
     ) -> Dict[str, float]:
         """
@@ -84,6 +88,7 @@ class EnergyBounds:
             s_target:
             seed:
             chi:
+            boto3_session:
             **kwargs:
 
         Returns:
@@ -98,6 +103,7 @@ class EnergyBounds:
                 s_target=s_target,
                 seed=seed,
                 chi=chi,
+                boto3_session=boto3_session,
             ),
             Columns.min_en: cls.athena_query(
                 n=n,
@@ -107,5 +113,6 @@ class EnergyBounds:
                 s_target=s_target,
                 seed=seed,
                 chi=chi,
+                boto3_session=boto3_session,
             ),
         }
