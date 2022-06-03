@@ -14,7 +14,7 @@ on:
       tracking_uri:
         description: 'Mlflow tracking server endpoint'
         required: false
-        default: 'http://mlflow-xxxxx.elb.xx-region.amazonaws.com:80'
+        default: 'http://localhost:5000'
       args:
         description: 'Arguments pass to job template'
         required: false
