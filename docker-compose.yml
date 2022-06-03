@@ -4,6 +4,8 @@ services:
     pull_policy: always
     shm_size: 10.24gb
     network_mode: "host"
+    environment:
+      - MLFLOW_S3_ENDPOINT_URL=http://localhost:9000
     volumes:
       - ~/projects/mbl/scripts:/home/mbl/scripts
       - ~/.aws:/root/.aws
