@@ -13,6 +13,7 @@ services:
 
 volumes:
   ray:
+    external: true
     driver: local
     driver_opts:
       type: none
