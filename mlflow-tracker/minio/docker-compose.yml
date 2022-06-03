@@ -83,15 +83,15 @@ services:
         depends_on:
             - mlflow
         ports:
-            - "8080:80"
-            - "8443:443"
+            - "8080:443"
+            - "8888:444"
         networks:
             - frontend
         volumes:
             - /etc/letsencrypt:/etc/letsencrypt
+            - /etc/nginx/.htpasswd:/etc/nginx/.htpasswd
         extra_hosts:
             - "localhost:127.0.0.1"
-        command: certbot --nginx --rsa-key-size 4096 --no-redirect --staple-ocsp -d do-doublets.phys.nthu.edu.tw
 
 volumes:
     dbdata:
