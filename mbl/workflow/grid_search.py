@@ -110,9 +110,9 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     @staticmethod
     @mlflow_mixin
     def experiment(config: Dict[str, Union[int, float, str]]):
-        boto3.setup_default_session(profile_name="minio")
         config.pop("mlflow")
         config.update(EnergyBounds.retrieve(**config))  # TODO: this can be a bottleneck
+        boto3.setup_default_session(profile_name="minio")
         mlflow.log_params(config)
         experiment = RandomHeisenbergFoldingTSDRG(**config)
         filename = Path("-".join([f"{k}_{v}" for k, v in config.items()]) + ".p")
