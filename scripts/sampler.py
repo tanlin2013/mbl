@@ -77,7 +77,7 @@ def main(
         num_cpus=num_cpus,
         object_store_memory=memory * 1024 ** 3,
         dashboard_host="0.0.0.0",
-        dashboard_port=8265,
+        dashboard_port=8786,
     )
     experiment = globals()[workflow].experiment
     run(
