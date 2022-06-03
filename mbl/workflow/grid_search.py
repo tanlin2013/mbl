@@ -110,9 +110,8 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     @staticmethod
     @mlflow_mixin
     def experiment(config: Dict[str, Union[int, float, str]]):
-        boto3.setup_default_session(profile_name="default")
         config.pop("mlflow")
-        config.update(EnergyBounds.retrieve(**config))  # TODO: this can be a bottleneck
+        config = RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds(config)
         boto3.setup_default_session(profile_name="minio")
         mlflow.log_params(config)
         experiment = RandomHeisenbergFoldingTSDRG(**config)
@@ -123,6 +122,14 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
         mlflow.log_metric(key="mean_variance", value=df[Columns.variance].mean())
         mlflow.log_dict(df.to_dict(), "df.json")
         RandomHeisenbergFoldingTSDRGGridSearch.to_s3_parquet(df)
+
+    @classmethod
+    def retrieve_energy_bounds(
+        cls, config: Dict[str, Union[int, float, str]]
+    ) -> Dict[str, Union[int, float, str]]:
+        boto3.setup_default_session(profile_name="default")
+        config.update(EnergyBounds.retrieve(**config))  # TODO: this can be a bottleneck
+        return config
 
     @classmethod
     def to_s3_parquet(cls, df: pd.DataFrame):
