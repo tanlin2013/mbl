@@ -33,7 +33,7 @@ def config_parser(workflow: str):
         )
     elif workflow == RandomHeisenbergFoldingTSDRGGridSearch.__name__:
         config.update(
-            {"relative_offset": data[Columns.offset],}
+            {"relative_offset": data[Columns.offset]}
         )
     return {k: tune.grid_search(v) for k, v in config.items()}
 
@@ -41,7 +41,7 @@ def config_parser(workflow: str):
 @click.command()
 @click.option("-U", "--tracking_uri", default="http://localhost:5000", type=str)
 @click.option(
-    "-W", "--workflow", default="RandomHeisenbergFoldingTSDRGGridSearch", type="str"
+    "-W", "--workflow", default="RandomHeisenbergFoldingTSDRGGridSearch", type=str
 )
 @click.option(
     "-N",
