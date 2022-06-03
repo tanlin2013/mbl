@@ -95,12 +95,14 @@ services:
 
 volumes:
     dbdata:
+        external: true
         driver: local
         driver_opts:
             type: none
             o: bind
             device: /data/TaoLin_shared/docker/volumes/minio_dbdata/_data
     minio_data:
+        external: true
         driver: local
         driver_opts:
             type: none
