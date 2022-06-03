@@ -13,12 +13,8 @@ on:
           - sftp
       docker_compose_cmd:
         description: 'Run docker compose command'
-        type: choice
         required: false
-        default: 'up --build -d'
-        options:
-          - up --build -d
-          - down
+        default: '--env-file /opt/docker/mlflow/.env up --build -d'
 
 jobs:
   deploy-service:
@@ -47,9 +43,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd projects/mbl/mlflow-tracker/minio &&
-            docker compose \
-            --env-file /opt/docker/mlflow/.env \
-            ${{ github.event.inputs.docker_compose_cmd }}
+            docker compose ${{ github.event.inputs.docker_compose_cmd }}
 
       - name: Deploy sftp server on workstation
         if: github.event.inputs.service == 'sftp'
