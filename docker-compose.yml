@@ -19,4 +19,4 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /data/TaoLin_shared/docker/volumes/ray_results
+      device: /data/TaoLin_shared/docker/volumes/ray_results/_data
