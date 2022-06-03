@@ -40,9 +40,14 @@ def config_parser(workflow: str):
 
 @click.command()
 @click.option("-U", "--tracking_uri", default="http://localhost:5000", type=str)
-@click.option("-W", "--workflow", default="RandomHeisenbergTSDRGGridSearch", type="str")
 @click.option(
-    "-N", "--experiment_name", default="random_heisenberg-tsdrg-energy_bounds", type=str
+    "-W", "--workflow", default="RandomHeisenbergFoldingTSDRGGridSearch", type="str"
+)
+@click.option(
+    "-N",
+    "--experiment_name",
+    default="random_heisenberg-folding_tsdrg-energy_windows",
+    type=str,
 )
 @click.option(
     "--num_cpus", default=28, type=int, help="Number of total available cpus."
