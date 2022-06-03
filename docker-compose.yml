@@ -5,7 +5,7 @@ services:
     shm_size: 10.24gb
     network_mode: "host"
     ports:
-      - "8265:8265"
+      - "8787:8265"
     volumes:
       - ~/projects/mbl/scripts:/home/mbl/scripts
       - ~/.aws:/root/.aws
