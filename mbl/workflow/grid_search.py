@@ -1,6 +1,8 @@
 import abc
+import traceback
 from pathlib import Path
 from dataclasses import dataclass
+from functools import wraps
 from typing import Dict, Union, Callable
 
 import boto3
@@ -47,6 +49,18 @@ def run(
     )
 
 
+def mlflow_exception_catcher(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            func(*args, **kwargs)
+        except Exception as e:
+            mlflow.set_tag("error", type(e).__name__)
+            mlflow.log_text(traceback.format_exc(), "error.txt")
+            mlflow.end_run("FAILED")
+    return wrapper
+
+
 class GridSearch(abc.ABC):
     @staticmethod
     @mlflow_mixin
@@ -64,6 +78,7 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
 
     @staticmethod
     @mlflow_mixin
+    @mlflow_exception_catcher
     def experiment(config: Dict[str, Union[int, float, str]]):
         boto3.setup_default_session(profile_name="minio")
         config.pop("mlflow")
@@ -109,6 +124,7 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
 
     @staticmethod
     @mlflow_mixin
+    @mlflow_exception_catcher
     def experiment(config: Dict[str, Union[int, float, str]]):
         config = RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds(config)
         config.pop("mlflow")
