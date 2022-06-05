@@ -49,7 +49,19 @@ def run(
     )
 
 
-def mlflow_exception_catcher(func):
+def mlflow_s3_storage(profile_name: str):
+    def decorator(func: Callable):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            boto3.setup_default_session(profile_name=profile_name)
+            func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+
+def mlflow_exception_catcher(func: Callable):
     @wraps(func)
     def wrapper(*args, **kwargs):
         try:
@@ -79,9 +91,9 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
 
     @staticmethod
     @mlflow_mixin
+    @mlflow_s3_storage(profile_name="minio")
     @mlflow_exception_catcher
     def experiment(config: Dict[str, Union[int, float, str]]):
-        boto3.setup_default_session(profile_name="minio")
         config.pop("mlflow")
         mlflow.log_params(config)
         experiment = RandomHeisenbergTSDRG(**config)
@@ -125,11 +137,11 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
 
     @staticmethod
     @mlflow_mixin
+    @mlflow_s3_storage(profile_name="minio")
     @mlflow_exception_catcher
     def experiment(config: Dict[str, Union[int, float, str]]):
         config.pop("mlflow")
         config = RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds(config)
-        boto3.setup_default_session(profile_name="minio")
         mlflow.log_params(config)
         experiment = RandomHeisenbergFoldingTSDRG(**config)
         filename = Path("-".join([f"{k}_{v}" for k, v in config.items()]) + ".p")
