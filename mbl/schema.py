@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import pandera as pa
 from pandera.typing import Series
 
@@ -84,3 +85,7 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
     @pa.check(Columns.edge_entropy)
     def bound_in(cls, series: Series[float]) -> Series[bool]:
         return (-1e-12 < series) & (series < np.log(2) + 1e-12)
+
+    @pa.dataframe_check
+    def energy_bounds(cls, df: pd.DataFrame) -> Series[bool]:
+        return df[Columns.max_en] > df[Columns.min_en]
