@@ -1,6 +1,7 @@
 import uuid
 from time import time
 
+import numpy as np
 import pandas as pd
 from pandera import check_output
 from tnpy.operators import MatrixProductOperator
@@ -53,20 +54,20 @@ class RandomHeisenbergED(EDExperiment):
         n_row = len(self.ed.evecs)
         return pd.DataFrame(
             {
-                Columns.level_id: list(range(n_row)),
-                Columns.en: self.evals.tolist(),
-                Columns.total_sz: self.total_sz.tolist(),
-                Columns.edge_entropy: self.entanglement_entropy(site=0).tolist(),
+                Columns.level_id: np.arange(n_row),
+                Columns.en: self.evals,
+                Columns.total_sz: self.total_sz,
+                Columns.edge_entropy: self.entanglement_entropy(site=0),
                 Columns.bipartite_entropy: self.entanglement_entropy(
                     site=self.model.n // 2 - 1
-                ).tolist(),
-                Columns.system_size: [self.model.n] * n_row,
-                Columns.disorder: [self.model.h] * n_row,
-                Columns.trial_id: [self.model.trial_id] * n_row,
-                Columns.seed: [self.model.seed] * n_row,
-                Columns.penalty: [self.model.penalty] * n_row,
-                Columns.s_target: [self.model.s_target] * n_row,
-                Columns.offset: [self.model.offset] * n_row,
+                ),
+                Columns.system_size: self.model.n,
+                Columns.disorder: self.model.h * np.ones(n_row),
+                Columns.trial_id: self.model.trial_id,
+                Columns.seed: self.model.seed,
+                Columns.penalty: self.model.penalty * np.ones(n_row),
+                Columns.s_target: self.model.s_target,
+                Columns.offset: self.model.offset * np.ones(n_row),
             }
         )
 
@@ -106,20 +107,20 @@ class RandomHeisenbergTSDRG(TSDRGExperiment):
         n_row = self.tsdrg.chi
         return pd.DataFrame(
             {
-                Columns.level_id: list(range(n_row)),
-                Columns.en: self.evals.tolist(),
-                Columns.variance: self.variance.tolist(),
-                Columns.total_sz: self.total_sz.tolist(),
-                Columns.edge_entropy: self.edge_entropy.tolist(),
-                Columns.truncation_dim: [self.tsdrg.chi] * n_row,
-                Columns.system_size: [self.model.n] * n_row,
-                Columns.disorder: [self.model.h] * n_row,
-                Columns.trial_id: [self.model.trial_id] * n_row,
-                Columns.seed: [self.model.seed] * n_row,
-                Columns.penalty: [self.model.penalty] * n_row,
-                Columns.s_target: [self.model.s_target] * n_row,
-                Columns.offset: [self.model.offset] * n_row,
-                Columns.overall_const: [self._overall_const] * n_row,
+                Columns.level_id: np.arange(n_row),
+                Columns.en: self.evals,
+                Columns.variance: self.variance,
+                Columns.total_sz: self.total_sz,
+                Columns.edge_entropy: self.edge_entropy,
+                Columns.truncation_dim: self.tsdrg.chi,
+                Columns.system_size: self.model.n,
+                Columns.disorder: self.model.h * np.ones(n_row),
+                Columns.trial_id: self.model.trial_id,
+                Columns.seed: self.model.seed,
+                Columns.penalty: self.model.penalty * np.ones(n_row),
+                Columns.s_target: self.model.s_target,
+                Columns.offset: self.model.offset * np.ones(n_row),
+                Columns.overall_const: self._overall_const * np.ones(n_row),
             }
         )
 
@@ -163,21 +164,21 @@ class RandomHeisenbergFoldingTSDRG(TSDRGExperiment):
         n_row = self.tsdrg.chi
         return pd.DataFrame(
             {
-                Columns.level_id: list(range(n_row)),
-                Columns.en: self.evals.tolist(),
-                Columns.variance: self.variance.tolist(),
-                Columns.total_sz: self.total_sz.tolist(),
-                Columns.edge_entropy: self.edge_entropy.tolist(),
-                Columns.truncation_dim: [self.tsdrg.chi] * n_row,
-                Columns.system_size: [self.model.n] * n_row,
-                Columns.disorder: [self.model.h] * n_row,
-                Columns.trial_id: [self.model.trial_id] * n_row,
-                Columns.seed: [self.model.seed] * n_row,
-                Columns.penalty: [self._folded_model.penalty] * n_row,
-                Columns.s_target: [self._folded_model.s_target] * n_row,
-                Columns.offset: [self._folded_model.offset] * n_row,
-                Columns.max_en: [self._max_en] * n_row,
-                Columns.min_en: [self._min_en] * n_row,
-                Columns.relative_offset: [self._relative_offset] * n_row,
+                Columns.level_id: np.arange(n_row),
+                Columns.en: self.evals,
+                Columns.variance: self.variance,
+                Columns.total_sz: self.total_sz,
+                Columns.edge_entropy: self.edge_entropy,
+                Columns.truncation_dim: self.tsdrg.chi,
+                Columns.system_size: self.model.n,
+                Columns.disorder: self.model.h * np.ones(n_row),
+                Columns.trial_id: self.model.trial_id,
+                Columns.seed: self.model.seed,
+                Columns.penalty: self._folded_model.penalty * np.ones(n_row),
+                Columns.s_target: self._folded_model.s_target,
+                Columns.offset: self._folded_model.offset * np.ones(n_row),
+                Columns.max_en: self._max_en * np.ones(n_row),
+                Columns.min_en: self._min_en * np.ones(n_row),
+                Columns.relative_offset: self._relative_offset * np.ones(n_row),
             }
         )
