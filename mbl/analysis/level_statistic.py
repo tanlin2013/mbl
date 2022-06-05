@@ -41,6 +41,7 @@ class LevelStatistic:
         s_target: int = 0,
         seed: int = None,
         chi: int = None,
+        relative_offset: float = None,
         total_sz: int = None,
         tol: float = 1e-12,
     ) -> List[str]:
@@ -52,6 +53,8 @@ class LevelStatistic:
         ]
         if chi is not None:
             query.append(f"({Columns.truncation_dim} = {chi})")
+        if relative_offset is not None:
+            query.append(f"({Columns.relative_offset} = {relative_offset})")
         if seed is not None:
             query.append(f"({Columns.seed} = {seed})")
         if total_sz is not None:
@@ -66,11 +69,12 @@ class LevelStatistic:
         s_target: int = 0,
         seed: int = None,
         chi: int = None,
+        relative_offset: float = None,
         total_sz: int = None,
         tol: float = 1e-12,
     ) -> pd.DataFrame:
         query = self.query_elements(
-            n, h, penalty, s_target, seed, chi, total_sz, tol
+            n, h, penalty, s_target, seed, chi, relative_offset, total_sz, tol
         )
         return self.raw_df.query(
             " & ".join(query).replace("=", "==").replace("ABS", "abs")
@@ -85,12 +89,13 @@ class LevelStatistic:
         s_target: int = 0,
         seed: int = None,
         chi: int = None,
+        relative_offset: float = None,
         total_sz: int = None,
         tol: float = 1e-12,
         **kwargs,
     ) -> pd.DataFrame:
         query = cls.query_elements(
-            n, h, penalty, s_target, seed, chi, total_sz, tol
+            n, h, penalty, s_target, seed, chi, relative_offset, total_sz, tol
         )
         table = cls.Metadata.ed_table if chi is None else cls.Metadata.tsdrg_table
         return wr.athena.read_sql_query(
@@ -107,15 +112,27 @@ class LevelStatistic:
         s_target: int = 0,
         seed: int = None,
         chi: int = None,
+        relative_offset: float = None,
         total_sz: int = None,
         tol: float = 1e-12,
         **kwargs,
     ) -> pd.DataFrame:
         df = (
-            self.local_query(n, h, penalty, s_target, seed, chi, total_sz, tol)
+            self.local_query(
+                n, h, penalty, s_target, seed, chi, relative_offset, total_sz, tol
+            )
             if self.raw_df is not None
             else self.athena_query(
-                n, h, penalty, s_target, seed, chi, total_sz, tol
+                n,
+                h,
+                penalty,
+                s_target,
+                seed,
+                chi,
+                relative_offset,
+                total_sz,
+                tol,
+                **kwargs,
             )
         )
         df.drop_duplicates(
@@ -124,6 +141,7 @@ class LevelStatistic:
                 Columns.disorder,
                 Columns.penalty,
                 Columns.s_target,
+                # Columns.relative_offset,
                 Columns.seed,
                 Columns.level_id,
             ],
