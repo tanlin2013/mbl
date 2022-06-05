@@ -58,6 +58,7 @@ def mlflow_exception_catcher(func):
             mlflow.set_tag("error", type(e).__name__)
             mlflow.log_text(traceback.format_exc(), "error.txt")
             mlflow.end_run("FAILED")
+
     return wrapper
 
 
@@ -126,8 +127,8 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     @mlflow_mixin
     @mlflow_exception_catcher
     def experiment(config: Dict[str, Union[int, float, str]]):
-        config = RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds(config)
         config.pop("mlflow")
+        config = RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds(config)
         boto3.setup_default_session(profile_name="minio")
         mlflow.log_params(config)
         experiment = RandomHeisenbergFoldingTSDRG(**config)
