@@ -45,6 +45,7 @@ class EnergyBounds:
         seed: int = None,
         chi: int = None,
         boto3_session: Session = None,
+        **kwargs,
     ) -> float:
         query_elements = cls.query_elements(
             n=n,
@@ -63,6 +64,7 @@ class EnergyBounds:
             f"LIMIT 1",
             database=cls.Metadata.database,
             boto3_session=boto3_session,
+            **kwargs,
         )[Columns.en][0]
 
     @classmethod
@@ -89,7 +91,7 @@ class EnergyBounds:
             seed:
             chi:
             boto3_session:
-            **kwargs:
+            **kwargs: Additional kwargs passed to athena sql query.
 
         Returns:
 
@@ -104,6 +106,7 @@ class EnergyBounds:
                 seed=seed,
                 chi=chi,
                 boto3_session=boto3_session,
+                **kwargs,
             ),
             Columns.min_en: cls.athena_query(
                 n=n,
@@ -114,5 +117,6 @@ class EnergyBounds:
                 seed=seed,
                 chi=chi,
                 boto3_session=boto3_session,
+                **kwargs,
             ),
         }
