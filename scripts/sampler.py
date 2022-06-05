@@ -87,7 +87,7 @@ def main(
         configs=config_parser(workflow),
         resources_per_trial={"cpu": cpu},
         verbose=verbose,
-        resume="ERRORED_ONLY",
+        # resume="ERRORED_ONLY",
     )
 
 
