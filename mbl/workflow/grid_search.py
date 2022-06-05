@@ -161,7 +161,15 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
         # TODO: this can be a bottleneck
         config.update(
             EnergyBounds.retrieve(
-                **config, boto3_session=boto3.Session(profile_name="default")
+                n=config.get("n"),
+                h=config.get("h"),
+                penalty=config.get("penalty"),
+                s_target=config.get("s_target"),
+                seed=config.get("seed"),
+                chi=config.get("chi"),
+                boto3_session=boto3.Session(
+                    profile_name=cls.AthenaMetadata.profile_name
+                ),
             )
         )
         return config
