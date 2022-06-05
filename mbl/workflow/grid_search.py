@@ -85,6 +85,7 @@ class GridSearch(abc.ABC):
 class RandomHeisenbergTSDRGGridSearch(GridSearch):
     @dataclass
     class AthenaMetadata:
+        profile_name: str = "default"
         s3_path: str = "s3://many-body-localization/random_heisenberg/tsdrg"
         database: str = "random_heisenberg"
         table: str = "tsdrg"
@@ -124,13 +125,14 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
             ],
             database=cls.AthenaMetadata.database,
             table=cls.AthenaMetadata.table,
-            boto3_session=boto3.Session(profile_name="default"),
+            boto3_session=boto3.Session(profile_name=cls.AthenaMetadata.profile_name),
         )
 
 
 class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     @dataclass
     class AthenaMetadata:
+        profile_name: str = "default"
         s3_path: str = "s3://many-body-localization/random_heisenberg/folding_tsdrg"
         database: str = "random_heisenberg"
         table: str = "folding_tsdrg"
@@ -183,5 +185,5 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
             ],
             database=cls.AthenaMetadata.database,
             table=cls.AthenaMetadata.table,
-            boto3_session=boto3.Session(profile_name="default"),
+            boto3_session=boto3.Session(profile_name=cls.AthenaMetadata.profile_name),
         )
