@@ -41,7 +41,7 @@ def run(
     configs.update(mlflow_config)
 
     tune.run(
-        tune.with_parameters(experiment),
+        tune.with_parameters(experiment),  # TODO: pass additives if necessary
         config=configs,
         num_samples=1,
         resources_per_trial=resources_per_trial,
