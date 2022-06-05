@@ -11,14 +11,10 @@ on:
         options:
           - workstation
           - cluster
-      tracking_uri:
-        description: 'Mlflow tracking server endpoint'
-        required: false
-        default: 'http://localhost:5000'
       args:
-        description: 'Arguments pass to job template'
+        description: 'Arguments passed to job script'
         required: false
-        default: '--num_cpus 28 --memory 4'
+        default: '-U http://localhost:5000 --num_cpus 34 --memory 4'
 
 jobs:
   deploy2workstation:
@@ -49,7 +45,6 @@ jobs:
             cd projects/mbl &&
             docker compose run -d mbl \
             scripts/sampler.py \
-            -U ${{ github.event.inputs.tracking_uri }} \
             ${{ github.event.inputs.args }}
 
       - name: Prune dangling images
