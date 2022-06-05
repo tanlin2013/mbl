@@ -50,10 +50,10 @@ def config_parser(workflow: str):
     type=str,
 )
 @click.option(
-    "--num_cpus", default=28, type=int, help="Number of total available cpus."
+    "--num_cpus", default=34, type=int, help="Number of total available cpus."
 )
 @click.option("--cpu", default=1, type=int, help="Number of cpu per task.")
-@click.option("--memory", default=3, type=float, help="Memory size per task in GB.")
+@click.option("--memory", default=4, type=float, help="Memory size per task in GB.")
 @click.option(
     "--verbose",
     default=3,
@@ -87,6 +87,7 @@ def main(
         configs=config_parser(workflow),
         resources_per_trial={"cpu": cpu},
         verbose=verbose,
+        resume="ERRORED_ONLY",
     )
 
 
