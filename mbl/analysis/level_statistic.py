@@ -87,6 +87,7 @@ class LevelStatistic:
         chi: int = None,
         total_sz: int = None,
         tol: float = 1e-12,
+        **kwargs,
     ) -> pd.DataFrame:
         query = cls.query_elements(
             n, h, penalty, s_target, seed, chi, total_sz, tol
@@ -95,6 +96,7 @@ class LevelStatistic:
         return wr.athena.read_sql_query(
             f"SELECT * FROM {table} WHERE {' AND '.join(query)}",
             database=cls.Metadata.database,
+            **kwargs,
         )
 
     def extract_gap(
@@ -107,6 +109,7 @@ class LevelStatistic:
         chi: int = None,
         total_sz: int = None,
         tol: float = 1e-12,
+        **kwargs,
     ) -> pd.DataFrame:
         df = (
             self.local_query(n, h, penalty, s_target, seed, chi, total_sz, tol)
