@@ -74,8 +74,8 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
     penalty: Series[float]
     s_target: Series[int]
     offset: Series[float]
-    max_en: Series[float]
-    min_en: Series[float]
+    max_en: Series[float] = pa.Field(nullable=True)
+    min_en: Series[float] = pa.Field(nullable=True)
     relative_offset: Series[float] = pa.Field(ge=0, le=1)
 
     @pa.check(Columns.total_sz)
@@ -88,4 +88,6 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
 
     @pa.dataframe_check
     def energy_bounds(cls, df: pd.DataFrame) -> Series[bool]:
-        return df[Columns.max_en] > df[Columns.min_en]
+        if np.isnan(df[Columns.max_en]).all() and np.isnan(df[Columns.min_en]).all():
+            return np.isnan(df[Columns.max_en]) & np.isnan(df[Columns.min_en])
+        return Series(df[Columns.max_en] > df[Columns.min_en])

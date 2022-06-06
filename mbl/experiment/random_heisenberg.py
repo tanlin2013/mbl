@@ -134,8 +134,8 @@ class RandomHeisenbergFoldingTSDRG(TSDRGExperiment):
         seed: int = None,
         penalty: float = 0,
         s_target: int = 0,
-        max_en: float = 0,
-        min_en: float = 0,
+        max_en: float = np.nan,
+        min_en: float = np.nan,
         relative_offset: float = 0,
     ):
         trial_id = uuid.uuid4().hex
@@ -147,7 +147,7 @@ class RandomHeisenbergFoldingTSDRG(TSDRGExperiment):
             seed=seed,
             penalty=penalty,
             s_target=s_target,
-            offset=(max_en - min_en) * relative_offset,
+            offset=np.nan_to_num(max_en - min_en) * relative_offset,
         )
         self._max_en = max_en
         self._min_en = min_en
