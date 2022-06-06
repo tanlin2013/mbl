@@ -95,6 +95,11 @@ class EnergyBounds:
 
         Returns:
 
+        Notes:
+            The upside down spectrum (for which we apply -1 to the Hamiltonian) saved on
+            AWS Athena doesn't restore the original spectrum up to an overall constant
+            (-1 in this case). Thereby we restore the original highest energy
+            by applying a -1 here.
         """
         return {
             Columns.max_en: cls.athena_query(
