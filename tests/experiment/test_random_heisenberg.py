@@ -43,23 +43,23 @@ class TestRandomHeisenbergED:
     def test_compute_df(self, agent):
         df = agent.compute_df()
         pd.testing.assert_frame_equal(
+            df,
             pd.DataFrame(
                 {
-                    Columns.level_id: list(range(4)),
+                    Columns.level_id: np.arange(4),
                     Columns.en: [-0.75, 0.25, 0.25, 0.25],
                     Columns.total_sz: [0.0, 1.0, 0.0, -1.0],
                     Columns.edge_entropy: [np.log(2), np.nan, np.log(2), np.nan],
                     Columns.bipartite_entropy: [np.log(2), np.nan, np.log(2), np.nan],
-                    Columns.system_size: [2, 2, 2, 2],
-                    Columns.disorder: [0, 0, 0, 0],
-                    Columns.trial_id: [0, 0, 0, 0],
-                    Columns.seed: [agent.model.seed] * 4,
-                    Columns.penalty: [0, 0, 0, 0],
-                    Columns.s_target: [0, 0, 0, 0],
-                    Columns.offset: [0, 0, 0, 0],
+                    Columns.system_size: 2,
+                    Columns.disorder: 0 * np.ones(4),
+                    Columns.trial_id: agent.model.trial_id,
+                    Columns.seed: agent.model.seed,
+                    Columns.penalty: 0 * np.ones(4),
+                    Columns.s_target: 0,
+                    Columns.offset: 0 * np.ones(4),
                 }
             ),
-            df,
         )
         RandomHeisenbergEDSchema.validate(df, lazy=True)
 
@@ -95,29 +95,29 @@ class TestRandomHeisenbergFoldingTSDRG:
         n_row = agent.tsdrg.chi
         df = agent.compute_df()
         pd.testing.assert_frame_equal(
+            df,
             pd.DataFrame(
                 {
-                    Columns.level_id: list(range(n_row)),
-                    Columns.en: ed_agent.evals.tolist(),
+                    Columns.level_id: np.arange(n_row),
+                    Columns.en: ed_agent.evals,
                     Columns.variance: np.zeros(n_row),
-                    Columns.total_sz: ed_agent.total_sz.tolist(),
+                    Columns.total_sz: ed_agent.total_sz,
                     Columns.edge_entropy: np.nan_to_num(
                         ed_agent.entanglement_entropy(0)
-                    ).tolist(),
-                    Columns.truncation_dim: [agent.tsdrg.chi] * n_row,
-                    Columns.system_size: [agent.model.n] * n_row,
-                    Columns.disorder: [agent.model.h] * n_row,
-                    Columns.trial_id: [agent.model.trial_id] * n_row,
-                    Columns.seed: [agent.model.seed] * n_row,
-                    Columns.penalty: [0] * n_row,
-                    Columns.s_target: [0] * n_row,
-                    Columns.offset: [0] * n_row,
-                    Columns.max_en: [0] * n_row,
-                    Columns.min_en: [0] * n_row,
-                    Columns.relative_offset: [0] * n_row,
+                    ),
+                    Columns.truncation_dim: agent.tsdrg.chi,
+                    Columns.system_size: agent.model.n,
+                    Columns.disorder: agent.model.h * np.ones(n_row),
+                    Columns.trial_id: agent.model.trial_id,
+                    Columns.seed: agent.model.seed,
+                    Columns.penalty: 0 * np.ones(n_row),
+                    Columns.s_target: 0,
+                    Columns.offset: 0 * np.ones(n_row),
+                    Columns.max_en: np.nan * np.ones(n_row),
+                    Columns.min_en: np.nan * np.ones(n_row),
+                    Columns.relative_offset: 0 * np.ones(n_row),
                 }
             ),
-            df,
             atol=1e-12,
         )
         RandomHeisenbergFoldingTSDRGSchema.validate(df, lazy=True)
