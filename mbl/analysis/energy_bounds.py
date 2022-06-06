@@ -102,26 +102,17 @@ class EnergyBounds:
             by applying a -1 here.
         """
         return {
-            Columns.max_en: cls.athena_query(
+            k: v
+            * cls.athena_query(
                 n=n,
                 h=h,
-                overall_const=-1,
+                overall_const=v,
                 penalty=penalty,
                 s_target=s_target,
                 seed=seed,
                 chi=chi,
                 boto3_session=boto3_session,
                 **kwargs,
-            ),
-            Columns.min_en: cls.athena_query(
-                n=n,
-                h=h,
-                overall_const=1,
-                penalty=penalty,
-                s_target=s_target,
-                seed=seed,
-                chi=chi,
-                boto3_session=boto3_session,
-                **kwargs,
-            ),
+            )
+            for k, v in [(Columns.max_en, -1), (Columns.min_en, 1)]
         }
