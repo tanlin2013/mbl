@@ -14,12 +14,12 @@ class RandomHeisenbergEDSchema(pa.SchemaModel):
     edge_entropy: Series[float] = pa.Field(nullable=True)
     bipartite_entropy: Series[float] = pa.Field(nullable=True)
     system_size: Series[int] = pa.Field(gt=1)
-    disorder: Series[float] = pa.Field(coerce=True)
+    disorder: Series[float]
     trial_id: Series[str] = pa.Field(nullable=True)
     seed: Series[int]
-    penalty: Series[float] = pa.Field(coerce=True)
+    penalty: Series[float]
     s_target: Series[int]
-    offset: Series[float] = pa.Field(ge=0, le=1, coerce=True)
+    offset: Series[float] = pa.Field(ge=0, le=1)
 
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
@@ -43,13 +43,13 @@ class RandomHeisenbergTSDRGSchema(pa.SchemaModel):
     edge_entropy: Series[float] = pa.Field(nullable=True)
     truncation_dim: Series[int]
     system_size: Series[int] = pa.Field(gt=1)
-    disorder: Series[float] = pa.Field(coerce=True)
+    disorder: Series[float]
     trial_id: Series[str] = pa.Field(nullable=True)
     seed: Series[int]
-    penalty: Series[float] = pa.Field(coerce=True)
+    penalty: Series[float]
     s_target: Series[int]
-    offset: Series[float] = pa.Field(coerce=True)
-    overall_const: Series[float] = pa.Field(coerce=True)
+    offset: Series[float]
+    overall_const: Series[float]
 
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
@@ -68,15 +68,15 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
     edge_entropy: Series[float] = pa.Field(nullable=True)
     truncation_dim: Series[int]
     system_size: Series[int] = pa.Field(gt=1)
-    disorder: Series[float] = pa.Field(coerce=True)
+    disorder: Series[float]
     trial_id: Series[str] = pa.Field(nullable=True)
     seed: Series[int]
-    penalty: Series[float] = pa.Field(coerce=True)
+    penalty: Series[float]
     s_target: Series[int]
-    offset: Series[float] = pa.Field(coerce=True)
-    max_en: Series[float] = pa.Field(coerce=True)
-    min_en: Series[float] = pa.Field(coerce=True)
-    relative_offset: Series[float] = pa.Field(ge=0, le=1, coerce=True)
+    offset: Series[float]
+    max_en: Series[float]
+    min_en: Series[float]
+    relative_offset: Series[float] = pa.Field(ge=0, le=1)
 
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
