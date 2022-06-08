@@ -1,1 +1,0 @@
-web: sh streamlit.sh && streamlit run scripts/app.py
