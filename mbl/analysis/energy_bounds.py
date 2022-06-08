@@ -24,15 +24,17 @@ class EnergyBounds:
         seed: int = None,
         chi: int = None,
     ):
-        return [
+        query = [
             f"({Columns.system_size} = {n})",
             f"({Columns.disorder} = {h})",
             f"({Columns.overall_const} = {overall_const})",
             f"({Columns.truncation_dim} = {chi})",
             f"({Columns.penalty} = {penalty})",
             f"({Columns.s_target} = {s_target})",
-            f"({Columns.seed} = {seed})",
         ]
+        if seed is not None:
+            query.append(f"({Columns.seed} = {seed})")
+        return query
 
     @classmethod
     def athena_query(
