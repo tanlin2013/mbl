@@ -1,0 +1,5 @@
+[server]
+#headless = true
+#port = $PORT
+#enableCORS = false
+maxMessageSize = 400
