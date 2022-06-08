@@ -57,11 +57,13 @@ class EnergyBounds:
             chi=chi,
         )
         return wr.athena.read_sql_query(
-            f"SELECT {Columns.en} "
-            f"FROM {cls.Metadata.table} "
-            f"WHERE {' AND '.join(query_elements)} "
-            f"ORDER BY {Columns.en} "
-            f"LIMIT 1",
+            f"""
+            SELECT {Columns.en}
+            FROM {cls.Metadata.table}
+            WHERE {' AND '.join(query_elements)}
+            ORDER BY {Columns.en}
+            LIMIT 1
+            """,
             database=cls.Metadata.database,
             boto3_session=boto3_session,
             **kwargs,
