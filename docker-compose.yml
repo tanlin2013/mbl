@@ -3,7 +3,8 @@ services:
     image: tanlin2013/mbl:latest
     pull_policy: always
     shm_size: 10.24gb
-    network_mode: "host"
+    ports:
+      - "8787:8265"
     environment:
       - MLFLOW_S3_ENDPOINT_URL=http://localhost:9000
     volumes:

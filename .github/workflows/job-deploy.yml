@@ -43,7 +43,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd projects/mbl &&
-            docker compose run -d mbl \
+            docker compose run --service-ports -d mbl \
             scripts/sampler.py \
             ${{ github.event.inputs.args }}
 
