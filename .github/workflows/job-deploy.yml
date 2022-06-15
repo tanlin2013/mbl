@@ -14,7 +14,7 @@ on:
       args:
         description: 'Arguments passed to job script'
         required: false
-        default: '-U http://localhost:5000 --num_cpus 34 --memory 4'
+        default: '-U http://mlflow:5000 --num_cpus 34 --memory 4'
 
 jobs:
   deploy2workstation:
