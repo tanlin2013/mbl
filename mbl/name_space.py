@@ -23,3 +23,4 @@ class Columns:
     max_en: str = "max_en"
     min_en: str = "min_en"
     relative_offset: str = "relative_offset"
+    method: str = "method"

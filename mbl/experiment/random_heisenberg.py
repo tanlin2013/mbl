@@ -87,6 +87,7 @@ class RandomHeisenbergTSDRG(TSDRGExperiment):
     ):
         seed = int(time()) if seed is None else seed
         self._overall_const = overall_const
+        self._method = method
         super().__init__(
             model=RandomHeisenberg(
                 n=n,
@@ -123,6 +124,7 @@ class RandomHeisenbergTSDRG(TSDRGExperiment):
                 Columns.s_target: self.model.s_target,
                 Columns.offset: self.model.offset * np.ones(n_row),
                 Columns.overall_const: self._overall_const * np.ones(n_row),
+                Columns.method: self._method,
             }
         )
 
@@ -155,6 +157,7 @@ class RandomHeisenbergFoldingTSDRG(TSDRGExperiment):
         self._max_en = max_en
         self._min_en = min_en
         self._relative_offset = relative_offset
+        self._method = method
         super().__init__(
             model=RandomHeisenberg(n=n, h=h, trial_id=trial_id, seed=seed),
             chi=chi,
@@ -185,5 +188,6 @@ class RandomHeisenbergFoldingTSDRG(TSDRGExperiment):
                 Columns.max_en: self._max_en * np.ones(n_row),
                 Columns.min_en: self._min_en * np.ones(n_row),
                 Columns.relative_offset: self._relative_offset * np.ones(n_row),
+                Columns.method: self._method,
             }
         )

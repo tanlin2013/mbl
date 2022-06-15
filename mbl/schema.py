@@ -46,6 +46,7 @@ class RandomHeisenbergTSDRGSchema(pa.SchemaModel):
     s_target: Series[int]
     offset: Series[float]
     overall_const: Series[float]
+    method: Series[str] = pa.Field(isin=["min", "max"])
 
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
@@ -73,6 +74,7 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
     max_en: Series[float] = pa.Field(nullable=True)
     min_en: Series[float] = pa.Field(nullable=True)
     relative_offset: Series[float] = pa.Field(ge=0, le=1)
+    method: Series[str] = pa.Field(isin=["min", "max"])
 
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
