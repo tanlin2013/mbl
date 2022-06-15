@@ -25,11 +25,7 @@ class RandomHeisenbergEDSchema(pa.SchemaModel):
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
         return Series(np.isclose(series, np.rint(series), atol=1e-12))
 
-    @pa.check(Columns.edge_entropy)
-    def bound_in(cls, series: Series[float]) -> Series[bool]:
-        return (-1e-12 < series) & (series < np.log(2) + 1e-12)
-
-    @pa.check(Columns.bipartite_entropy)
+    @pa.check(r"entropy$", regex=True)
     def bound_in(cls, series: Series[float]) -> Series[bool]:
         return (-1e-12 < series) & (series < np.log(2) + 1e-12)
 
