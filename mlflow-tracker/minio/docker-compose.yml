@@ -84,6 +84,7 @@ services:
             - mlflow
         ports:
             - "8080:443"
+            - "8888:444"
         networks:
             - frontend
         volumes:
