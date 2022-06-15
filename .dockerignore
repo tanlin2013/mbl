@@ -179,20 +179,24 @@ cython_debug/
 .gitignore
 
 # Other stuff
+/app
+/docs
+/lab
 /mlflow-tracker
 /tests
 LICENCE
 makefile
 README.md
+.pre-commit-config.yaml
 
 # Poetry
 poetry.lock
 
-# Streamlit
+# Heroku app
 Procfile
-streamlit.sh
 
 # Docker itself
 .dockerignore
 Dockerfile
 docker-compose.yml
+singularity.def
