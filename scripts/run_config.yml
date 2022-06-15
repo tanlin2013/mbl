@@ -37,5 +37,5 @@ relative_offset:
   - 0.5
   - 0.9
 method:
-  - min
+#  - min
   - max
