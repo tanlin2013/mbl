@@ -6,7 +6,7 @@ services:
     ports:
       - "8787:8265"
     networks:
-      - frontend
+      - minio_frontend
     environment:
       - MLFLOW_S3_ENDPOINT_URL=http://localhost:9000
     volumes:
