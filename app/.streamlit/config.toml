@@ -2,4 +2,4 @@
 #headless = true
 #port = $PORT
 #enableCORS = false
-maxMessageSize = 400
+maxMessageSize = 200
