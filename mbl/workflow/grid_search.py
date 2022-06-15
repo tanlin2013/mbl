@@ -1,4 +1,5 @@
 import abc
+import subprocess
 import traceback
 from pathlib import Path
 from dataclasses import dataclass
@@ -61,6 +62,24 @@ def mlflow_s3_storage(profile_name: str):
     return decorator
 
 
+def mlflow_auto_tags(func: Callable):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        tags = {
+            "git.commit": "git rev-parse --short HEAD",
+            "docker.image.id": "hostname",
+        }
+        mlflow.set_tags(
+            {
+                k: subprocess.check_output(v.split()).decode("ascii").strip()
+                for k, v in tags.items()
+            }
+        )
+        func(*args, **kwargs)
+
+    return wrapper
+
+
 def mlflow_exception_catcher(func: Callable):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -93,6 +112,7 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
     @staticmethod
     @mlflow_mixin
     @mlflow_s3_storage(profile_name="minio")
+    @mlflow_auto_tags
     @mlflow_exception_catcher
     def experiment(config: Dict[str, Union[int, float, str]]):
         config.pop("mlflow")
@@ -140,6 +160,7 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     @staticmethod
     @mlflow_mixin
     @mlflow_s3_storage(profile_name="minio")
+    @mlflow_auto_tags
     @mlflow_exception_catcher
     def experiment(config: Dict[str, Union[int, float, str]]):
         config.pop("mlflow")
