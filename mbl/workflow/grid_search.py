@@ -1,4 +1,5 @@
 import abc
+import os
 import subprocess
 import traceback
 from pathlib import Path
@@ -66,12 +67,14 @@ def mlflow_auto_tags(func: Callable):
     @wraps(func)
     def wrapper(*args, **kwargs):
         tags = {
-            "git.commit": "git rev-parse --short HEAD",
             "docker.image.id": "hostname",
+            "git.commit": "git rev-parse --short HEAD",
         }
         mlflow.set_tags(
             {
-                k: subprocess.check_output(v.split()).decode("ascii").strip()
+                k: subprocess.check_output(v.split(), cwd=os.getcwd())
+                .decode("ascii")
+                .strip()
                 for k, v in tags.items()
             }
         )
