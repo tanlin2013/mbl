@@ -32,14 +32,12 @@ def config_parser(workflow: str):
             }
         )
     elif workflow == RandomHeisenbergFoldingTSDRGGridSearch.__name__:
-        config.update(
-            {"relative_offset": data[Columns.relative_offset]}
-        )
+        config.update({"relative_offset": data[Columns.relative_offset]})
     return {k: tune.grid_search(v) for k, v in config.items()}
 
 
 @click.command()
-@click.option("-U", "--tracking_uri", default="http://localhost:5000", type=str)
+@click.option("-U", "--tracking_uri", default="http://mlflow:5000", type=str)
 @click.option(
     "-W", "--workflow", default="RandomHeisenbergFoldingTSDRGGridSearch", type=str
 )
@@ -75,7 +73,7 @@ def main(
 ):
     ray.init(
         num_cpus=num_cpus,
-        object_store_memory=memory * 1024 ** 3,
+        object_store_memory=memory * 1024**3,
         dashboard_host="0.0.0.0",
         dashboard_port=8786,
     )
