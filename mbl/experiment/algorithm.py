@@ -8,7 +8,7 @@ import pandas as pd
 from tnpy.operators import FullHamiltonian, MatrixProductOperator
 from tnpy.model import Model1D, TotalSz
 from tnpy.exact_diagonalization import ExactDiagonalization
-from tnpy.tsdrg import TreeTensorNetworkSDRG
+from tnpy.tsdrg import TreeTensorNetworkSDRG, HighEnergyTreeTensorNetworkSDRG
 
 
 class Experiment1D(abc.ABC):
@@ -64,9 +64,12 @@ class EDExperiment(Experiment1D):
 
 
 class TSDRGExperiment(Experiment1D):
-    def __init__(self, model: Model1D, chi: int):
+    def __init__(self, model: Model1D, chi: int, method: str = "min"):
         super().__init__(model)
-        self._tsdrg = TreeTensorNetworkSDRG(self._mpo_run_method(), chi=chi)
+        self._tsdrg = {
+            "min": TreeTensorNetworkSDRG(self._mpo_run_method(), chi=chi),
+            "max": HighEnergyTreeTensorNetworkSDRG(self._mpo_run_method(), chi=chi),
+        }[method]
         self._tsdrg.run()
         self._evals = self.tsdrg.measurements.expectation_value(self.model.mpo)
         self._sorting_order = np.argsort(self._evals)

@@ -83,6 +83,7 @@ class RandomHeisenbergTSDRG(TSDRGExperiment):
         s_target: int = 0,
         offset: float = 0,
         overall_const: float = 1,
+        method: str = "min",
     ):
         seed = int(time()) if seed is None else seed
         self._overall_const = overall_const
@@ -97,6 +98,7 @@ class RandomHeisenbergTSDRG(TSDRGExperiment):
                 offset=offset,
             ),
             chi=chi,
+            method=method,
         )
 
     def _mpo_run_method(self) -> MatrixProductOperator:
@@ -137,6 +139,7 @@ class RandomHeisenbergFoldingTSDRG(TSDRGExperiment):
         max_en: float = np.nan,
         min_en: float = np.nan,
         relative_offset: float = 0,
+        method: str = "min",
     ):
         trial_id = uuid.uuid4().hex
         seed = int(time()) if seed is None else seed
@@ -153,7 +156,9 @@ class RandomHeisenbergFoldingTSDRG(TSDRGExperiment):
         self._min_en = min_en
         self._relative_offset = relative_offset
         super().__init__(
-            model=RandomHeisenberg(n=n, h=h, trial_id=trial_id, seed=seed), chi=chi
+            model=RandomHeisenberg(n=n, h=h, trial_id=trial_id, seed=seed),
+            chi=chi,
+            method=method,
         )
 
     def _mpo_run_method(self) -> MatrixProductOperator:
