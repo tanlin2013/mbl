@@ -196,5 +196,6 @@ Procfile
 
 # Docker itself
 .dockerignore
+Dockerfile
 docker-compose.yml
 singularity.def
