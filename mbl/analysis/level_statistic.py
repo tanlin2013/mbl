@@ -18,7 +18,7 @@ class LevelStatistic:
     @dataclass
     class Metadata:
         database: str = "random_heisenberg"
-        ed_table: str = "ed2"
+        ed_table: str = "ed"
         tsdrg_table: str = "folding_tsdrg"
 
     def __init__(self, raw_df: pd.DataFrame = None):
