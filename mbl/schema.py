@@ -19,7 +19,7 @@ class RandomHeisenbergEDSchema(pa.SchemaModel):
     seed: Series[int]
     penalty: Series[float]
     s_target: Series[int]
-    offset: Series[float] = pa.Field(ge=0, le=1)
+    offset: Series[float]
 
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
