@@ -185,7 +185,6 @@ cython_debug/
 /tests
 LICENCE
 makefile
-README.md
 .pre-commit-config.yaml
 
 # Poetry
