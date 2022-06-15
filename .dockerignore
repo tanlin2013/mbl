@@ -174,7 +174,6 @@ cython_debug/
 
 ### mbl specific
 # Github
-/.git
 /.github
 .gitignore
 
@@ -197,6 +196,5 @@ Procfile
 
 # Docker itself
 .dockerignore
-Dockerfile
 docker-compose.yml
 singularity.def
