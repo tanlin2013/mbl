@@ -183,7 +183,7 @@ cython_debug/
 /lab
 /mlflow-tracker
 /tests
-LICENCE
+LICENSE
 makefile
 .pre-commit-config.yaml
 
