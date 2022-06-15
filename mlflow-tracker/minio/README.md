@@ -84,25 +84,28 @@ The MLflow tracking server is composed of 4 docker containers:
 
 ## Customization
 
-### Nginx Frontend
+### 1. Nginx Frontend
 
-#### SSL certification (https)
+#### a. SSL certification (https)
 
-To enable https with SSL certification, 
-it's required to mount public key and private key (in `.cert` or `.pem`) into 
-the container path `/etc/nginx/cert`. 
+To enable https with SSL certification,
+it's required to mount public key and private key (in `.cert` or `.pem`) into
+the container path `/etc/nginx/cert`.
 One should put them in the path `/opt/docker/nginx/cert` of the based system.
 
-#### Configuration files
+Or alternatively, if using `let's encript`,
+one could mount them to `/etc/letsencrypt/live/<domain_name>`.
+
+#### b. Configuration files
 Configuration files are placed in `/mlflow-tracker/minio/nginx` of this repo.
 
-### Environment file
-One should replace the default environment file `/mlflow-tracker/minio/.env` 
-in this repo, with your own one. 
+### 2. Environment file
+One should replace the default environment file `/mlflow-tracker/minio/.env`
+in this repo, with your own one.
 Preferably in this path `/opt/docker/mlflow/.env` of the based system.
 Or, one can overwrite it with
 ```
-docker compose --env-file <path/to/your/.env> up 
+docker compose --env-file <path/to/your/.env> up
 ```
 
 ## References
