@@ -33,17 +33,26 @@ def run(
 ):
     mlflow.set_tracking_uri(tracking_uri)
     mlflow.set_experiment(experiment_name)
+    tags = {
+        k: subprocess.check_output(v.split()).decode("ascii").strip()
+        for k, v in {
+            "docker.image.id": "hostname",
+            "git.commit": f"git --git-dir {os.getenv('GITDIR')} "
+            f"rev-parse --short HEAD",
+        }.items()
+    }
     mlflow_config = {
         "mlflow": {
             "tracking_uri": tracking_uri,
             "experiment_name": experiment_name,
             "token": token,
+            "tags": tags,
         }
     }
     configs.update(mlflow_config)
 
     tune.run(
-        tune.with_parameters(experiment),  # TODO: pass additives if necessary
+        experiment,
         config=configs,
         num_samples=1,
         resources_per_trial=resources_per_trial,
@@ -61,25 +70,6 @@ def mlflow_s3_storage(profile_name: str):
         return wrapper
 
     return decorator
-
-
-def mlflow_auto_tags(func: Callable):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        tags = {
-            "docker.image.id": "hostname",
-            "git.commit": f"git --git-dir {os.getenv('GITDIR')} "
-            f"rev-parse --short HEAD",
-        }
-        mlflow.set_tags(
-            {
-                k: subprocess.check_output(v.split()).decode("ascii").strip()
-                for k, v in tags.items()
-            }
-        )
-        func(*args, **kwargs)
-
-    return wrapper
 
 
 def mlflow_exception_catcher(func: Callable):
@@ -114,10 +104,10 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
     @staticmethod
     @mlflow_mixin
     @mlflow_s3_storage(profile_name="minio")
-    @mlflow_auto_tags
     @mlflow_exception_catcher
     def experiment(config: Dict[str, Union[int, float, str]]):
-        config.pop("mlflow")
+        mlflow_config = config.pop("mlflow")
+        mlflow.set_tags(mlflow_config["tags"])
         mlflow.log_params(config)
         experiment = RandomHeisenbergTSDRG(**config)
         filename = Path("-".join([f"{k}_{v}" for k, v in config.items()]) + ".p")
@@ -163,10 +153,10 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     @staticmethod
     @mlflow_mixin
     @mlflow_s3_storage(profile_name="minio")
-    @mlflow_auto_tags
     @mlflow_exception_catcher
     def experiment(config: Dict[str, Union[int, float, str]]):
-        config.pop("mlflow")
+        mlflow_config = config.pop("mlflow")
+        mlflow.set_tags(mlflow_config["tags"])
         config = RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds(config)
         mlflow.log_params(config)
         experiment = RandomHeisenbergFoldingTSDRG(**config)
