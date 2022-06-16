@@ -2,8 +2,8 @@ import abc
 import traceback
 from pathlib import Path
 from dataclasses import dataclass
-
-# from functools import wraps
+from functools import wraps
+from copy import deepcopy
 from typing import Dict, Union, Callable
 
 import boto3
@@ -54,15 +54,16 @@ def run(
 def mlflow_tracker(profile_name: str):
     def decorator(func: Callable):
         @mlflow_mixin
-        # @wraps(func)
+        @wraps(func)
         def wrapper(
             config: Dict[str, Union[int, float, str]], data: Dict[str, str] = None
         ):
             boto3.setup_default_session(profile_name=profile_name)
             mlflow.set_tags(data)
             try:
-                config.pop("mlflow")
-                func(config)
+                _config = deepcopy(config)
+                _config.pop("mlflow")
+                func(_config)
             except Exception as e:
                 mlflow.set_tag("error", type(e).__name__)
                 mlflow.log_text(traceback.format_exc(), "error.txt")
