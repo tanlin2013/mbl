@@ -2,7 +2,8 @@ import abc
 import traceback
 from pathlib import Path
 from dataclasses import dataclass
-from functools import wraps
+
+# from functools import wraps
 from typing import Dict, Union, Callable
 
 import boto3
@@ -53,7 +54,7 @@ def run(
 def mlflow_tracker(profile_name: str):
     def decorator(func: Callable):
         @mlflow_mixin
-        @wraps(func)
+        # @wraps(func)
         def wrapper(
             config: Dict[str, Union[int, float, str]], data: Dict[str, str] = None
         ):
