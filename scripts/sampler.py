@@ -80,7 +80,7 @@ def main(
         k: subprocess.check_output(v.split()).decode("ascii").strip()
         for k, v in {
             "docker.image.id": "hostname",
-            "git.commit": "git --git-dir ../.git rev-parse --short HEAD",
+            "git.commit": "git rev-parse --short HEAD",
         }.items()
     }
     ray.init(
