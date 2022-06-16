@@ -62,8 +62,8 @@ def run(
 
 def mlflow_tracker(profile_name: str):
     def decorator(func: Callable):
-        @wraps(func)
         @mlflow_mixin
+        @wraps(func)
         def wrapper(config: Dict[str, Union[int, float, str]]):
             boto3.setup_default_session(profile_name=profile_name)
             mlflow_config = config.pop("mlflow")
