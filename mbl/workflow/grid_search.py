@@ -68,13 +68,12 @@ def mlflow_auto_tags(func: Callable):
     def wrapper(*args, **kwargs):
         tags = {
             "docker.image.id": "hostname",
-            "git.commit": "git rev-parse --short HEAD",
+            "git.commit": f"git --git-dir {os.getenv('GITDIR')} "
+            f"rev-parse --short HEAD",
         }
         mlflow.set_tags(
             {
-                k: subprocess.check_output(v.split(), cwd=os.getcwd())
-                .decode("ascii")
-                .strip()
+                k: subprocess.check_output(v.split()).decode("ascii").strip()
                 for k, v in tags.items()
             }
         )
