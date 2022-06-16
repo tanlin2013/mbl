@@ -67,9 +67,6 @@ services:
             - frontend
             - backend
         environment:
-#            - MLFLOW_TRACKING_USERNAME=${MLFLOW_TRACKING_USERNAME}
-#            - MLFLOW_TRACKING_PASSWORD=${MLFLOW_TRACKING_PASSWORD}
-#            - MLFLOW_TRACKING_TOKEN=${MLFLOW_TRACKING_TOKEN}
             - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
             - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
             - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
