@@ -94,10 +94,24 @@ the container path `/etc/nginx/cert`.
 One should put them in the path `/opt/docker/nginx/cert` of the based system.
 
 Or alternatively, if using `let's encript`,
-one could mount them to `/etc/letsencrypt/live/<domain_name>`.
+one could mount them to `/etc/letsencrypt/live/<domain_name>` in container.
 
 #### b. Configuration files
 Configuration files are placed in `/mlflow-tracker/minio/nginx` of this repo.
+
+#### c. Set up htpasswd for basic auth
+We’ll create the first user as follows (replace `first_username with username of your choice):
+```
+sudo htpasswd -c /etc/nginx/.htpasswd first_username
+```
+You will be asked to supply and confirm a password for the user.
+Leave out the -c argument for any additional users you wish to add so you don’t overwrite the file:
+```
+sudo htpasswd /etc/nginx/.htpasswd another_user
+```
+The directory `/etc/nginx` is on host, and it should be mounted into the container at runtime.
+See [here](https://www.digitalocean.com/community/tutorials/how-to-set-up-password-authentication-with-apache-on-ubuntu-18-04-quickstart)
+for more information.
 
 ### 2. Environment file
 One should replace the default environment file `/mlflow-tracker/minio/.env`
