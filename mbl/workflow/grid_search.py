@@ -46,13 +46,12 @@ def run(
             "tracking_uri": tracking_uri,
             "experiment_name": experiment_name,
             "token": token,
-            "tags": tags,
         }
     }
     configs.update(mlflow_config)
 
     tune.run(
-        experiment,
+        tune.with_parameters(experiment, data=tags),
         config=configs,
         num_samples=1,
         resources_per_trial=resources_per_trial,
@@ -64,10 +63,13 @@ def mlflow_tracker(profile_name: str):
     def decorator(func: Callable):
         @mlflow_mixin
         @wraps(func)
-        def wrapper(config: Dict[str, Union[int, float, str]]):
+        def wrapper(
+            config: Dict[str, Union[int, float, str]], data: Dict[str, str] = None
+        ):
             boto3.setup_default_session(profile_name=profile_name)
-            mlflow.set_tags(config["mlflow"]["tags"])
+            mlflow.set_tags(data)
             try:
+                config.pop("mlflow")
                 func(config)
             except Exception as e:
                 mlflow.set_tag("error", type(e).__name__)
@@ -98,7 +100,6 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
     @staticmethod
     @mlflow_tracker(profile_name="minio")
     def experiment(config: Dict[str, Union[int, float, str]]):
-        config.pop("mlflow")
         mlflow.log_params(config)
         experiment = RandomHeisenbergTSDRG(**config)
         filename = Path("-".join([f"{k}_{v}" for k, v in config.items()]) + ".p")
@@ -144,7 +145,6 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
     @staticmethod
     @mlflow_tracker(profile_name="minio")
     def experiment(config: Dict[str, Union[int, float, str]]):
-        config.pop("mlflow")
         config = RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds(config)
         mlflow.log_params(config)
         experiment = RandomHeisenbergFoldingTSDRG(**config)
