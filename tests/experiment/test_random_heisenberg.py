@@ -19,7 +19,7 @@ class TestRandomHeisenbergED:
 
     @pytest.fixture(scope="class")
     def agent(self):
-        return RandomHeisenbergED(n=2, h=0, penalty=0, s_target=0, trial_id=0)
+        return RandomHeisenbergED(n=2, h=0, penalty=0, s_target=0)
 
     def test_matrix(self, agent, ham):
         np.testing.assert_array_equal(agent.ed.matrix, ham)
@@ -67,7 +67,7 @@ class TestRandomHeisenbergED:
 class TestRandomHeisenbergFoldingTSDRG:
     @pytest.fixture(scope="class")
     def agent(self):
-        return RandomHeisenbergFoldingTSDRG(n=6, h=0.5, chi=2 ** 6)
+        return RandomHeisenbergFoldingTSDRG(n=6, h=0.5, chi=2**6)
 
     @pytest.fixture(scope="class")
     def ed_agent(self, agent):
@@ -116,6 +116,7 @@ class TestRandomHeisenbergFoldingTSDRG:
                     Columns.max_en: np.nan * np.ones(n_row),
                     Columns.min_en: np.nan * np.ones(n_row),
                     Columns.relative_offset: 0 * np.ones(n_row),
+                    Columns.method: "min",
                 }
             ),
             atol=1e-12,
