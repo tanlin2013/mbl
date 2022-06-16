@@ -29,10 +29,16 @@ def config_parser(workflow: str):
             {
                 "offset": data[Columns.offset],
                 "overall_const": data[Columns.overall_const],
+                "method": data[Columns.method],
             }
         )
     elif workflow == RandomHeisenbergFoldingTSDRGGridSearch.__name__:
-        config.update({"relative_offset": data[Columns.relative_offset]})
+        config.update(
+            {
+                "relative_offset": data[Columns.relative_offset],
+                "method": data[Columns.method],
+            }
+        )
     return {k: tune.grid_search(v) for k, v in config.items()}
 
 
