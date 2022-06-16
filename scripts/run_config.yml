@@ -17,12 +17,12 @@ disorder:
   - 10.0
 truncation_dim:
   - 8
-#  - 16
-#  - 32
-#  - 64
+  - 16
+  - 32
+  - 64
 seed:
   start: 2000
-  end: 2002
+  end: 2200
   step: 1
 overall_const:
   - 1
@@ -37,5 +37,5 @@ relative_offset:
   - 0.5
   - 0.9
 method:
-#  - min
+  - min
   - max
