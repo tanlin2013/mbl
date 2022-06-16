@@ -3,7 +3,8 @@ MAINTAINER "TaoLin" <tanlin2013@gmail.com>
 
 ARG WORKDIR=/home/mbl
 ENV PYTHONPATH="${PYTHONPATH}:$WORKDIR" \
-    PATH="/root/.local/bin:$PATH"
+    PATH="/root/.local/bin:$PATH" \
+    GITDIR=$WORKDIR
 WORKDIR $WORKDIR
 COPY . $WORKDIR
 
