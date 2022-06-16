@@ -60,34 +60,29 @@ def run(
     )
 
 
-def mlflow_s3_storage(profile_name: str):
+def mlflow_tracker(profile_name: str):
     def decorator(func: Callable):
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        @mlflow_mixin
+        def wrapper(config: Dict[str, Union[int, float, str]]):
             boto3.setup_default_session(profile_name=profile_name)
-            func(*args, **kwargs)
+            mlflow_config = config.pop("mlflow")
+            mlflow.set_tags(mlflow_config["tags"])
+            try:
+                func(config)
+            except Exception as e:
+                mlflow.set_tag("error", type(e).__name__)
+                mlflow.log_text(traceback.format_exc(), "error.txt")
+                mlflow.end_run("FAILED")
 
         return wrapper
 
     return decorator
 
 
-def mlflow_exception_catcher(func: Callable):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            func(*args, **kwargs)
-        except Exception as e:
-            mlflow.set_tag("error", type(e).__name__)
-            mlflow.log_text(traceback.format_exc(), "error.txt")
-            mlflow.end_run("FAILED")
-
-    return wrapper
-
-
 class GridSearch(abc.ABC):
     @staticmethod
-    @mlflow_mixin
+    @mlflow_tracker
     @abc.abstractmethod
     def experiment(config: Dict[str, Union[int, float, str]]):
         return NotImplemented
@@ -102,12 +97,8 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
         table: str = "tsdrg"
 
     @staticmethod
-    @mlflow_mixin
-    @mlflow_s3_storage(profile_name="minio")
-    @mlflow_exception_catcher
+    @mlflow_tracker(profile_name="minio")
     def experiment(config: Dict[str, Union[int, float, str]]):
-        mlflow_config = config.pop("mlflow")
-        mlflow.set_tags(mlflow_config["tags"])
         mlflow.log_params(config)
         experiment = RandomHeisenbergTSDRG(**config)
         filename = Path("-".join([f"{k}_{v}" for k, v in config.items()]) + ".p")
@@ -151,12 +142,8 @@ class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
         table: str = "folding_tsdrg"
 
     @staticmethod
-    @mlflow_mixin
-    @mlflow_s3_storage(profile_name="minio")
-    @mlflow_exception_catcher
+    @mlflow_tracker(profile_name="minio")
     def experiment(config: Dict[str, Union[int, float, str]]):
-        mlflow_config = config.pop("mlflow")
-        mlflow.set_tags(mlflow_config["tags"])
         config = RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds(config)
         mlflow.log_params(config)
         experiment = RandomHeisenbergFoldingTSDRG(**config)
