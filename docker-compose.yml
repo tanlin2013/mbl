@@ -4,11 +4,14 @@ services:
     pull_policy: always
     shm_size: 10.24gb
     ports:
-      - "8787:8265"
+      - "8786:8265"
     networks:
       - minio_frontend
     environment:
       - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
+#      - MLFLOW_TRACKING_USERNAME=${MLFLOW_TRACKING_USERNAME}
+#      - MLFLOW_TRACKING_PASSWORD=${MLFLOW_TRACKING_PASSWORD}
+#      - MLFLOW_TRACKING_TOKEN=${MLFLOW_TRACKING_TOKEN}
     volumes:
       - ~/projects/mbl/scripts:/home/mbl/scripts
       - ~/.aws:/root/.aws
