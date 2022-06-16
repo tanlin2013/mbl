@@ -1,4 +1,5 @@
 import click
+import subprocess
 from pathlib import Path
 
 import yaml
@@ -77,6 +78,13 @@ def main(
     memory: float,
     verbose: int,
 ):
+    tags = {
+        k: subprocess.check_output(v.split()).decode("ascii").strip()
+        for k, v in {
+            "docker.image.id": "hostname",
+            "git.commit": "git --git-dir ../.git rev-parse --short HEAD",
+        }.items()
+    }
     ray.init(
         num_cpus=num_cpus,
         object_store_memory=memory * 1024**3,
@@ -91,6 +99,7 @@ def main(
         configs=config_parser(workflow),
         resources_per_trial={"cpu": cpu},
         verbose=verbose,
+        tags=tags,
         # resume="ERRORED_ONLY",
     )
 

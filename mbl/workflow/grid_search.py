@@ -1,6 +1,4 @@
 import abc
-import os
-import subprocess
 import traceback
 from pathlib import Path
 from dataclasses import dataclass
@@ -29,18 +27,11 @@ def run(
     configs: Dict,
     resources_per_trial: Dict = None,
     token: str = None,
+    tags: Dict[str, str] = None,
     **kwargs,
 ):
     mlflow.set_tracking_uri(tracking_uri)
     mlflow.set_experiment(experiment_name)
-    tags = {
-        k: subprocess.check_output(v.split()).decode("ascii").strip()
-        for k, v in {
-            "docker.image.id": "hostname",
-            "git.commit": f"git --git-dir {os.getenv('GITDIR')} "
-            f"rev-parse --short HEAD",
-        }.items()
-    }
     mlflow_config = {
         "mlflow": {
             "tracking_uri": tracking_uri,
