@@ -5,6 +5,7 @@ from typing import List
 import numpy as np
 import pandas as pd
 import awswrangler as wr
+import modin.pandas as mpd
 
 from mbl.name_space import Columns
 
@@ -104,44 +105,14 @@ class LevelStatistic:
             **kwargs,
         )
 
-    def extract_gap(
-        self,
-        n: int,
-        h: float,
-        penalty: float = 0.0,
-        s_target: int = 0,
-        seed: int = None,
-        chi: int = None,
-        relative_offset: float = None,
-        total_sz: int = None,
-        tol: float = 1e-12,
-        **kwargs,
-    ) -> pd.DataFrame:
-        df = (
-            self.local_query(
-                n, h, penalty, s_target, seed, chi, relative_offset, total_sz, tol
-            )
-            if self.raw_df is not None
-            else self.athena_query(
-                n,
-                h,
-                penalty,
-                s_target,
-                seed,
-                chi,
-                relative_offset,
-                total_sz,
-                tol,
-                **kwargs,
-            )
-        )
+    @classmethod
+    def extract_gap(cls, df: mpd.DataFrame) -> mpd.DataFrame:
         df.drop_duplicates(
             subset=[
                 Columns.system_size,
                 Columns.disorder,
                 Columns.penalty,
                 Columns.s_target,
-                # Columns.relative_offset,
                 Columns.seed,
                 Columns.level_id,
             ],
@@ -164,15 +135,26 @@ class LevelStatistic:
         return df.groupby([Columns.seed])[Columns.gap_ratio].mean()
 
     @staticmethod
-    def disorder_average(df: pd.DataFrame) -> pd.Series:
+    def disorder_average(df: mpd.DataFrame) -> mpd.Series:
         return df.groupby([Columns.level_id])[Columns.gap_ratio].mean()
 
-    @staticmethod
+    @classmethod
     def averaged_gap_ratio(
-        df: pd.DataFrame, order: AverageOrder = AverageOrder.LEVEL_FIRST
+        cls, df: mpd.DataFrame, order: AverageOrder = AverageOrder.LEVEL_FIRST
     ) -> float:
-        return (
-            LevelStatistic.level_average(df).mean()
-            if order is AverageOrder.LEVEL_FIRST
-            else LevelStatistic.disorder_average(df).mean()
-        )
+        return {
+            AverageOrder.LEVEL_FIRST: cls.level_average(df).mean(),
+            AverageOrder.DISORDER_FIRST: cls.disorder_average(df).mean(),
+        }[order]
+
+    @classmethod
+    def fetch_gap_ratio(
+        cls,
+        n: int,
+        h: float,
+        chi: int = None,
+        total_sz: int = None,
+        order: AverageOrder = AverageOrder.LEVEL_FIRST,
+    ) -> float:
+        df = mpd.DataFrame(cls.athena_query(n=n, h=h, chi=chi, total_sz=total_sz))
+        return cls.averaged_gap_ratio(cls.extract_gap(df), order=order)
