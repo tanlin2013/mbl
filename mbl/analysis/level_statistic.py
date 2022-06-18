@@ -1,7 +1,7 @@
 from enum import Enum
 from functools import wraps
 from dataclasses import dataclass
-from typing import List, Callable
+from typing import List, Union, Callable
 
 import numpy as np
 import pandas as pd
@@ -9,17 +9,6 @@ import awswrangler as wr
 import modin.pandas as mpd
 
 from mbl.name_space import Columns
-
-
-def check_modin_df(func: Callable):
-    @wraps(func)
-    def wrapper(df, *args, **kwargs):
-        if not isinstance(df, mpd.DataFrame):
-            assert isinstance(df, pd.DataFrame)
-            df = mpd.DataFrame(df)
-        return func(df, *args, **kwargs)
-
-    return wrapper
 
 
 class AverageOrder(Enum):
@@ -117,6 +106,18 @@ class LevelStatistic:
             **kwargs,
         )
 
+    def check_modin_df(func: Callable):
+        @wraps(func)
+        def wrapper(
+            cls, df: Union[pd.DataFrame, mpd.DataFrame], *args, **kwargs
+        ) -> mpd.DataFrame:
+            if not isinstance(df, mpd.DataFrame):
+                assert isinstance(df, pd.DataFrame)
+                df = mpd.DataFrame(df)
+            return func(cls, df, *args, **kwargs)
+
+        return wrapper
+
     @classmethod
     @check_modin_df
     def extract_gap(cls, df: mpd.DataFrame) -> mpd.DataFrame:
@@ -143,14 +144,14 @@ class LevelStatistic:
         r = np.minimum(x[:-1] / x[1:], x[1:] / x[:-1])
         return np.append(r, np.nan)
 
-    @staticmethod
+    @classmethod
     @check_modin_df
-    def level_average(df: mpd.DataFrame) -> mpd.Series:
+    def level_average(cls, df: mpd.DataFrame) -> mpd.Series:
         return df.groupby([Columns.seed])[Columns.gap_ratio].mean()
 
-    @staticmethod
+    @classmethod
     @check_modin_df
-    def disorder_average(df: mpd.DataFrame) -> mpd.Series:
+    def disorder_average(cls, df: mpd.DataFrame) -> mpd.Series:
         return df.groupby([Columns.level_id])[Columns.gap_ratio].mean()
 
     @classmethod
