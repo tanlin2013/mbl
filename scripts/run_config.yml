@@ -25,17 +25,18 @@ seed:
   end: 2200
   step: 1
 overall_const:
-  - 1
+  - 1.0
+#  - -1.0
 penalty:
-  - 0
+  - 0.0
 s_target:
   - 0
 offset:
-  - 0
+  - 0.0
 relative_offset:
   - 0.1
   - 0.5
   - 0.9
 method:
   - min
-  - max
+#  - max
