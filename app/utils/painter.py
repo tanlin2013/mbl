@@ -2,6 +2,7 @@ from typing import Tuple
 
 import pandas as pd
 import streamlit as st
+import orjson  # noqa: F401 (See https://plotly.com/python/renderers/#performance)
 import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
