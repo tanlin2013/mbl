@@ -1,10 +1,9 @@
+# flake8: noqa
 import io
 
-import numpy as np
 import streamlit as st
 
 from mbl.name_space import Columns
-
 from utils.data_loader import *
 from utils.painter import *
 
@@ -27,15 +26,15 @@ st.markdown(
 # Sidebar choices
 n = st.sidebar.radio("System size n", (8, 10, 12, 14, 16, 18, 20))
 h = st.sidebar.radio("Disorder strength h", (0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0))
-overall_const = st.sidebar.radio("Overall const", (-1, 1))
-num_seeds = st.sidebar.radio("Number of seeds to draw", (6, 8, 10, 20, 30, 40, 50))
-st.sidebar.caption("**Note**: seeds will be randomly picked up")
+overall_const = st.sidebar.radio("Overall const", (1, -1))
+method = st.sidebar.radio("Method", ("min", "max"))
+seeds = st.sidebar.slider("The range of seeds to draw", 2000, 2200, (2000, 2020))
 
 # Load the data
 st.header("1. Data Table")
 
 st.caption("**Note**: Please wait, it may take a while to load the data.")
-df = fetch_energy_bounds()
+df = fetch_energy_bounds(method)
 with st.expander("Click to view the table"):
     st.dataframe(df)
     buffer = io.StringIO()
@@ -45,29 +44,47 @@ with st.expander("Click to view the table"):
 # Data visualization
 st.header("2. Visualization")
 
-chis = [2 ** 3, 2 ** 4, 2 ** 5, 2 ** 6]
 query = [
     f"{Columns.system_size} == {n}",
     f"{Columns.disorder} == {h}",
     f"{Columns.overall_const} == {overall_const}",
 ]
-res = df.query(" & ".join(query))
-res["en"] = res["min_en"] * res[Columns.overall_const]
-fig = go.Figure()
-for seed in np.random.choice(np.arange(2000, 2500), num_seeds):
-    fig.add_trace(
-        go.Scatter(
-            x=chis,
-            y=res.query(f"{Columns.seed} == {seed}")["en"],
-            name=f"{Columns.seed} = {seed}",
-            mode="lines+markers",
-            line={"dash": "dash"},
-            marker={"size": 10},
-        )
+mini_df = df.query(" & ".join(query))
+mini_df["en"] = mini_df["en"] * mini_df[Columns.overall_const]
+st.plotly_chart(
+    energy_bounds_scaling(
+        mini_df,
+        y=Columns.en,
+        seeds=seeds,
+        title="Fig. Convergence of energy up to finite bond dimensions",
+        xaxis_title="Bond dim chi",
+        yaxis_title="Energy",
     )
-fig.update_layout(
-    title="Fig. Convergence of energy up to finite bond dimension",
-    xaxis_title="Bond dim chi",
-    yaxis_title="Energy",
 )
+
+st.plotly_chart(
+    energy_bounds_scaling(
+        mini_df,
+        y=Columns.total_sz,
+        seeds=seeds,
+        title="Fig. Total Sz sector tSDRG converged to on different bond dimensions",
+        xaxis_title="Bond dim chi",
+        yaxis_title="Total Sz",
+    )
+)
+
+# mini_df[Columns.variance][mini_df[Columns.variance] < 0] = 1e-24
+fig = energy_bounds_scaling(
+    mini_df,
+    y=Columns.variance,
+    seeds=seeds,
+    title="Fig. Energy variance up to finite bond dimensions",
+    xaxis_title="Bond dim chi",
+    yaxis_title="Variance",
+)
+fig.update_yaxes(type="log", range=[-8, 0])
 st.plotly_chart(fig)
+st.caption(
+    "**Note**: Nearly perpendicular line may appear due to the presence of "
+    "small or even negative variance in log scale."
+)
