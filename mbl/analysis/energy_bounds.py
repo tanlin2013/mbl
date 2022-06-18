@@ -46,6 +46,7 @@ class EnergyBounds:
         s_target: int = 0,
         seed: int = None,
         chi: int = None,
+        method: str = None,
         boto3_session: Session = None,
         **kwargs,
     ) -> float:
@@ -58,24 +59,25 @@ class EnergyBounds:
             seed=seed,
             chi=chi,
         )
+        key = getattr(Columns, f"{method}_en")
         return wr.athena.read_sql_query(
             f"""
-            SELECT {Columns.en}
+            SELECT {method.upper()}({Columns.en}) as {key}
             FROM {cls.Metadata.table}
             WHERE {' AND '.join(query_elements)}
-            ORDER BY {Columns.en}
             LIMIT 1
             """,
             database=cls.Metadata.database,
             boto3_session=boto3_session,
             **kwargs,
-        )[Columns.en][0]
+        )[key][0]
 
     @classmethod
     def retrieve(
         cls,
         n: int,
         h: float,
+        overall_const: float = 1,
         penalty: float = 0.0,
         s_target: int = 0,
         seed: int = None,
@@ -90,6 +92,7 @@ class EnergyBounds:
         Args:
             n:
             h:
+            overall_const:
             penalty:
             s_target:
             seed:
@@ -101,22 +104,20 @@ class EnergyBounds:
 
         Notes:
             The upside down spectrum (for which we apply -1 to the Hamiltonian) saved on
-            AWS Athena doesn't restore the original spectrum up to an overall constant
-            (-1 in this case). Thereby we restore the original highest energy
-            by applying a -1 here.
+            AWS Athena doesn't restore the original spectrum up to an overall constant.
         """
         return {
-            k: v
-            * cls.athena_query(
+            k: cls.athena_query(
                 n=n,
                 h=h,
-                overall_const=v,
+                overall_const=overall_const,
                 penalty=penalty,
                 s_target=s_target,
                 seed=seed,
                 chi=chi,
+                method=v,
                 boto3_session=boto3_session,
                 **kwargs,
             )
-            for k, v in [(Columns.max_en, -1), (Columns.min_en, 1)]
+            for k, v in [(Columns.max_en, "max"), (Columns.min_en, "min")]
         }
