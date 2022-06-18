@@ -1,6 +1,7 @@
 from enum import Enum
+from functools import wraps
 from dataclasses import dataclass
-from typing import List
+from typing import List, Callable
 
 import numpy as np
 import pandas as pd
@@ -8,6 +9,17 @@ import awswrangler as wr
 import modin.pandas as mpd
 
 from mbl.name_space import Columns
+
+
+def check_modin_df(func: Callable):
+    @wraps(func)
+    def wrapper(df, *args, **kwargs):
+        if not isinstance(df, mpd.DataFrame):
+            assert isinstance(df, pd.DataFrame)
+            df = mpd.DataFrame(df)
+        return func(df, *args, **kwargs)
+
+    return wrapper
 
 
 class AverageOrder(Enum):
@@ -106,6 +118,7 @@ class LevelStatistic:
         )
 
     @classmethod
+    @check_modin_df
     def extract_gap(cls, df: mpd.DataFrame) -> mpd.DataFrame:
         df.drop_duplicates(
             subset=[
@@ -131,14 +144,17 @@ class LevelStatistic:
         return np.append(r, np.nan)
 
     @staticmethod
-    def level_average(df: pd.DataFrame) -> pd.Series:
+    @check_modin_df
+    def level_average(df: mpd.DataFrame) -> mpd.Series:
         return df.groupby([Columns.seed])[Columns.gap_ratio].mean()
 
     @staticmethod
+    @check_modin_df
     def disorder_average(df: mpd.DataFrame) -> mpd.Series:
         return df.groupby([Columns.level_id])[Columns.gap_ratio].mean()
 
     @classmethod
+    @check_modin_df
     def averaged_gap_ratio(
         cls, df: mpd.DataFrame, order: AverageOrder = AverageOrder.LEVEL_FIRST
     ) -> float:
@@ -156,5 +172,5 @@ class LevelStatistic:
         total_sz: int = None,
         order: AverageOrder = AverageOrder.LEVEL_FIRST,
     ) -> float:
-        df = mpd.DataFrame(cls.athena_query(n=n, h=h, chi=chi, total_sz=total_sz))
+        df = cls.athena_query(n=n, h=h, chi=chi, total_sz=total_sz)
         return cls.averaged_gap_ratio(cls.extract_gap(df), order=order)
