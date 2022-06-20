@@ -98,34 +98,36 @@ class TestRandomHeisenbergFoldingTSDRG:
                 assert min_en <= tsgrg._folded_model.offset <= max_en
 
     @pytest.fixture(scope="class")
-    def agent(self):
+    def tsdrg_agent(self):
         return RandomHeisenbergFoldingTSDRG(n=6, h=0.5, chi=2**6)
 
     @pytest.fixture(scope="class")
-    def ed_agent(self, agent):
-        return RandomHeisenbergED(agent.model.n, agent.model.h, seed=agent.model.seed)
-
-    def test_evals(self, agent, ed_agent):
-        np.testing.assert_allclose(agent.evals, ed_agent.evals, atol=1e-12)
-
-    def test_variance(self, agent):
-        np.testing.assert_allclose(
-            agent.variance, np.zeros(agent.tsdrg.chi), atol=1e-12
+    def ed_agent(self, tsdrg_agent):
+        return RandomHeisenbergED(
+            tsdrg_agent.model.n, tsdrg_agent.model.h, seed=tsdrg_agent.model.seed
         )
 
-    def test_total_sz(self, agent, ed_agent):
-        np.testing.assert_allclose(agent.total_sz, ed_agent.total_sz, atol=1e-12)
+    def test_evals(self, tsdrg_agent, ed_agent):
+        np.testing.assert_allclose(tsdrg_agent.evals, ed_agent.evals, atol=1e-12)
 
-    def test_edge_entropy(self, agent, ed_agent):
+    def test_variance(self, tsdrg_agent):
         np.testing.assert_allclose(
-            agent.edge_entropy,
+            tsdrg_agent.variance, np.zeros(tsdrg_agent.tsdrg.chi), atol=1e-12
+        )
+
+    def test_total_sz(self, tsdrg_agent, ed_agent):
+        np.testing.assert_allclose(tsdrg_agent.total_sz, ed_agent.total_sz, atol=1e-12)
+
+    def test_edge_entropy(self, tsdrg_agent, ed_agent):
+        np.testing.assert_allclose(
+            tsdrg_agent.edge_entropy,
             np.nan_to_num(ed_agent.entanglement_entropy(0)),
             atol=1e-12,
         )
 
-    def test_compute_df(self, agent, ed_agent):
-        n_row = agent.tsdrg.chi
-        df = agent.compute_df()
+    def test_compute_df(self, tsdrg_agent, ed_agent):
+        n_row = tsdrg_agent.tsdrg.chi
+        df = tsdrg_agent.compute_df()
         pd.testing.assert_frame_equal(
             df,
             pd.DataFrame(
@@ -137,11 +139,11 @@ class TestRandomHeisenbergFoldingTSDRG:
                     Columns.edge_entropy: np.nan_to_num(
                         ed_agent.entanglement_entropy(0)
                     ),
-                    Columns.truncation_dim: agent.tsdrg.chi,
-                    Columns.system_size: agent.model.n,
-                    Columns.disorder: agent.model.h * np.ones(n_row),
-                    Columns.trial_id: agent.model.trial_id,
-                    Columns.seed: agent.model.seed,
+                    Columns.truncation_dim: tsdrg_agent.tsdrg.chi,
+                    Columns.system_size: tsdrg_agent.model.n,
+                    Columns.disorder: tsdrg_agent.model.h * np.ones(n_row),
+                    Columns.trial_id: tsdrg_agent.model.trial_id,
+                    Columns.seed: tsdrg_agent.model.seed,
                     Columns.penalty: 0 * np.ones(n_row),
                     Columns.s_target: 0,
                     Columns.offset: 0 * np.ones(n_row),
