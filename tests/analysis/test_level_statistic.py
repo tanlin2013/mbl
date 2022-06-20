@@ -13,49 +13,46 @@ from mbl.analysis.level_statistic import LevelStatistic, AverageOrder
 
 @pytest.fixture(scope="function")
 def expected_table(request) -> pd.DataFrame:
-    return {
-        "ed": pd.DataFrame.from_dict(
-            {
-                0: [Columns.level_id, "bigint", False, ""],
-                1: [Columns.en, "double", False, ""],
-                2: [Columns.total_sz, "double", False, ""],
-                3: [Columns.edge_entropy, "double", False, ""],
-                4: [Columns.bipartite_entropy, "double", False, ""],
-                5: [Columns.trial_id, "bigint", False, ""],
-                6: [Columns.seed, "bigint", False, ""],
-                7: [Columns.system_size, "bigint", True, ""],
-                8: [Columns.disorder, "double", True, ""],
-                9: [Columns.penalty, "double", True, ""],
-                10: [Columns.s_target, "bigint", True, ""],
-                11: [Columns.offset, "double", True, ""],
-            },
-            orient="index",
-            columns=["Column Name", "Type", "Partition", "Comment"]
-        ),
-        "tsdrg": pd.DataFrame.from_dict(
-            {
-                0: [Columns.level_id, "bigint", False, ""],
-                1: [Columns.en, "double", False, ""],
-                2: [Columns.variance, "double", False, ""],
-                3: [Columns.total_sz, "double", False, ""],
-                4: [Columns.edge_entropy, "double", False, ""],
-                5: [Columns.trial_id, "string", False, ""],
-                6: [Columns.seed, "bigint", False, ""],
-                7: [Columns.offset, "double", False, ""],
-                8: [Columns.max_en, "double", False, ""],
-                9: [Columns.min_en, "double", False, ""],
-                10: [Columns.system_size, "bigint", True, ""],
-                11: [Columns.disorder, "double", True, ""],
-                12: [Columns.truncation_dim, "bigint", True, ""],
-                13: [Columns.relative_offset, "double", True, ""],
-                14: [Columns.penalty, "double", True, ""],
-                15: [Columns.s_target, "bigint", True, ""],
-                16: [Columns.method, "string", True, ""],
-            },
-            orient="index",
-            columns=["Column Name", "Type", "Partition", "Comment"]
-        ),
+    expected_table = {
+        "ed": {
+            0: [Columns.level_id, "bigint", False, ""],
+            1: [Columns.en, "double", False, ""],
+            2: [Columns.total_sz, "double", False, ""],
+            3: [Columns.edge_entropy, "double", False, ""],
+            4: [Columns.bipartite_entropy, "double", False, ""],
+            5: [Columns.trial_id, "bigint", False, ""],
+            6: [Columns.seed, "bigint", False, ""],
+            7: [Columns.system_size, "bigint", True, ""],
+            8: [Columns.disorder, "double", True, ""],
+            9: [Columns.penalty, "double", True, ""],
+            10: [Columns.s_target, "bigint", True, ""],
+            11: [Columns.offset, "double", True, ""],
+        },
+        "tsdrg": {
+            0: [Columns.level_id, "bigint", False, ""],
+            1: [Columns.en, "double", False, ""],
+            2: [Columns.variance, "double", False, ""],
+            3: [Columns.total_sz, "double", False, ""],
+            4: [Columns.edge_entropy, "double", False, ""],
+            5: [Columns.trial_id, "string", False, ""],
+            6: [Columns.seed, "bigint", False, ""],
+            7: [Columns.offset, "double", False, ""],
+            8: [Columns.max_en, "double", False, ""],
+            9: [Columns.min_en, "double", False, ""],
+            10: [Columns.system_size, "bigint", True, ""],
+            11: [Columns.disorder, "double", True, ""],
+            12: [Columns.truncation_dim, "bigint", True, ""],
+            13: [Columns.relative_offset, "double", True, ""],
+            14: [Columns.penalty, "double", True, ""],
+            15: [Columns.s_target, "bigint", True, ""],
+            16: [Columns.method, "string", True, ""],
+        },
     }[request.param]
+    return pd.DataFrame.from_dict(
+        expected_table,
+        orient="index",
+        columns=["Column Name", "Type", "Partition", "Comment"]
+    )
 
 
 @pytest.mark.parametrize(
