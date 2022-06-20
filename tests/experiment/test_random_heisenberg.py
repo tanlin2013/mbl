@@ -1,6 +1,10 @@
+from unittest.mock import patch
+from contextlib import nullcontext as does_not_raise
+
 import pytest
 import numpy as np
 import pandas as pd
+from tnpy.tsdrg import TreeTensorNetworkSDRG
 
 from mbl.name_space import Columns
 from mbl.schema import RandomHeisenbergEDSchema, RandomHeisenbergFoldingTSDRGSchema
@@ -65,6 +69,39 @@ class TestRandomHeisenbergED:
 
 
 class TestRandomHeisenbergFoldingTSDRG:
+    @pytest.mark.parametrize(
+        "max_en, min_en, relative_offset, as_expected",
+        [
+            (np.nan, -3.5, 0.5, does_not_raise()),
+            (-3, 2, 0.5, pytest.raises(AssertionError)),
+            (2, -2, 3, pytest.raises(AssertionError)),
+        ],
+    )
+    @patch.object(TreeTensorNetworkSDRG, "run", return_value=None)
+    @patch.object(TreeTensorNetworkSDRG, "measurements", return_value=None)
+    def test_offset(
+        self,
+        TreeTensorNetworkSDRG,
+        TreeTensorNetworkMeasurements,
+        max_en,
+        min_en,
+        relative_offset,
+        as_expected,
+    ):
+        with as_expected:
+            tsgrg = RandomHeisenbergFoldingTSDRG(
+                n=6,
+                h=0.5,
+                chi=16,
+                max_en=max_en,
+                min_en=min_en,
+                relative_offset=relative_offset,
+            )
+            if np.isnan([max_en, min_en]).any():
+                assert tsgrg._folded_model.offset == 0
+            else:
+                assert min_en <= tsgrg._folded_model.offset <= max_en
+
     @pytest.fixture(scope="class")
     def agent(self):
         return RandomHeisenbergFoldingTSDRG(n=6, h=0.5, chi=2**6)

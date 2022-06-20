@@ -89,3 +89,9 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
         if np.isnan(df[Columns.max_en]).all() and np.isnan(df[Columns.min_en]).all():
             return np.isnan(df[Columns.max_en]) & np.isnan(df[Columns.min_en])
         return Series(df[Columns.max_en] > df[Columns.min_en])
+
+    @pa.dataframe_check
+    def offset_within(self, df: pd.DataFrame) -> Series[bool]:
+        return Series(df[Columns.min_en] < df[Columns.offset]) & Series(
+            df[Columns.offset] < df[Columns.max_en]
+        )

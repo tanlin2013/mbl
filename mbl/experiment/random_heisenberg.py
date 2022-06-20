@@ -145,6 +145,9 @@ class RandomHeisenbergFoldingTSDRG(TSDRGExperiment):
     ):
         trial_id = uuid.uuid4().hex
         seed = int(time()) if seed is None else seed
+        if not np.isnan([max_en, min_en]).any():
+            assert max_en > min_en
+        assert 0 <= relative_offset <= 1
         self._folded_model = RandomHeisenberg(
             n=n,
             h=h,
@@ -152,7 +155,7 @@ class RandomHeisenbergFoldingTSDRG(TSDRGExperiment):
             seed=seed,
             penalty=penalty,
             s_target=s_target,
-            offset=np.nan_to_num(max_en - min_en) * relative_offset,
+            offset=np.nan_to_num(min_en + (max_en - min_en) * relative_offset),
         )
         self._max_en = max_en
         self._min_en = min_en
