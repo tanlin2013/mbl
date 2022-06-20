@@ -1,4 +1,3 @@
-# fmt: off
 from unittest.mock import patch
 from dataclasses import make_dataclass
 from itertools import product
