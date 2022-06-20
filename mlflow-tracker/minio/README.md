@@ -3,7 +3,8 @@ Easily deploy an MLflow tracking server with 1 command.
 
 MinIO S3 is used as the artifact store and MySQL server is used as the backend store.
 
-## How to run
+How to run
+----------
 
 1. Clone (download) this repository
 
@@ -23,7 +24,8 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
 
 5. Access MinIO UI with http://localhost:9000
 
-## Containerization
+Containerization
+----------------
 
 The MLflow tracking server is composed of 4 docker containers:
 
@@ -31,7 +33,8 @@ The MLflow tracking server is composed of 4 docker containers:
 * MinIO object storage server
 * MySQL database server
 
-## Example
+Example
+-------
 
 1. Install [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)
 
@@ -82,7 +85,8 @@ The MLflow tracking server is composed of 4 docker containers:
     curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
     ```
 
-## Customization
+Customization
+-------------
 
 ### 1. Nginx Frontend
 
@@ -122,5 +126,14 @@ Or, one can overwrite it with
 docker compose --env-file <path/to/your/.env> up
 ```
 
-## References
+### 3. Permanently delete
+Permanently delete runs in the deleted lifecycle stage from the specified backend store.
+This command deletes all artifacts and metadata associated with the specified runs.
+```
+mlflow gc --backend-store-uri mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db:3306/${MYSQL_DATABASE}
+```
+See [here](https://mlflow.org/docs/latest/cli.html#mlflow-gc) for more information.
+
+References
+----------
 https://github.com/sachua/mlflow-docker-compose
