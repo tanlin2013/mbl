@@ -1,5 +1,8 @@
 # fmt: off
 # flake8: noqa
+from dataclasses import make_dataclass
+from itertools import product
+
 import pytest
 import numpy as np
 import pandas as pd
@@ -80,55 +83,59 @@ def test_athena_query(schema: pa.SchemaModel, n: int, h: float, chi: int, seed: 
     schema.validate(df, lazy=True)
 
 
+@pytest.fixture(scope="function")
+def mock_gap(request) -> np.ndarray:
+    size = 10 ** 6
+    gap = {
+        "poisson": pd.Series(np.sort(np.random.standard_normal(size))).diff(),
+        "wigner_dyson": pd.Series(),
+    }[request.param]
+    return gap.to_numpy()
 
-def test_gap_ratio(level_statistic):
-    np.testing.assert_allclose(
-        level_statistic.gap_ratio(
-            np.array(
-                [
-                    np.nan,
-                    0.00726675,
-                    0.00550455,
-                    0.01220888,
-                    0.00061159,
-                    0.00013423,
-                    0.00775276,
-                    0.00357282,
-                    0.04445829,
-                    0.00015914,
-                ]
+
+@pytest.mark.parametrize(
+    "mock_gap, expected_r_value",
+    [
+        ("poisson", 2 * np.log(2) - 1),
+        # ("wigner_dyson", 4 - 2 * np.sqrt(3))
+    ],
+    indirect=["mock_gap"],
+)
+def test_gap_ratio(mock_gap: np.ndarray, expected_r_value: float):
+    assert np.isnan(mock_gap[0])
+    r_value = LevelStatistic.gap_ratio(mock_gap)
+    assert np.isnan(r_value[0])
+    assert np.isnan(r_value[-1])
+    avg_r_value = pd.Series(r_value).mean()
+    np.testing.assert_allclose(avg_r_value, expected_r_value, atol=1e-3)
+
+
+@pytest.fixture(scope="function", params=[(3, 5)])
+def mock_raw_df(request) -> pd.DataFrame:
+    n_trials, n_levels = request.param
+    Row = make_dataclass("Row", [(Columns.en, float), (Columns.seed, int)])
+    return pd.DataFrame(
+        [
+            Row(en, seed)
+            for seeds in np.random.randint(2000, 2500, n_trials)
+            for en, seed in product(
+                np.sort(np.random.standard_normal(size=n_levels)), [seeds]
             )
-        ),
-        np.array(
-            [
-                np.nan,
-                0.75749753,
-                0.45086416,
-                0.05009375,
-                0.21948545,
-                0.01731444,
-                0.46084533,
-                0.08036352,
-                0.00357958,
-                np.nan,
-            ]
-        ),
-        atol=1e-5,
-    )
-    np.testing.assert_array_equal(level_statistic.gap_ratio(np.array([0.0478])), np.nan)
-    np.testing.assert_array_equal(
-        level_statistic.gap_ratio(np.array([-0.0478, 0.0478])),
-        np.array([-1, np.nan]),
+        ]
     )
 
 
-def test_extract_gap(level_statistic):
-    df = level_statistic.athena_query(8, 10.0, total_sz=0)
-    print(df)
-    # df2 = self.agent.extract_gap(20, 0.5, chi=64, total_sz=0, seed=1948)
-    # print(df2)
-    # df[Columns.level_id] = df.groupby([Columns.seed]).cumcount()
+def test_extract_gap(mock_raw_df, monkeypatch):
+    def mock_drop_duplicates(*args, **kwargs):
+        pass
 
+    monkeypatch.setattr(pd.DataFrame, "drop_duplicates", mock_drop_duplicates)
+    df = LevelStatistic.extract_gap(mock_raw_df)
+    assert (df[Columns.energy_gap][~df[Columns.energy_gap].isnull()]).gt(0).all()
+    assert (df[Columns.gap_ratio][~df[Columns.gap_ratio].isnull()]).between(0, 1).all()
+    assert (df.groupby(Columns.seed)[Columns.energy_gap].nth(0).isnull()).all()
+    assert (df.groupby(Columns.seed)[Columns.gap_ratio].nth(0).isnull()).all()
+    assert (df.groupby(Columns.seed)[Columns.gap_ratio].nth(-1).isnull()).all()
 
 def test_averaged_gap_ratio(level_statistic):
     df = level_statistic.extract_gap(n=10, h=1.0, total_sz=0)
