@@ -1,5 +1,5 @@
 # fmt: off
-# flake8: noqa
+from unittest.mock import patch
 from dataclasses import make_dataclass
 from itertools import product
 
@@ -110,7 +110,7 @@ def test_gap_ratio(mock_gap: np.ndarray, expected_r_value: float):
     np.testing.assert_allclose(avg_r_value, expected_r_value, atol=1e-3)
 
 
-@pytest.fixture(scope="function", params=[(3, 5)])
+@pytest.fixture(scope="function", params=[(3, 5), (10, 16)])
 def mock_raw_df(request) -> pd.DataFrame:
     n_trials, n_levels = request.param
     Row = make_dataclass("Row", [(Columns.en, float), (Columns.seed, int)])
@@ -125,10 +125,11 @@ def mock_raw_df(request) -> pd.DataFrame:
     )
 
 
-def test_extract_gap(mock_raw_df, monkeypatch):
-    def mock_drop_duplicates(*args, **kwargs):
-        pass
+def mock_drop_duplicates(*args, **kwargs):
+    pass
 
+
+def test_extract_gap(mock_raw_df, monkeypatch):
     monkeypatch.setattr(pd.DataFrame, "drop_duplicates", mock_drop_duplicates)
     df = LevelStatistic.extract_gap(mock_raw_df)
     assert (df[Columns.energy_gap][~df[Columns.energy_gap].isnull()]).gt(0).all()
@@ -137,9 +138,22 @@ def test_extract_gap(mock_raw_df, monkeypatch):
     assert (df.groupby(Columns.seed)[Columns.gap_ratio].nth(0).isnull()).all()
     assert (df.groupby(Columns.seed)[Columns.gap_ratio].nth(-1).isnull()).all()
 
-def test_averaged_gap_ratio(level_statistic):
-    df = level_statistic.extract_gap(n=10, h=1.0, total_sz=0)
-    r = level_statistic.averaged_gap_ratio(df, AverageOrder.LEVEL_FIRST)
-    print(r)
-    r2 = level_statistic.averaged_gap_ratio(df, AverageOrder.DISORDER_FIRST)
-    print(r2)
+
+def test_averaged_gap_ratio(mock_raw_df, monkeypatch):
+    monkeypatch.setattr(pd.DataFrame, "drop_duplicates", mock_drop_duplicates)
+    df = LevelStatistic.extract_gap(mock_raw_df)
+    r1 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.LEVEL_FIRST)
+    r2 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.DISORDER_FIRST)
+    np.testing.assert_allclose(r1, r2, atol=1e-12)
+
+
+def test_fetch_gap_ratio(mock_raw_df, monkeypatch):
+    monkeypatch.setattr(pd.DataFrame, "drop_duplicates", mock_drop_duplicates)
+    with patch.object(LevelStatistic, "athena_query", return_value=mock_raw_df):
+        r1 = LevelStatistic.fetch_gap_ratio(
+            n=8, h=10.0, chi=32, total_sz=0, order=AverageOrder.LEVEL_FIRST
+        )
+        r2 = LevelStatistic.fetch_gap_ratio(
+            n=8, h=10.0, chi=32, total_sz=0, order=AverageOrder.DISORDER_FIRST
+        )
+        np.testing.assert_allclose(r1, r2, atol=1e-12)
