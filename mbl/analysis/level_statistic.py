@@ -140,9 +140,11 @@ class LevelStatistic:
         return df.reset_index(drop=True)
 
     @staticmethod
-    def gap_ratio(x: np.ndarray) -> np.ndarray:
-        r = np.minimum(x[:-1] / x[1:], x[1:] / x[:-1])
-        return np.append(r, np.nan)
+    def gap_ratio(gap: np.ndarray) -> np.ndarray:
+        assert np.isnan(gap[0])
+        assert (gap[~np.isnan(gap)] > 0).all()
+        next_gap = np.roll(gap, -1)
+        return np.minimum(gap / next_gap, next_gap / gap)
 
     @classmethod
     @check_modin_df
