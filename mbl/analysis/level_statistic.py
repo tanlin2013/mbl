@@ -136,7 +136,7 @@ class LevelStatistic:
         df[Columns.energy_gap] = df.groupby([Columns.seed])[Columns.en].diff()
         df[Columns.gap_ratio] = df.groupby([Columns.seed])[
             Columns.energy_gap
-        ].transform(lambda x: LevelStatistic.gap_ratio(x.to_numpy()))
+        ].transform(lambda x: cls.gap_ratio(x.to_numpy()))
         return df.reset_index(drop=True)
 
     @staticmethod
