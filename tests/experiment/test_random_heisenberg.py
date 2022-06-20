@@ -68,6 +68,7 @@ class TestRandomHeisenbergFoldingTSDRG:
         "max_en, min_en, relative_offset, as_expected",
         [
             (np.nan, -3.5, 0.5, does_not_raise()),
+            (2, -2, 0.5, does_not_raise()),
             (-3, 2, 0.5, pytest.raises(AssertionError)),
             (2, -2, 3, pytest.raises(AssertionError)),
         ],
