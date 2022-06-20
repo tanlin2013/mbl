@@ -147,12 +147,12 @@ class LevelStatistic:
     @classmethod
     @check_modin_df
     def level_average(cls, df: mpd.DataFrame) -> mpd.Series:
-        return df.groupby([Columns.seed])[Columns.gap_ratio].mean()
+        return df.groupby(Columns.seed)[Columns.gap_ratio].mean()
 
     @classmethod
     @check_modin_df
     def disorder_average(cls, df: mpd.DataFrame) -> mpd.Series:
-        return df.groupby([Columns.level_id])[Columns.gap_ratio].mean()
+        return df.groupby(Columns.level_id)[Columns.gap_ratio].mean()
 
     @classmethod
     @check_modin_df
