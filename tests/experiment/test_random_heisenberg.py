@@ -7,7 +7,6 @@ import pandas as pd
 from tnpy.tsdrg import TreeTensorNetworkSDRG
 
 from mbl.name_space import Columns
-from mbl.schema import RandomHeisenbergEDSchema, RandomHeisenbergFoldingTSDRGSchema
 from mbl.experiment.random_heisenberg import (
     RandomHeisenbergED,
     RandomHeisenbergFoldingTSDRG,
@@ -27,9 +26,6 @@ class TestRandomHeisenbergED:
 
     def test_matrix(self, agent, ham):
         np.testing.assert_array_equal(agent.ed.matrix, ham)
-
-    def test_sorting_order(self, agent):
-        assert agent.sorting_order is None
 
     def test_evals(self, agent):
         np.testing.assert_array_equal(agent.evals, np.array([-0.75, 0.25, 0.25, 0.25]))
@@ -65,7 +61,6 @@ class TestRandomHeisenbergED:
                 }
             ),
         )
-        RandomHeisenbergEDSchema.validate(df, lazy=True)
 
 
 class TestRandomHeisenbergFoldingTSDRG:
@@ -158,4 +153,3 @@ class TestRandomHeisenbergFoldingTSDRG:
             ),
             atol=1e-12,
         )
-        RandomHeisenbergFoldingTSDRGSchema.validate(df, lazy=True)
