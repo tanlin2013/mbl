@@ -84,9 +84,8 @@ def test_athena_query(schema: pa.SchemaModel, n: int, h: float, chi: int, seed: 
 
 @pytest.fixture(scope="function")
 def mock_gap(request) -> np.ndarray:
-    size = 10**6
     gap = {
-        "poisson": pd.Series(np.sort(np.random.standard_normal(size))).diff(),
+        "poisson": pd.Series(np.sort(np.random.standard_normal(size=10**6))).diff(),
         "wigner_dyson": pd.Series(),
     }[request.param]
     return gap.to_numpy()
