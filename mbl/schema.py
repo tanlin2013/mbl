@@ -15,7 +15,9 @@ class RandomHeisenbergEDSchema(pa.SchemaModel):
     bipartite_entropy: Series[float] = pa.Field(nullable=True)
     system_size: Series[int] = pa.Field(gt=1)
     disorder: Series[float]
-    trial_id: Series[str] = pa.Field(nullable=True)
+    trial_id: Series[pd.StringDtype] = pa.Field(
+        nullable=True, coerce=True
+    )  # allow to coerce to int for legacy reason
     seed: Series[int]
     penalty: Series[float]
     s_target: Series[int]
@@ -66,7 +68,7 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
     truncation_dim: Series[int]
     system_size: Series[int] = pa.Field(gt=1)
     disorder: Series[float]
-    trial_id: Series[str] = pa.Field(nullable=True)
+    trial_id: Series[pd.StringDtype] = pa.Field(nullable=True)
     seed: Series[int]
     penalty: Series[float]
     s_target: Series[int]
@@ -74,7 +76,7 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
     max_en: Series[float] = pa.Field(nullable=True)
     min_en: Series[float] = pa.Field(nullable=True)
     relative_offset: Series[float] = pa.Field(ge=0, le=1)
-    method: Series[str] = pa.Field(isin=["min", "max"])
+    method: Series[pd.StringDtype] = pa.Field(isin=["min", "max"])
 
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
