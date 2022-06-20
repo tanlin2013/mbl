@@ -1,27 +1,140 @@
-import os
-
 import boto3
 import moto
 import pytest
 import numpy as np
+import pandas as pd
+import awswrangler as wr
 
+from mbl.name_space import Columns
 from mbl.analysis.level_statistic import LevelStatistic, AverageOrder
 
 
 @pytest.fixture(scope="function")
-def level_statistic():
-    # raw_df = pd.read_csv(f'{Path(__file__).parent}/random_heisenberg_config.csv')
-    return LevelStatistic()
+def expected_table(request) -> pd.DataFrame:
+    return {
+        "ed": pd.DataFrame(
+            {
+                "Column Name": [
+                    Columns.level_id,
+                    Columns.en,
+                    Columns.total_sz,
+                    Columns.edge_entropy,
+                    Columns.bipartite_entropy,
+                    Columns.trial_id,
+                    Columns.seed,
+                    Columns.system_size,
+                    Columns.disorder,
+                    Columns.penalty,
+                    Columns.s_target,
+                    Columns.offset,
+                ],
+                "Type": [
+                    "bigint",
+                    "double",
+                    "double",
+                    "double",
+                    "double",
+                    "bigint",
+                    "bigint",
+                    "bigint",
+                    "double",
+                    "double",
+                    "bigint",
+                    "double",
+                ],
+                "Partition": [
+                    False,
+                    False,
+                    False,
+                    False,
+                    False,
+                    False,
+                    False,
+                    True,
+                    True,
+                    True,
+                    True,
+                    True,
+                ],
+                "Comment": "",
+            }
+        ),
+        "tsdrg": pd.DataFrame(
+            {
+                "Column Name": [
+                    Columns.level_id,
+                    Columns.en,
+                    Columns.variance,
+                    Columns.total_sz,
+                    Columns.edge_entropy,
+                    Columns.trial_id,
+                    Columns.seed,
+                    Columns.offset,
+                    Columns.max_en,
+                    Columns.min_en,
+                    Columns.system_size,
+                    Columns.disorder,
+                    Columns.truncation_dim,
+                    Columns.relative_offset,
+                    Columns.penalty,
+                    Columns.s_target,
+                    Columns.method,
+                ],
+                "Type": [
+                    "bigint",
+                    "double",
+                    "double",
+                    "double",
+                    "double",
+                    "string",
+                    "bigint",
+                    "double",
+                    "double",
+                    "double",
+                    "bigint",
+                    "double",
+                    "bigint",
+                    "double",
+                    "double",
+                    "bigint",
+                    "string",
+                ],
+                "Partition": [
+                    False,
+                    False,
+                    False,
+                    False,
+                    False,
+                    False,
+                    False,
+                    False,
+                    False,
+                    False,
+                    True,
+                    True,
+                    True,
+                    True,
+                    True,
+                    True,
+                    True,
+                ],
+                "Comment": "",
+            }
+        ),
+    }[request.param]
 
 
-@pytest.fixture(scope="function")
-def aws_credentials():
-    """Mocked AWS Credentials for moto."""
-    os.environ["AWS_ACCESS_KEY_ID"] = "testing"
-    os.environ["AWS_SECRET_ACCESS_KEY"] = "testing"
-    os.environ["AWS_SECURITY_TOKEN"] = "testing"
-    os.environ["AWS_SESSION_TOKEN"] = "testing"
-    os.environ["AWS_DEFAULT_REGION"] = "us-west-1"
+@pytest.mark.parametrize(
+    "table_name, expected_table",
+    [("ed_table", "ed"), ("tsdrg_table", "tsdrg")],
+    indirect=["expected_table"],
+)
+def test_athena_table(table_name: str, expected_table: pd.DataFrame):
+    table_df = wr.catalog.table(
+        database=LevelStatistic.Metadata.database,
+        table=getattr(LevelStatistic.Metadata, table_name),
+    )
+    pd.testing.assert_frame_equal(table_df, expected_table)
 
 
 @pytest.fixture(scope="function")
