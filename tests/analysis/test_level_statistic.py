@@ -1,11 +1,13 @@
-import boto3
-import moto
+# fmt: off
+# flake8: noqa
 import pytest
 import numpy as np
 import pandas as pd
 import awswrangler as wr
+import pandera as pa
 
 from mbl.name_space import Columns
+from mbl.schema import RandomHeisenbergEDSchema, RandomHeisenbergFoldingTSDRGSchema
 from mbl.analysis.level_statistic import LevelStatistic, AverageOrder
 
 
@@ -137,18 +139,17 @@ def test_athena_table(table_name: str, expected_table: pd.DataFrame):
     pd.testing.assert_frame_equal(table_df, expected_table)
 
 
-@pytest.fixture(scope="function")
-@moto.mock_glue
-def moto_athena(aws_credentials):
-    with moto.mock_athena():
-        athena = boto3.client("athena")
-        yield athena
+@pytest.mark.parametrize(
+    "schema, n, h, chi, seed",
+    [
+        (RandomHeisenbergEDSchema, 10, 0.5, None, 2020),
+        (RandomHeisenbergFoldingTSDRGSchema, 10, 0.5, 16, 2020),
+    ],
+)
+def test_athena_query(schema: pa.SchemaModel, n: int, h: float, chi: int, seed: int):
+    df = LevelStatistic.athena_query(n=n, h=h, chi=chi, seed=seed)
+    schema.validate(df, lazy=True)
 
-
-def test_athena_query(level_statistic, moto_athena):
-    # df = wr.catalog.table(database="random_heisenberg", table="tsdrg")
-    df = level_statistic.athena_query(18, 0.5, chi=16, relative_offset=0.1, total_sz=0)
-    print(df)
 
 
 def test_gap_ratio(level_statistic):
