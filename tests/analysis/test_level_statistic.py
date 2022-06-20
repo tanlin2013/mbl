@@ -54,7 +54,7 @@ def expected_table(request) -> pd.DataFrame:
     return pd.DataFrame.from_dict(
         expected_table,
         orient="index",
-        columns=["Column Name", "Type", "Partition", "Comment"]
+        columns=["Column Name", "Type", "Partition", "Comment"],
     )
 
 
@@ -68,7 +68,7 @@ def test_athena_table(table_name: str, expected_table: pd.DataFrame):
         database=LevelStatistic.Metadata.database,
         table=getattr(LevelStatistic.Metadata, table_name),
     )
-    pd.testing.assert_frame_equal(table_df, expected_table)
+    pd.testing.assert_frame_equal(table_df, expected_table)  # order sensitive
 
 
 @pytest.mark.parametrize(
@@ -85,7 +85,7 @@ def test_athena_query(schema: pa.SchemaModel, n: int, h: float, chi: int, seed: 
 
 @pytest.fixture(scope="function")
 def mock_gap(request) -> np.ndarray:
-    size = 10 ** 6
+    size = 10**6
     gap = {
         "poisson": pd.Series(np.sort(np.random.standard_normal(size))).diff(),
         "wigner_dyson": pd.Series(),
