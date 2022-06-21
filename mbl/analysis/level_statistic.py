@@ -119,19 +119,34 @@ class LevelStatistic:
         return wrapper
 
     @classmethod
+    def _get_subset(cls, columns: mpd.Index) -> List[str]:
+        subset = [
+            Columns.system_size,
+            Columns.disorder,
+            Columns.penalty,
+            Columns.s_target,
+            Columns.seed,
+            Columns.level_id,
+        ]
+        if Columns.truncation_dim in columns:
+            subset.append(Columns.truncation_dim)
+        if Columns.relative_offset in columns:
+            subset.append(Columns.relative_offset)
+        return subset
+
+    @classmethod
     @check_modin_df
     def extract_gap(cls, df: mpd.DataFrame) -> mpd.DataFrame:
         df.drop_duplicates(
-            subset=[
-                Columns.system_size,
-                Columns.disorder,
-                Columns.penalty,
-                Columns.s_target,
-                Columns.seed,
-                Columns.level_id,
-            ],
+            subset=cls._get_subset(df.columns),
             keep="first",
             inplace=True,
+        )
+        df[Columns.energy_gap] = df.groupby(Columns.seed)[Columns.en].diff()
+        # TODO: check why there are negative gpas?
+        df[Columns.energy_gap][df[Columns.energy_gap] < 0] = np.nan
+        df[Columns.gap_ratio] = df.groupby(Columns.seed)[Columns.energy_gap].transform(
+            lambda x: cls.gap_ratio(x.to_numpy())
         )
         df[Columns.energy_gap] = df.groupby([Columns.seed])[Columns.en].diff()
         df[Columns.gap_ratio] = df.groupby([Columns.seed])[
