@@ -17,7 +17,7 @@ class AverageOrder(Enum):
 
 
 class LevelStatistic:
-    @dataclass
+    @dataclass(frozen=True)
     class Metadata:
         database: str = "random_heisenberg"
         ed_table: str = "ed"

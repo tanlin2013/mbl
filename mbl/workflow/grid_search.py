@@ -81,7 +81,7 @@ class GridSearch(abc.ABC):
 
 
 class RandomHeisenbergTSDRGGridSearch(GridSearch):
-    @dataclass
+    @dataclass(frozen=True)
     class AthenaMetadata:
         profile_name: str = "default"
         s3_path: str = "s3://many-body-localization/random_heisenberg/tsdrg"
@@ -126,7 +126,7 @@ class RandomHeisenbergTSDRGGridSearch(GridSearch):
 
 
 class RandomHeisenbergFoldingTSDRGGridSearch(GridSearch):
-    @dataclass
+    @dataclass(frozen=True)
     class AthenaMetadata:
         profile_name: str = "default"
         s3_path: str = "s3://many-body-localization/random_heisenberg/folding_tsdrg"
