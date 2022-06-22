@@ -23,6 +23,10 @@ class RandomHeisenbergEDSchema(pa.SchemaModel):
     s_target: Series[int]
     offset: Series[float]
 
+    @pa.check(Columns.en)
+    def monotonically_increasing(cls, series: Series[float]) -> bool:
+        return pd.Index(series).is_monotonic_increasing
+
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
         return Series(np.isclose(series, np.rint(series), atol=1e-12))
@@ -49,6 +53,10 @@ class RandomHeisenbergTSDRGSchema(pa.SchemaModel):
     offset: Series[float]
     overall_const: Series[float]
     method: Series[str] = pa.Field(isin=["min", "max"], coerce=True)
+
+    @pa.check(Columns.en)
+    def monotonically_increasing(cls, series: Series[float]) -> bool:
+        return pd.Index(series).is_monotonic_increasing
 
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
@@ -77,6 +85,10 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
     min_en: Series[float] = pa.Field(nullable=True)
     relative_offset: Series[float] = pa.Field(ge=0, le=1)
     method: Series[str] = pa.Field(isin=["min", "max"], coerce=True)
+
+    @pa.check(Columns.en)
+    def monotonically_increasing(cls, series: Series[float]) -> bool:
+        return pd.Index(series).is_monotonic_increasing
 
     @pa.check(Columns.total_sz)
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
