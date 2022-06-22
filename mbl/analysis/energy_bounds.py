@@ -8,7 +8,7 @@ from mbl.name_space import Columns
 
 
 class EnergyBounds:
-    @dataclass
+    @dataclass(frozen=True)
     class Metadata:
         database: str = "random_heisenberg"
         table: str = "tsdrg"
