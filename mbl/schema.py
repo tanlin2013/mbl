@@ -109,3 +109,9 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
         return Series(df[Columns.min_en] < df[Columns.offset]) & Series(
             df[Columns.offset] < df[Columns.max_en]
         )
+
+    @pa.dataframe_check
+    def energies_within(self, df: pd.DataFrame) -> Series[bool]:
+        return Series(df[Columns.min_en] < df[Columns.en]) & Series(
+            df[Columns.en] < df[Columns.max_en]
+        )
