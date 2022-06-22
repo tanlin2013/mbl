@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [Dashboard](https://streamlit-mbl.herokuapp.com/) |
-[Documentation]()
+[Documentation](https://tanlin2013.github.io/mbl/)
 
 MBL is a research program aims at studying the delocalization transitions with numerical methods,
 currently with exact diagonalization (ED) and tree tensor strong-disorder RG (tSDRG).
