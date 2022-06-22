@@ -1,8 +1,10 @@
+# flake8: noqa
 import io
-from itertools import count
+from itertools import count, product
 
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 from mbl.name_space import Columns
 from mbl.analysis.level_statistic import LevelStatistic, AverageOrder
 
@@ -17,10 +19,10 @@ st.sidebar.markdown("# 💡 Exact Diagonalization")
 # Sidebar choices
 n = st.sidebar.radio("System size n", (8, 10, 12))
 h = st.sidebar.radio("Disorder strength h", (0.5, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 10.0))
-total_sz = st.sidebar.radio("Restrict Total Sz in", (None, 0, 1))
+total_sz = st.sidebar.radio("Restrict Total Sz in", (0, 1, None))
 n_conf = st.sidebar.radio(
     "Number of disorder trials for drawing plots",
-    (8, 10, 20, 30, None),
+    (6, 8, 10, 12, None),
 )
 st.sidebar.caption(
     "**Warning**: The larger, the slower. `None` means using all samples."
@@ -53,13 +55,13 @@ with col1:
     st.metric(
         label="(Level-then-disorder) averaged < r >",
         value=f"{r1:.12f}",
-        delta=f"{rel_diff:.6f} %"
+        delta=f"{rel_diff:.6f} %",
     )
 with col2:
     st.metric(
         label="(Disorder-then-level) averaged < r >",
         value=f"{r2:.12f}",
-        delta=f"{-1 * rel_diff:.6f} %"
+        delta=f"{-1 * rel_diff:.6f} %",
     )
 st.markdown("#")
 st.caption("**Note**: Theoretical values are")
@@ -79,11 +81,11 @@ else:
 
 plot_pairs = [
     (Columns.en, Columns.level_id),
+    (Columns.en, Columns.energy_gap),
     (Columns.gap_ratio, Columns.en),
     (Columns.en, Columns.edge_entropy),
     (Columns.gap_ratio, Columns.edge_entropy),
     (Columns.gap_ratio, Columns.bipartite_entropy),
-    (Columns.en, Columns.energy_gap),
     (Columns.en, Columns.total_sz),
     (Columns.gap_ratio, Columns.total_sz),
 ]
@@ -102,45 +104,31 @@ for k, v in zip(count(start=1), plot_pairs):
 st.subheader("Scaling")
 
 if st.button("Click to start this time-consuming part"):
-    ns = [8, 10, 12]
-    hs = [0.5, 3.0, 4.0, 6.0, 10.0]
-
-    fig = go.Figure()
-    for h in hs:
-        r = [fetch_gap_ratio(n, h, total_sz=total_sz) for n in ns]
-        fig.add_trace(
-            go.Scatter(
-                x=ns,
-                y=r,
-                name=f"h = {h}",
-                mode="lines+markers",
-                line={"dash": "dash"},
-                marker={"size": 10},
-            )
+    params = [
+        {"n": n, "h": h, "total_sz": total_sz, "order": order}
+        for n, h, total_sz, order in product(
+            [8, 10, 12],
+            [0.5, 3.0, 4.0, 6.0, 10.0],
+            [None, 0, 1],
+            [AverageOrder.LEVEL_FIRST],
         )
-    fig.update_layout(
+    ]
+    gap_ratio_df = fetch_gap_ratio(params)
+
+    fig = px.scatter(
+        gap_ratio_df.query(f"abs({Columns.total_sz} - {total_sz}) < {1e-12})"),
+        x="n",
+        y=Columns.gap_ratio,
+        color="h",
         title="Fig. Finite size scaling of averaged gap ratio",
-        xaxis_title="System size n",
-        yaxis_title="Averaged gap ratio r",
     )
     st.write(fig)
 
-    fig = go.Figure()
-    for n in ns:
-        r = [fetch_gap_ratio(n, h, total_sz=total_sz) for h in hs]
-        fig.add_trace(
-            go.Scatter(
-                x=hs,
-                y=r,
-                name=f"n = {n}",
-                mode="lines+markers",
-                line={"dash": "dash"},
-                marker={"size": 10},
-            )
-        )
-    fig.update_layout(
+    fig = px.scatter(
+        gap_ratio_df.query(f"abs({Columns.total_sz} - {total_sz}) < {1e-12})"),
+        x="h",
+        y=Columns.gap_ratio,
+        color="n",
         title="Fig. Finite size scaling of averaged gap ratio",
-        xaxis_title="Disorder strength h",
-        yaxis_title="Averaged gap ratio r",
     )
     st.write(fig)

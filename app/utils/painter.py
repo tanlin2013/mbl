@@ -25,6 +25,7 @@ def scatter_with_error_bar(df: pd.DataFrame, x: str, y: str, title: str):
         df,
         x=x,
         y=y,
+        color=Columns.seed,
         error_x=error_x,
         error_y=error_y,
         marginal_x="histogram",
