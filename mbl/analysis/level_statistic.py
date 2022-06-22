@@ -1,7 +1,8 @@
+# fmt: off
 from enum import Enum
 from functools import wraps
 from dataclasses import dataclass
-from typing import List, Union, Callable
+from typing import List, Union, Callable, Dict, Sequence  # noqa: F401
 
 import numpy as np
 import pandas as pd
@@ -63,6 +64,37 @@ class LevelStatistic:
             query.append(f"(ABS({Columns.total_sz} - {total_sz}) < {tol})")
         return query
 
+    @classmethod
+    def _get_subset(cls, columns: mpd.Index) -> List[str]:
+        subset = [
+            Columns.system_size,
+            Columns.disorder,
+            Columns.penalty,
+            Columns.s_target,
+            Columns.seed,
+            Columns.level_id,
+        ]
+        if Columns.truncation_dim in columns:
+            subset.append(Columns.truncation_dim)
+        if Columns.relative_offset in columns:
+            subset.append(Columns.relative_offset)
+        return subset
+
+    def df_cleaning(func: Callable):
+        @wraps(func)
+        def wrapper(cls, *args, **kwargs) -> pd.DataFrame:
+            df = func(cls, *args, **kwargs)
+            return (
+                df.drop_duplicates(
+                    subset=cls._get_subset(df.columns), keep="first",
+                )
+                .sort_values([Columns.seed, Columns.en], ascending=True)
+                .reset_index(drop=True)
+            )
+
+        return wrapper
+
+    @df_cleaning
     def local_query(
         self,
         n: int,
@@ -83,6 +115,7 @@ class LevelStatistic:
         )
 
     @classmethod
+    @df_cleaning
     def athena_query(
         cls,
         n: int,
@@ -119,28 +152,10 @@ class LevelStatistic:
         return wrapper
 
     @classmethod
-    def _get_subset(cls, columns: mpd.Index) -> List[str]:
-        subset = [
-            Columns.system_size,
-            Columns.disorder,
-            Columns.penalty,
-            Columns.s_target,
-            Columns.seed,
-            Columns.level_id,
-        ]
-        if Columns.truncation_dim in columns:
-            subset.append(Columns.truncation_dim)
-        if Columns.relative_offset in columns:
-            subset.append(Columns.relative_offset)
-        return subset
-
-    @classmethod
     @check_modin_df
     def extract_gap(cls, df: mpd.DataFrame) -> mpd.DataFrame:
         df.drop_duplicates(
-            subset=cls._get_subset(df.columns),
-            keep="first",
-            inplace=True,
+            subset=cls._get_subset(df.columns), keep="first", inplace=True,
         )
         df[Columns.energy_gap] = df.groupby(Columns.seed)[Columns.en].diff()
         # TODO: check why there are negative gpas?
