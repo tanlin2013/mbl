@@ -1,5 +1,4 @@
 import abc
-import logging
 import pickle
 from pathlib import Path
 
@@ -9,6 +8,8 @@ from tnpy.operators import FullHamiltonian, MatrixProductOperator
 from tnpy.model import Model1D, TotalSz
 from tnpy.exact_diagonalization import ExactDiagonalization
 from tnpy.tsdrg import TreeTensorNetworkSDRG, HighEnergyTreeTensorNetworkSDRG
+
+from mbl import logger
 
 
 class Experiment1D(abc.ABC):
@@ -116,6 +117,6 @@ class TSDRGExperiment(Experiment1D):
 
     def save_tree(self, filename: str):
         assert Path(filename).suffix == ".p"
-        logging.info(f"Dumping tree into file {filename}")
+        logger.info(f"Dumping tree into file {filename}")
         with open(filename, "wb") as f:
             pickle.dump(self.tsdrg.tree, f)
