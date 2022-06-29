@@ -145,9 +145,9 @@ class LevelStatistic:
         def wrapper(
             cls, df: Union[pd.DataFrame, mpd.DataFrame], *args, **kwargs
         ) -> mpd.DataFrame:
-            if not isinstance(df, mpd.DataFrame):
-                assert isinstance(df, pd.DataFrame)
-                df = mpd.DataFrame(df)
+            # if not isinstance(df, mpd.DataFrame):
+            #     assert isinstance(df, pd.DataFrame)
+            #     df = mpd.DataFrame(df)
             return func(cls, df, *args, **kwargs)
 
         return wrapper
