@@ -33,8 +33,10 @@ class ETL:
         Returns:
 
         Notes:
-            Performance may be bounded by the bandwidth of internet.
-            Please adjust the number of cpus in ray.init() accordingly.
+            1. Both averaging orders will be considered.
+                There is no need to provide the order in `params`.
+            2. Performance may be bounded by the bandwidth of internet.
+                Please adjust the number of cpus in ray.init() accordingly.
         """
 
         @ray.remote(num_cpus=1)
