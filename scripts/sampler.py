@@ -1,6 +1,7 @@
 import click
 import subprocess
 from pathlib import Path
+from typing import Union
 
 import yaml
 import ray
@@ -67,6 +68,14 @@ def config_parser(workflow: str):
     "2 = status and brief trial results, "
     "3 = status and detailed trial results",
 )
+@click.option(
+    "--resume",
+    default=False,
+    type=click.Choice(
+        ["ERRORED_ONLY", "LOCAL", "REMOTE", "PROMPT", "AUTO", True, False],
+        case_sensitive=True,
+    ),
+)
 def main(
     tracking_uri: str,
     workflow: str,
@@ -75,6 +84,7 @@ def main(
     cpu: int,
     memory: float,
     verbose: int,
+    resume: Union[bool, str],
 ):
     tags = {
         k: subprocess.check_output(v.split()).decode("ascii").strip()
@@ -96,7 +106,7 @@ def main(
         resources_per_trial={"cpu": cpu},
         verbose=verbose,
         tags=tags,
-        # resume="ERRORED_ONLY",
+        resume=resume,
     )
 
 
