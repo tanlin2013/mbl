@@ -18,6 +18,8 @@ class Distributed:
 
         Returns:
 
+        Warnings:
+            The results are not order-preserving as the order in input `params`.
         """
 
         def watch(obj_ids: List[ray.ObjectRef]):
