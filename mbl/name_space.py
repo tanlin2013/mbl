@@ -24,3 +24,5 @@ class Columns:
     min_en: str = "min_en"
     relative_offset: str = "relative_offset"
     method: str = "method"
+    algorithm: str = "algorithm"
+    avg_order: str = "avg_order"
