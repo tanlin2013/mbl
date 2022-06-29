@@ -129,7 +129,7 @@ def mock_drop_duplicates(*args, **kwargs):
 
 
 def test_extract_gap(mock_raw_df, monkeypatch):
-    monkeypatch.setattr(mpd.DataFrame, "drop_duplicates", mock_drop_duplicates)
+    monkeypatch.setattr(pd.DataFrame, "drop_duplicates", mock_drop_duplicates)
     df = LevelStatistic.extract_gap(mock_raw_df)
     assert (df[Columns.energy_gap][~df[Columns.energy_gap].isnull()]).gt(0).all()
     assert (df[Columns.gap_ratio][~df[Columns.gap_ratio].isnull()]).between(0, 1).all()
