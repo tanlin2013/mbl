@@ -165,8 +165,10 @@ class LevelStatistic:
         df[Columns.gap_ratio] = df.groupby(Columns.seed)[Columns.energy_gap].transform(
             lambda x: cls.gap_ratio(x.to_numpy())
         )
-        df[Columns.level_id] = df.groupby(Columns.seed)[Columns.en].rank(
-            method="first", ascending=True
+        df[Columns.level_id] = (
+            df.groupby(Columns.seed)[Columns.en]
+            .rank(method="first", ascending=True)
+            .astype("int64")
         )
         return df.reset_index(drop=True)
 
