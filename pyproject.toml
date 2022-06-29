@@ -29,9 +29,9 @@ pandas-profiling = { version = "3.1.0", optional = true }
 
 [tool.poetry.extras]
 mlops = ["mlflow"]
-distributed = ["ray", "modin"]
+distributed = ["ray", "modin", "dask", "dask-jobqueue"]
 dashboard = ["streamlit", "orjson", "plotly", "pandas-profiling"]
-experimental = ["apache-airflow", "tensorboard", "dask", "dask-jobqueue"]
+experimental = ["apache-airflow", "tensorboard"]
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.1"
