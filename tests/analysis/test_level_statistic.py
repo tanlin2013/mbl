@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import awswrangler as wr
 import pandera as pa
-import modin.pandas as mpd
+import modin.pandas as mpd  # noqa: F401
 
 from mbl.name_space import Columns
 from mbl.schema import RandomHeisenbergEDSchema, RandomHeisenbergFoldingTSDRGSchema
@@ -139,7 +139,7 @@ def test_extract_gap(mock_raw_df, monkeypatch):
 
 
 def test_averaged_gap_ratio(mock_raw_df, monkeypatch):
-    monkeypatch.setattr(mpd.DataFrame, "drop_duplicates", mock_drop_duplicates)
+    monkeypatch.setattr(pd.DataFrame, "drop_duplicates", mock_drop_duplicates)
     df = LevelStatistic.extract_gap(mock_raw_df)
     r1 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.LEVEL_FIRST)
     r2 = LevelStatistic.averaged_gap_ratio(df, AverageOrder.DISORDER_FIRST)
@@ -147,7 +147,7 @@ def test_averaged_gap_ratio(mock_raw_df, monkeypatch):
 
 
 def test_fetch_gap_ratio(mock_raw_df, monkeypatch):
-    monkeypatch.setattr(mpd.DataFrame, "drop_duplicates", mock_drop_duplicates)
+    monkeypatch.setattr(pd.DataFrame, "drop_duplicates", mock_drop_duplicates)
     with patch.object(LevelStatistic, "athena_query", return_value=mock_raw_df):
         r1 = LevelStatistic.fetch_gap_ratio(
             n=8, h=10.0, chi=32, total_sz=0, order=AverageOrder.LEVEL_FIRST
