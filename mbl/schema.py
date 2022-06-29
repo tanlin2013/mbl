@@ -31,9 +31,16 @@ class RandomHeisenbergEDSchema(pa.SchemaModel):
     def close_to_integer(cls, series: Series[float]) -> Series[bool]:
         return Series(np.isclose(series, np.rint(series), atol=1e-12))
 
-    @pa.check(r"entropy$", regex=True)
-    def bound_in(cls, series: Series[float]) -> Series[bool]:
+    @pa.check(Columns.edge_entropy)
+    def bounded_in(cls, series: Series[float]) -> Series[bool]:
         return (-1e-12 < series) & (series < np.log(2) + 1e-12)
+
+    @pa.dataframe_check
+    def bipartite_entropy_bounded_in(cls, df: pd.DataFrame) -> Series[bool]:
+        (system_size,) = df[Columns.system_size].unique()
+        return (-1e-12 < df[Columns.bipartite_entropy]) & (
+            df[Columns.bipartite_entropy] < 0.5 * system_size * np.log(2) + 1e-12
+        )
 
 
 class RandomHeisenbergTSDRGSchema(pa.SchemaModel):
