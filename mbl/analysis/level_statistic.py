@@ -159,9 +159,9 @@ class LevelStatistic:
             subset=cls._get_subset(df.columns), keep="first", inplace=True,
         )
         df[Columns.energy_gap] = df.groupby(Columns.seed)[Columns.en].diff()
-        df[Columns.energy_gap][df[Columns.energy_gap] < 0] = np.nan
-        if df[Columns.energy_gap].isnull().values.any():
+        if (df[Columns.energy_gap] < 0).any():
             logger.warning("Encounter negative energy gap, set value to NaN.")
+            df[Columns.energy_gap][df[Columns.energy_gap] < 0] = np.nan
         df[Columns.gap_ratio] = df.groupby(Columns.seed)[Columns.energy_gap].transform(
             lambda x: cls.gap_ratio(x.to_numpy())
         )
