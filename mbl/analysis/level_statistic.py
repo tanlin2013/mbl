@@ -204,7 +204,10 @@ class LevelStatistic:
         h: float,
         chi: int = None,
         total_sz: int = None,
+        relative_offset: float = None,
         order: AverageOrder = AverageOrder.LEVEL_FIRST,
     ) -> float:
-        df = cls.athena_query(n=n, h=h, chi=chi, total_sz=total_sz)
+        df = cls.athena_query(
+            n=n, h=h, chi=chi, total_sz=total_sz, relative_offset=relative_offset
+        )
         return cls.averaged_gap_ratio(cls.extract_gap(df), order=order)
