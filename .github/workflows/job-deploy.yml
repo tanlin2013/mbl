@@ -11,6 +11,10 @@ on:
         options:
           - workstation
           - cluster
+      command:
+        description: 'Command passed to docker compose'
+        required: true
+        default: 'scripts/sampler.py'
       args:
         description: 'Arguments passed to job script'
         required: false
@@ -44,7 +48,7 @@ jobs:
           script: |
             cd projects/mbl &&
             docker compose run --service-ports -d mbl \
-            scripts/sampler.py \
+            ${{ github.event.inputs.command }} \
             ${{ github.event.inputs.args }}
 
       - name: Prune dangling images
