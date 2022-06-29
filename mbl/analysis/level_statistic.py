@@ -9,6 +9,7 @@ import pandas as pd
 import awswrangler as wr
 import modin.pandas as mpd
 
+from mbl import logger
 from mbl.name_space import Columns
 
 
@@ -158,8 +159,9 @@ class LevelStatistic:
             subset=cls._get_subset(df.columns), keep="first", inplace=True,
         )
         df[Columns.energy_gap] = df.groupby(Columns.seed)[Columns.en].diff()
-        # TODO: check why there are negative gpas?
         df[Columns.energy_gap][df[Columns.energy_gap] < 0] = np.nan
+        if df[Columns.energy_gap].isnull().values.any():
+            logger.warning("Encounter negative energy gap, set value to NaN.")
         df[Columns.gap_ratio] = df.groupby(Columns.seed)[Columns.energy_gap].transform(
             lambda x: cls.gap_ratio(x.to_numpy())
         )
