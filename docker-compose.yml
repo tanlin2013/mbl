@@ -4,7 +4,7 @@ services:
     pull_policy: always
     shm_size: 10.24gb
     ports:
-      - "8786:8265"
+      - "8265:8265"
     networks:
       - minio_frontend
     environment:
