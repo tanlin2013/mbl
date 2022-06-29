@@ -87,6 +87,7 @@ services:
         ports:
             - "8080:443"
             - "8888:444"
+            - "8265:445"
         networks:
             - frontend
         volumes:
