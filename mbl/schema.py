@@ -100,8 +100,9 @@ class RandomHeisenbergFoldingTSDRGSchema(pa.SchemaModel):
 
     @pa.dataframe_check
     def energy_bounds(cls, df: pd.DataFrame) -> Series[bool]:
-        if np.isnan(df[Columns.max_en]).all() and np.isnan(df[Columns.min_en]).all():
-            return np.isnan(df[Columns.max_en]) & np.isnan(df[Columns.min_en])
+        got_nan = np.isnan(df[Columns.max_en]) & np.isnan(df[Columns.min_en])
+        if got_nan.all():
+            return got_nan
         return Series(df[Columns.max_en] > df[Columns.min_en])
 
     @pa.dataframe_check
