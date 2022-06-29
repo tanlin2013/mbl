@@ -136,4 +136,5 @@ See [here](https://mlflow.org/docs/latest/cli.html#mlflow-gc) for more informati
 
 References
 ----------
-https://github.com/sachua/mlflow-docker-compose
+1. https://github.com/sachua/mlflow-docker-compose
+2. https://docs.min.io/docs/setup-nginx-proxy-with-minio.html
