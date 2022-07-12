@@ -6,6 +6,7 @@ import streamlit as st
 import pandas as pd
 from mbl.name_space import Columns
 from mbl.analysis.level_statistic import LevelStatistic, AverageOrder
+from mbl.workflow.etl import ETL
 
 from utils.data_loader import *
 from utils.painter import *
@@ -110,84 +111,63 @@ for k, v in zip(count(start=1), plot_pairs):
 
 st.markdown("#### 3.b. Scaling")
 
-if st.button("Click to start this time-consuming part"):
-    hs = [0.5, 3.0, 4.0, 6.0, 10.0]
-    fig = go.Figure()
-    for h in hs:
-        r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for n in options_n]
-        fig.add_trace(
-            go.Scatter(
-                x=options_n,
-                y=r,
-                name=f"h = {h}",
-                mode="lines+markers",
-                line={"dash": "dash"},
-                marker={"size": 10},
-            )
-        )
-    fig.update_layout(
-        title="Fig. Finite size scaling of averaged gap ratio",
-        xaxis_title="System size n",
-        yaxis_title="Averaged gap ratio r",
-    )
-    st.write(fig)
+r_df = fetch_gap_ratio(algorithm=ETL.Metadata.tsdrg_table)
+with st.expander("Click to view the table"):
+    st.dataframe(r_df)
+    buffer = io.StringIO()
+    r_df.info(buf=buffer)
+    st.text(buffer.getvalue())
 
-    fig = go.Figure()
-    for n in options_n:
-        r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for h in hs]
-        fig.add_trace(
-            go.Scatter(
-                x=hs,
-                y=r,
-                name=f"n = {n}",
-                mode="lines+markers",
-                line={"dash": "dash"},
-                marker={"size": 10},
-            )
-        )
-    fig.update_layout(
-        title="Fig. Finite size scaling of averaged gap ratio",
-        xaxis_title="Disorder strength h",
-        yaxis_title="Averaged gap ratio r",
-    )
-    st.write(fig)
+order = st.radio(
+    "Average order", (AverageOrder.LEVEL_FIRST.name, AverageOrder.DISORDER_FIRST.name)
+)
+st.caption(
+    "**Hint**: apart from the average order, "
+    "change also the parameters that are not part of the (x-y-z) axes on the sidebar."
+)
 
-    fig = go.Figure()
-    for chi in options_chi:
-        r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for n in options_n]
-        fig.add_trace(
-            go.Scatter(
-                x=options_n,
-                y=r,
-                name=f"chi = {chi}",
-                mode="lines+markers",
-                line={"dash": "dash"},
-                marker={"size": 10},
-            )
-        )
-    fig.update_layout(
-        title="Fig. Finite size scaling of averaged gap ratio",
-        xaxis_title="System size n",
-        yaxis_title="Averaged gap ratio r",
-    )
-    st.write(fig)
+scaling_plots = [
+    {
+        "query": [
+            f"({Columns.system_size} == {n})",
+            f"({Columns.total_sz} == {total_sz})",
+            f"({Columns.avg_order} == '{order}')",
+            f"({Columns.relative_offset} == {relative_offset})",
+        ],
+        "x": Columns.disorder,
+        "y": Columns.gap_ratio,
+        "z": Columns.truncation_dim,
+    },
+    {
+        "query": [
+            f"({Columns.disorder} == {h})",
+            f"({Columns.total_sz} == {total_sz})",
+            f"({Columns.avg_order} == '{order}')",
+            f"({Columns.relative_offset} == {relative_offset})",
+        ],
+        "x": Columns.system_size,
+        "y": Columns.gap_ratio,
+        "z": Columns.truncation_dim,
+    },
+    {
+        "query": [
+            f"({Columns.truncation_dim} == {chi})",
+            f"({Columns.total_sz} == {total_sz})",
+            f"({Columns.avg_order} == '{order}')",
+            f"({Columns.relative_offset} == {relative_offset})",
+        ],
+        "x": Columns.system_size,
+        "y": Columns.gap_ratio,
+        "z": Columns.disorder,
+    },
+]
 
-    fig = go.Figure()
-    for chi in options_chi:
-        r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for h in hs]
-        fig.add_trace(
-            go.Scatter(
-                x=hs,
-                y=r,
-                name=f"chi = {chi}",
-                mode="lines+markers",
-                line={"dash": "dash"},
-                marker={"size": 10},
-            )
-        )
-    fig.update_layout(
-        title="Fig. Finite size scaling of averaged gap ratio",
-        xaxis_title="Disorder strength h",
-        yaxis_title="Averaged gap ratio r",
+for plot in scaling_plots:
+    fig = px.line(
+        r_df.query(" & ".join(plot["query"])).sort_values(by=[plot["z"], plot["x"]]),
+        x=plot["x"],
+        y=plot["y"],
+        color=plot["z"],
+        symbol=plot["z"],
     )
-    st.write(fig)
+    st.plotly_chart(fig)

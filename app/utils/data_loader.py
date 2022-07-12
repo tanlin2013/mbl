@@ -1,16 +1,13 @@
-from typing import Dict
-
 import numpy as np
 import pandas as pd
 import awswrangler as wr
-import ray
 import streamlit as st
 import modin.pandas as mpd
 
 from mbl.name_space import Columns
-from mbl.distributed import Distributed
 from mbl.analysis.level_statistic import LevelStatistic
 from mbl.analysis.energy_bounds import EnergyBounds
+from mbl.workflow.etl import ETL
 
 
 @st.cache(persist=True, allow_output_mutation=True)
@@ -33,15 +30,15 @@ def load_data(
 
 
 @st.cache(persist=True)
-def fetch_gap_ratio(params: Dict) -> pd.DataFrame:
-    @ray.remote
-    def wrapper(kwargs):
-        return LevelStatistic.fetch_gap_ratio(**kwargs)
-
-    rs = Distributed.map_on_ray(wrapper, params)
-    for k, param in enumerate(params):
-        param[Columns.gap_ratio] = rs[k]
-    return pd.DataFrame(params)
+def fetch_gap_ratio(algorithm: str) -> pd.DataFrame:
+    return wr.athena.read_sql_query(
+        f"""
+        SELECT *
+        FROM {ETL.Metadata.gap_ratio_table}
+        WHERE ({Columns.algorithm} = '{algorithm}')
+        """,
+        database=ETL.Metadata.database,
+    )
 
 
 @st.cache(persist=True, allow_output_mutation=True)

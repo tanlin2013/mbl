@@ -35,27 +35,6 @@ def scatter_with_error_bar(df: pd.DataFrame, x: str, y: str, title: str):
     return fig
 
 
-# @st.cache(persist=True)
-# def scaling_line(xs, zs, x_label: str, z_label: str, title: str, xaxis_title: str):
-#     fig = go.Figure()
-#     for z in zs:
-#         r = [fetch_gap_ratio(n, h, chi=chi, total_sz=total_sz) for x in xs]
-#         fig.add_trace(
-#             go.Scatter(
-#                 x=xs,
-#                 y=r,
-#                 name=f"{z_label} = {z}",
-#                 mode="lines+markers",
-#                 line={"dash": "dash"},
-#                 marker={"size": 10},
-#             )
-#         )
-#     fig.update_layout(
-#         title=title, xaxis_title=xaxis_title, yaxis_title="Averaged gap ratio r"
-#     )
-#     return fig
-
-
 @st.cache(persist=True, allow_output_mutation=True)
 def energy_bounds_scaling(
     df: pd.DataFrame,

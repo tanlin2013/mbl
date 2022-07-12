@@ -102,33 +102,3 @@ for k, v in zip(count(start=1), plot_pairs):
 
 # Plot scaling relations
 st.subheader("Scaling")
-
-if st.button("Click to start this time-consuming part"):
-    params = [
-        {"n": n, "h": h, "total_sz": total_sz, "order": order}
-        for n, h, total_sz, order in product(
-            [8, 10, 12],
-            [0.5, 3.0, 4.0, 6.0, 10.0],
-            [None, 0, 1],
-            [AverageOrder.LEVEL_FIRST],
-        )
-    ]
-    gap_ratio_df = fetch_gap_ratio(params)
-
-    fig = px.scatter(
-        gap_ratio_df.query(f"abs({Columns.total_sz} - {total_sz}) < {1e-12})"),
-        x="n",
-        y=Columns.gap_ratio,
-        color="h",
-        title="Fig. Finite size scaling of averaged gap ratio",
-    )
-    st.write(fig)
-
-    fig = px.scatter(
-        gap_ratio_df.query(f"abs({Columns.total_sz} - {total_sz}) < {1e-12})"),
-        x="h",
-        y=Columns.gap_ratio,
-        color="n",
-        title="Fig. Finite size scaling of averaged gap ratio",
-    )
-    st.write(fig)

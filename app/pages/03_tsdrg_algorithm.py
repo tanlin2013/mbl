@@ -62,3 +62,12 @@ st.markdown(
     r"W_{\tilde{B}}."
 )
 st.markdown(r"5. Repeat steps 2–4 until the system is represented by one single block.")
+
+st.markdown("## 🍎 Pros and Cons")
+st.markdown("* Super cheap (quick and dirty)")
+st.markdown(r"* Can obtain \chi lowest eigenstates in once")
+st.markdown(
+    "* The accuracy of energies is not so good, but acceptable in turns of "
+    "the states"
+)
+st.markdown("* The structure in random binary tree is a bit hard to manipulate")

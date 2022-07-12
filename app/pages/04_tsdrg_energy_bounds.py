@@ -101,7 +101,6 @@ st.plotly_chart(
     )
 )
 
-# mini_df[Columns.variance][mini_df[Columns.variance] < 0] = 1e-24
 fig = energy_bounds_scaling(
     mini_df,
     y=Columns.variance,
@@ -116,3 +115,13 @@ st.caption(
     "**Note**: Nearly perpendicular line may appear due to the presence of "
     "small or even negative variance in log scale."
 )
+
+mask = df[Columns.seed].apply(lambda x: x in list(range(*seeds)))
+fig = px.line(
+    mini_df[mask],
+    x=Columns.truncation_dim,
+    y=Columns.edge_entropy,
+    color=Columns.seed,
+    symbol=Columns.seed,
+)
+st.plotly_chart(fig)
