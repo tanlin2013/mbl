@@ -26,6 +26,7 @@ Prerequisite
 For the purpose of better data wrangling and MLOps experience,
 this repo highly relies on [aws data wrangler](https://aws-data-wrangler.readthedocs.io/en/stable/)
 and [mlflow tracking](https://mlflow.org/docs/latest/tracking.html).
+For backend algorithms, one may refer to [tnpy](https://tanlin2013.github.io/tnpy/).
 
 Getting Started
 ---------------
