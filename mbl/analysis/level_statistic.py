@@ -1,8 +1,7 @@
-# fmt: off
 from enum import Enum
 from functools import wraps
 from dataclasses import dataclass
-from typing import List, Union, Callable, Dict, Sequence  # noqa: F401
+from typing import List, Union, Callable
 
 import numpy as np
 import pandas as pd
@@ -97,7 +96,8 @@ class LevelStatistic:
             df = func(cls, *args, **kwargs)
             return (
                 df.drop_duplicates(
-                    subset=cls._get_subset(df.columns), keep="first",
+                    subset=cls._get_subset(df.columns),
+                    keep="first",
                 )
                 .sort_values([Columns.seed, Columns.en], ascending=True)
                 .reset_index(drop=True)
@@ -177,7 +177,9 @@ class LevelStatistic:
 
         """
         df.drop_duplicates(
-            subset=cls._get_subset(df.columns), keep="first", inplace=True,
+            subset=cls._get_subset(df.columns),
+            keep="first",
+            inplace=True,
         )
         df[Columns.energy_gap] = df.groupby(Columns.seed)[Columns.en].diff()
         if (df[Columns.energy_gap] < 0).any():
