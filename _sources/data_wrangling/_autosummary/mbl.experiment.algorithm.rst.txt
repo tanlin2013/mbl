@@ -1,0 +1,31 @@
+﻿mbl.experiment.algorithm
+========================
+
+.. automodule:: mbl.experiment.algorithm
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+   
+      EDExperiment
+      Experiment1D
+      TSDRGExperiment
+   
+   
+
+   
+   
+   
+
+
+

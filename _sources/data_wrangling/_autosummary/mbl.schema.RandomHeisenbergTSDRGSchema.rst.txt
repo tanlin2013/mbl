@@ -1,0 +1,50 @@
+﻿mbl.schema.RandomHeisenbergTSDRGSchema
+======================================
+
+.. currentmodule:: mbl.schema
+
+.. autoclass:: RandomHeisenbergTSDRGSchema
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RandomHeisenbergTSDRGSchema.__init__
+      ~RandomHeisenbergTSDRGSchema.bounded_in
+      ~RandomHeisenbergTSDRGSchema.close_to_integer
+      ~RandomHeisenbergTSDRGSchema.example
+      ~RandomHeisenbergTSDRGSchema.monotonically_increasing
+      ~RandomHeisenbergTSDRGSchema.strategy
+      ~RandomHeisenbergTSDRGSchema.to_schema
+      ~RandomHeisenbergTSDRGSchema.to_yaml
+      ~RandomHeisenbergTSDRGSchema.validate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RandomHeisenbergTSDRGSchema.disorder
+      ~RandomHeisenbergTSDRGSchema.edge_entropy
+      ~RandomHeisenbergTSDRGSchema.en
+      ~RandomHeisenbergTSDRGSchema.level_id
+      ~RandomHeisenbergTSDRGSchema.method
+      ~RandomHeisenbergTSDRGSchema.offset
+      ~RandomHeisenbergTSDRGSchema.overall_const
+      ~RandomHeisenbergTSDRGSchema.penalty
+      ~RandomHeisenbergTSDRGSchema.s_target
+      ~RandomHeisenbergTSDRGSchema.seed
+      ~RandomHeisenbergTSDRGSchema.system_size
+      ~RandomHeisenbergTSDRGSchema.total_sz
+      ~RandomHeisenbergTSDRGSchema.trial_id
+      ~RandomHeisenbergTSDRGSchema.truncation_dim
+      ~RandomHeisenbergTSDRGSchema.variance
+   
+   

@@ -1,0 +1,718 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>2.2. mbl.workflow.grid_search &#8212; mbl 0.2.1 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="3. AWS Data Wrangler" href="../aws_data_wrangler.html" />
+    <link rel="prev" title="2.1. mbl.distributed" href="mbl.distributed.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">mbl 0.2.1 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Infrastructure
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../mlflow_dashboard.html">
+   1. MLflow Dashboard
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="mbl.analysis.run_searcher.html">
+     1.2.1. mbl.analysis.run_searcher
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../distributed_computing.html">
+   2. Distributed Computing
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="mbl.distributed.html">
+     2.1. mbl.distributed
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     2.2. mbl.workflow.grid_search
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../aws_data_wrangler.html">
+   3. AWS Data Wrangler
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Workflow
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../workflow/grid_search.html">
+   1. Grid Search
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../workflow/_autosummary/mbl.workflow.grid_search.html">
+     1.1. mbl.workflow.grid_search
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../workflow/etl.html">
+   2. Extract, Transform, and Load (ETL)
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../workflow/_autosummary/mbl.workflow.etl.html">
+     2.1. mbl.workflow.etl
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Data Wrangling
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../data_wrangling/name_space.html">
+   1. Name Space
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../data_wrangling/_autosummary/mbl.name_space.Columns.html">
+     1.1. mbl.name_space.Columns
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../data_wrangling/data_discovery.html">
+   2. Data Discovery
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../data_wrangling/_autosummary/mbl.experiment.algorithm.html">
+     2.1. mbl.experiment.algorithm
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../data_wrangling/_autosummary/mbl.experiment.random_heisenberg.html">
+     2.2. mbl.experiment.random_heisenberg
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../data_wrangling/data_validation.html">
+   3. Data Validation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../data_wrangling/_autosummary/mbl.schema.RandomHeisenbergEDSchema.html">
+     3.1. mbl.schema.RandomHeisenbergEDSchema
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../data_wrangling/_autosummary/mbl.schema.RandomHeisenbergTSDRGSchema.html">
+     3.2. mbl.schema.RandomHeisenbergTSDRGSchema
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../data_wrangling/_autosummary/mbl.schema.RandomHeisenbergFoldingTSDRGSchema.html">
+     3.3. mbl.schema.RandomHeisenbergFoldingTSDRGSchema
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../data_wrangling/data_cleaning.html">
+   4. Data Cleaning
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../data_wrangling/_autosummary/mbl.analysis.level_statistic.AverageOrder.html">
+     4.1. mbl.analysis.level_statistic.AverageOrder
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../data_wrangling/_autosummary/mbl.analysis.level_statistic.LevelStatistic.html">
+     4.2. mbl.analysis.level_statistic.LevelStatistic
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../data_wrangling/_autosummary/mbl.analysis.energy_bounds.EnergyBounds.html">
+     4.3. mbl.analysis.energy_bounds.EnergyBounds
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/infrastructure/_autosummary/mbl.workflow.grid_search.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>mbl.workflow.grid_search</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="module-mbl.workflow.grid_search">
+<span id="mbl-workflow-grid-search"></span><h1><span class="section-number">2.2. </span>mbl.workflow.grid_search<a class="headerlink" href="#module-mbl.workflow.grid_search" title="Permalink to this headline">#</a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../workflow/_autosummary/mbl.workflow.grid_search.html#mbl.workflow.grid_search.mlflow_tracker" title="mbl.workflow.grid_search.mlflow_tracker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mlflow_tracker</span></code></a>(profile_name)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../workflow/_autosummary/mbl.workflow.grid_search.html#mbl.workflow.grid_search.run" title="mbl.workflow.grid_search.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a>(tracking_uri, experiment_name, ...[, ...])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../workflow/_autosummary/mbl.workflow.grid_search.html#mbl.workflow.grid_search.GridSearch" title="mbl.workflow.grid_search.GridSearch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GridSearch</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../../workflow/_autosummary/mbl.workflow.grid_search.html#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch" title="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomHeisenbergFoldingTSDRGGridSearch</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../workflow/_autosummary/mbl.workflow.grid_search.html#mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch" title="mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomHeisenbergTSDRGGridSearch</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.run">
+<span class="sig-prename descclassname"><span class="pre">mbl.workflow.grid_search.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tracking_uri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experiment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources_per_trial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.run" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tracking_uri</strong> (<em>str</em>) – </p></li>
+<li><p><strong>experiment_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>experiment</strong> (<em>Callable</em>) – </p></li>
+<li><p><strong>configs</strong> (<em>Dict</em>) – </p></li>
+<li><p><strong>resources_per_trial</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – </p></li>
+<li><p><strong>token</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>tags</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.mlflow_tracker">
+<span class="sig-prename descclassname"><span class="pre">mbl.workflow.grid_search.</span></span><span class="sig-name descname"><span class="pre">mlflow_tracker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#mlflow_tracker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.mlflow_tracker" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>profile_name</strong> (<em>str</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.GridSearch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mbl.workflow.grid_search.</span></span><span class="sig-name descname"><span class="pre">GridSearch</span></span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#GridSearch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.GridSearch" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.GridSearch.experiment">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#GridSearch.experiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.GridSearch.experiment" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>Callable</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mbl.workflow.grid_search.</span></span><span class="sig-name descname"><span class="pre">RandomHeisenbergTSDRGGridSearch</span></span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#RandomHeisenbergTSDRGGridSearch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../workflow/_autosummary/mbl.workflow.grid_search.html#mbl.workflow.grid_search.GridSearch" title="mbl.workflow.grid_search.GridSearch"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbl.workflow.grid_search.GridSearch</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AthenaMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'s3://many-body-localization/random_heisenberg/tsdrg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'random_heisenberg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'tsdrg'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#RandomHeisenbergTSDRGGridSearch.AthenaMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>s3_path</strong> (<em>str</em>) – </p></li>
+<li><p><strong>database</strong> (<em>str</em>) – </p></li>
+<li><p><strong>table</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata.profile_name">
+<span class="sig-name descname"><span class="pre">profile_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'default'</span></em><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata.profile_name" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata.s3_path">
+<span class="sig-name descname"><span class="pre">s3_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'s3://many-body-localization/random_heisenberg/tsdrg'</span></em><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata.s3_path" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata.database">
+<span class="sig-name descname"><span class="pre">database</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'random_heisenberg'</span></em><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata.database" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata.table">
+<span class="sig-name descname"><span class="pre">table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tsdrg'</span></em><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata.table" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s3://many-body-localization/random_heisenberg/tsdrg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random_heisenberg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tsdrg'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.AthenaMetadata.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>s3_path</strong> (<em>str</em>) – </p></li>
+<li><p><strong>database</strong> (<em>str</em>) – </p></li>
+<li><p><strong>table</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.experiment">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#RandomHeisenbergTSDRGGridSearch.experiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.experiment" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>, </em><em>str</em><em>]</em><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.to_s3_parquet">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_s3_parquet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#RandomHeisenbergTSDRGGridSearch.to_s3_parquet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergTSDRGGridSearch.to_s3_parquet" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.core.frame.DataFrame</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mbl.workflow.grid_search.</span></span><span class="sig-name descname"><span class="pre">RandomHeisenbergFoldingTSDRGGridSearch</span></span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#RandomHeisenbergFoldingTSDRGGridSearch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../workflow/_autosummary/mbl.workflow.grid_search.html#mbl.workflow.grid_search.GridSearch" title="mbl.workflow.grid_search.GridSearch"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbl.workflow.grid_search.GridSearch</span></code></a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AthenaMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'s3://many-body-localization/random_heisenberg/folding_tsdrg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'random_heisenberg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'folding_tsdrg'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>s3_path</strong> (<em>str</em>) – </p></li>
+<li><p><strong>database</strong> (<em>str</em>) – </p></li>
+<li><p><strong>table</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata.profile_name">
+<span class="sig-name descname"><span class="pre">profile_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'default'</span></em><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata.profile_name" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata.s3_path">
+<span class="sig-name descname"><span class="pre">s3_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'s3://many-body-localization/random_heisenberg/folding_tsdrg'</span></em><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata.s3_path" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata.database">
+<span class="sig-name descname"><span class="pre">database</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'random_heisenberg'</span></em><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata.database" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata.table">
+<span class="sig-name descname"><span class="pre">table</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'folding_tsdrg'</span></em><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata.table" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">profile_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s3_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s3://many-body-localization/random_heisenberg/folding_tsdrg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random_heisenberg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'folding_tsdrg'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.AthenaMetadata.__init__" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>profile_name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>s3_path</strong> (<em>str</em>) – </p></li>
+<li><p><strong>database</strong> (<em>str</em>) – </p></li>
+<li><p><strong>table</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.experiment">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#RandomHeisenbergFoldingTSDRGGridSearch.experiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.experiment" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>, </em><em>str</em><em>]</em><em>]</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_energy_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.retrieve_energy_bounds" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>, </em><em>str</em><em>]</em><em>]</em>) – </p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><em>Dict</em>[str, <em>Union</em>[int, float, str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.to_s3_parquet">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_s3_parquet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/workflow/grid_search.html#RandomHeisenbergFoldingTSDRGGridSearch.to_s3_parquet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.workflow.grid_search.RandomHeisenbergFoldingTSDRGGridSearch.to_s3_parquet" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.core.frame.DataFrame</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="mbl.distributed.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">2.1. </span>mbl.distributed</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../aws_data_wrangler.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>AWS Data Wrangler</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Tan Tao-Lin<br/>
+  
+      &copy; Copyright 2022, Tan Tao-Lin.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

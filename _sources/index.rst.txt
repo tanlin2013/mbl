@@ -6,11 +6,37 @@
 Welcome to mbl's documentation!
 ===============================
 
+.. mdinclude:: ../../README.md
+
+API references
+--------------
+
 .. toctree::
+   :numbered:
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Infrastructure
 
+   infrastructure/mlflow_dashboard
+   infrastructure/distributed_computing
+   infrastructure/aws_data_wrangler
 
+.. toctree::
+   :numbered:
+   :maxdepth: 2
+   :caption: Workflow
+
+   workflow/grid_search
+   workflow/etl
+
+.. toctree::
+   :numbered:
+   :maxdepth: 2
+   :caption: Data Wrangling
+
+   data_wrangling/name_space
+   data_wrangling/data_discovery
+   data_wrangling/data_validation
+   data_wrangling/data_cleaning
 
 Indices and tables
 ==================

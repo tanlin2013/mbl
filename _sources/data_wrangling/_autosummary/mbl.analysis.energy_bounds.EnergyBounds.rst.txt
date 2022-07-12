@@ -1,0 +1,25 @@
+﻿mbl.analysis.energy\_bounds.EnergyBounds
+========================================
+
+.. currentmodule:: mbl.analysis.energy_bounds
+
+.. autoclass:: EnergyBounds
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~EnergyBounds.__init__
+      ~EnergyBounds.athena_query
+      ~EnergyBounds.query_elements
+      ~EnergyBounds.retrieve
+   
+   
+
+   
+   
+   

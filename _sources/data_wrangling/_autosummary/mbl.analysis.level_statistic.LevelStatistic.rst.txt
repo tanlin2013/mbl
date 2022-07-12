@@ -1,0 +1,39 @@
+﻿mbl.analysis.level\_statistic.LevelStatistic
+============================================
+
+.. currentmodule:: mbl.analysis.level_statistic
+
+.. autoclass:: LevelStatistic
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LevelStatistic.__init__
+      ~LevelStatistic.athena_query
+      ~LevelStatistic.averaged_gap_ratio
+      ~LevelStatistic.check_modin_df
+      ~LevelStatistic.df_cleaning
+      ~LevelStatistic.disorder_average
+      ~LevelStatistic.extract_gap
+      ~LevelStatistic.fetch_gap_ratio
+      ~LevelStatistic.gap_ratio
+      ~LevelStatistic.level_average
+      ~LevelStatistic.local_query
+      ~LevelStatistic.query_elements
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LevelStatistic.raw_df
+   
+   

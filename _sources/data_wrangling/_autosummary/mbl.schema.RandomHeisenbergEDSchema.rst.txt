@@ -1,0 +1,48 @@
+﻿mbl.schema.RandomHeisenbergEDSchema
+===================================
+
+.. currentmodule:: mbl.schema
+
+.. autoclass:: RandomHeisenbergEDSchema
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RandomHeisenbergEDSchema.__init__
+      ~RandomHeisenbergEDSchema.bipartite_entropy_bounded_in
+      ~RandomHeisenbergEDSchema.bounded_in
+      ~RandomHeisenbergEDSchema.close_to_integer
+      ~RandomHeisenbergEDSchema.example
+      ~RandomHeisenbergEDSchema.monotonically_increasing
+      ~RandomHeisenbergEDSchema.strategy
+      ~RandomHeisenbergEDSchema.to_schema
+      ~RandomHeisenbergEDSchema.to_yaml
+      ~RandomHeisenbergEDSchema.validate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RandomHeisenbergEDSchema.bipartite_entropy
+      ~RandomHeisenbergEDSchema.disorder
+      ~RandomHeisenbergEDSchema.edge_entropy
+      ~RandomHeisenbergEDSchema.en
+      ~RandomHeisenbergEDSchema.level_id
+      ~RandomHeisenbergEDSchema.offset
+      ~RandomHeisenbergEDSchema.penalty
+      ~RandomHeisenbergEDSchema.s_target
+      ~RandomHeisenbergEDSchema.seed
+      ~RandomHeisenbergEDSchema.system_size
+      ~RandomHeisenbergEDSchema.total_sz
+      ~RandomHeisenbergEDSchema.trial_id
+   
+   

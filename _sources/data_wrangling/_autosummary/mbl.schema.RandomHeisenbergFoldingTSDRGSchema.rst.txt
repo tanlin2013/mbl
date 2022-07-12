@@ -1,0 +1,55 @@
+﻿mbl.schema.RandomHeisenbergFoldingTSDRGSchema
+=============================================
+
+.. currentmodule:: mbl.schema
+
+.. autoclass:: RandomHeisenbergFoldingTSDRGSchema
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RandomHeisenbergFoldingTSDRGSchema.__init__
+      ~RandomHeisenbergFoldingTSDRGSchema.bounded_in
+      ~RandomHeisenbergFoldingTSDRGSchema.close_to_integer
+      ~RandomHeisenbergFoldingTSDRGSchema.energies_within
+      ~RandomHeisenbergFoldingTSDRGSchema.energy_bounds
+      ~RandomHeisenbergFoldingTSDRGSchema.example
+      ~RandomHeisenbergFoldingTSDRGSchema.monotonically_increasing
+      ~RandomHeisenbergFoldingTSDRGSchema.offset_within
+      ~RandomHeisenbergFoldingTSDRGSchema.strategy
+      ~RandomHeisenbergFoldingTSDRGSchema.to_schema
+      ~RandomHeisenbergFoldingTSDRGSchema.to_yaml
+      ~RandomHeisenbergFoldingTSDRGSchema.validate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RandomHeisenbergFoldingTSDRGSchema.disorder
+      ~RandomHeisenbergFoldingTSDRGSchema.edge_entropy
+      ~RandomHeisenbergFoldingTSDRGSchema.en
+      ~RandomHeisenbergFoldingTSDRGSchema.level_id
+      ~RandomHeisenbergFoldingTSDRGSchema.max_en
+      ~RandomHeisenbergFoldingTSDRGSchema.method
+      ~RandomHeisenbergFoldingTSDRGSchema.min_en
+      ~RandomHeisenbergFoldingTSDRGSchema.offset
+      ~RandomHeisenbergFoldingTSDRGSchema.penalty
+      ~RandomHeisenbergFoldingTSDRGSchema.relative_offset
+      ~RandomHeisenbergFoldingTSDRGSchema.s_target
+      ~RandomHeisenbergFoldingTSDRGSchema.seed
+      ~RandomHeisenbergFoldingTSDRGSchema.system_size
+      ~RandomHeisenbergFoldingTSDRGSchema.total_sz
+      ~RandomHeisenbergFoldingTSDRGSchema.trial_id
+      ~RandomHeisenbergFoldingTSDRGSchema.truncation_dim
+      ~RandomHeisenbergFoldingTSDRGSchema.variance
+   
+   

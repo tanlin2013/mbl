@@ -1,0 +1,50 @@
+﻿mbl.name\_space.Columns
+=======================
+
+.. currentmodule:: mbl.name_space
+
+.. autoclass:: Columns
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Columns.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Columns.algorithm
+      ~Columns.avg_order
+      ~Columns.bipartite_entropy
+      ~Columns.disorder
+      ~Columns.edge_entropy
+      ~Columns.en
+      ~Columns.energy_gap
+      ~Columns.gap_ratio
+      ~Columns.level_id
+      ~Columns.max_en
+      ~Columns.method
+      ~Columns.min_en
+      ~Columns.offset
+      ~Columns.overall_const
+      ~Columns.penalty
+      ~Columns.relative_offset
+      ~Columns.s_target
+      ~Columns.seed
+      ~Columns.system_size
+      ~Columns.total_sz
+      ~Columns.trial_id
+      ~Columns.truncation_dim
+      ~Columns.variance
+   
+   

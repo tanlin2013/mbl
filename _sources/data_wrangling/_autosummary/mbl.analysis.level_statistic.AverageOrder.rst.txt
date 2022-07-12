@@ -1,0 +1,23 @@
+﻿mbl.analysis.level\_statistic.AverageOrder
+==========================================
+
+.. currentmodule:: mbl.analysis.level_statistic
+
+.. autoclass:: AverageOrder
+
+   
+   .. automethod:: __init__
+
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AverageOrder.LEVEL_FIRST
+      ~AverageOrder.DISORDER_FIRST
+   
+   
