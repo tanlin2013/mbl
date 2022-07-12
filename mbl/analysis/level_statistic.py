@@ -181,7 +181,7 @@ class LevelStatistic:
         )
         df[Columns.energy_gap] = df.groupby(Columns.seed)[Columns.en].diff()
         if (df[Columns.energy_gap] < 0).any():
-            logger.warning("Encounter negative energy gap, set value to NaN.")
+            logger.critical("Encounter negative energy gap, set value to NaN.")
             df[Columns.energy_gap][df[Columns.energy_gap] < 0] = np.nan
         df[Columns.gap_ratio] = df.groupby(Columns.seed)[Columns.energy_gap].transform(
             lambda x: cls.gap_ratio(x.to_numpy())
