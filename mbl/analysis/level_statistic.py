@@ -26,6 +26,16 @@ class LevelStatistic:
         tsdrg_table: str = "folding_tsdrg"
 
     def __init__(self, raw_df: pd.DataFrame = None):
+        """
+
+        Args:
+            raw_df: The raw data. If provided, local queries will be executed.
+                Default None to extract data from AWS Athena.
+
+        Examples:
+            >>> agent = LevelStatistic()
+            >>> df = agent.fetch_gap_ratio()
+        """
         self._raw_df = raw_df
 
     @property
@@ -155,6 +165,17 @@ class LevelStatistic:
     @classmethod
     @check_modin_df
     def extract_gap(cls, df: mpd.DataFrame) -> mpd.DataFrame:
+        """
+        Feed in the DataFrame obtained through either
+        :func:`~LevelStatistic.local_query` or :func:`~LevelStatistic.athena_query`,
+        then compute the energy gap and the gap ratio parameter.
+
+        Args:
+            df:
+
+        Returns:
+
+        """
         df.drop_duplicates(
             subset=cls._get_subset(df.columns), keep="first", inplace=True,
         )
@@ -174,6 +195,23 @@ class LevelStatistic:
 
     @staticmethod
     def gap_ratio(gap: np.ndarray) -> np.ndarray:
+        r"""
+        For k-th disorder trial, the gap ratio is defined as
+
+        .. math::
+
+            r_n^{(k)} = \min\left(
+                \frac{\delta_n}{\delta_{n+1}}, \frac{\delta_{n+1}}{\delta_n}
+            \right),
+
+        where :math:`\delta_n = E_{n+1} - E_n` is the n-th energy gap.
+
+        Args:
+            gap:
+
+        Returns:
+
+        """
         assert np.isnan(gap[0])
         assert (gap[~np.isnan(gap)] > 0).all()
         next_gap = np.roll(gap, -1)
