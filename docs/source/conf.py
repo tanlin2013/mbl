@@ -63,6 +63,15 @@ autodoc_default_options = {
 }
 autodoc_typehints = "description"
 
+# Looks for objects in external projects
+intersphinx_mapping = {
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("https://pandas.pydata.org/docs/", None),
+    "awswrangler": ("https://aws-data-wrangler.readthedocs.io/en/stable/", None),
+    "ray": ("https://docs.ray.io/en/latest/", None),
+    "pandera": ("https://pandera.readthedocs.io/en/stable/", None),
+}
+
 # Mathjax
 # mathjax_path = (
 #     "https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
