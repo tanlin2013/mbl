@@ -389,14 +389,16 @@ title="Fullscreen mode"
         <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run an exact diagonalization experiment against the random Heisenberg model.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            n: System size.</span>
 <span class="sd">            h: Disorder strength.</span>
 <span class="sd">            seed: Random seed used to initialize the pseudo-random number generator.</span>
+<span class="sd">                If not given (None), current time will be used as the seed.</span>
 <span class="sd">            penalty: Penalty strength (or Lagrangian multiplier).</span>
 <span class="sd">            s_target: The targeting total Sz charge sector.</span>
-<span class="sd">            offset:</span>
+<span class="sd">            offset: An overall shift to the spectrum.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">seed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">())</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">seed</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
@@ -413,6 +415,21 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="RandomHeisenbergED.compute_df"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.random_heisenberg.html#mbl.experiment.random_heisenberg.RandomHeisenbergED.compute_df">[docs]</a>    <span class="nd">@check_output</span><span class="p">(</span><span class="n">RandomHeisenbergEDSchema</span><span class="o">.</span><span class="n">to_schema</span><span class="p">(),</span> <span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">compute_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Summarize the experiment with these physical quantities,</span>
+
+<span class="sd">        * Energies</span>
+<span class="sd">        * Total :math:`S^z`</span>
+<span class="sd">        * The edge entropy</span>
+<span class="sd">        * The bi-partition entropy</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dataframe containing input parameters and the physical quantities.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`pandera.errors.SchemaError`: If data is inconsistent with</span>
+<span class="sd">             the schema, :class:`mbl.schema.RandomHeisenbergEDSchema`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n_row</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">evecs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="p">{</span>
@@ -447,6 +464,22 @@ title="Fullscreen mode"
         <span class="n">overall_const</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
         <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment</span>
+<span class="sd">        against the random Heisenberg model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            n: System size.</span>
+<span class="sd">            h: Disorder strength.</span>
+<span class="sd">            chi: The bond dimensions.</span>
+<span class="sd">            seed: Random seed used to initialize the pseudo-random number generator.</span>
+<span class="sd">                If not given (None), current time will be used as the seed.</span>
+<span class="sd">            penalty: Penalty strength (or Lagrangian multiplier).</span>
+<span class="sd">            s_target: The targeting total Sz charge sector.</span>
+<span class="sd">            offset: An overall shift to the spectrum.</span>
+<span class="sd">            overall_const: An overall constant multiplied on the spectrum.</span>
+<span class="sd">            method: Keep the highest or lowest ``chi`` eigenvectors in projection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">seed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">())</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">seed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_overall_const</span> <span class="o">=</span> <span class="n">overall_const</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_method</span> <span class="o">=</span> <span class="n">method</span>
@@ -469,6 +502,21 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="RandomHeisenbergTSDRG.compute_df"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.random_heisenberg.html#mbl.experiment.random_heisenberg.RandomHeisenbergTSDRG.compute_df">[docs]</a>    <span class="nd">@check_output</span><span class="p">(</span><span class="n">RandomHeisenbergTSDRGSchema</span><span class="o">.</span><span class="n">to_schema</span><span class="p">(),</span> <span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">compute_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Summarize the experiment with these physical quantities,</span>
+
+<span class="sd">        * Energies</span>
+<span class="sd">        * Energy variance</span>
+<span class="sd">        * Total :math:`S^z`</span>
+<span class="sd">        * The edge entropy</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dataframe containing input parameters and the physical quantities.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`pandera.errors.SchemaError`: If data is inconsistent with</span>
+<span class="sd">             the schema, :class:`mbl.schema.RandomHeisenbergTSDRGSchema`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdrg</span><span class="o">.</span><span class="n">chi</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="p">{</span>
@@ -505,6 +553,32 @@ title="Fullscreen mode"
         <span class="n">relative_offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment</span>
+<span class="sd">        against the random Heisenberg model with spectral folding,</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            H \rightarrow (H - \epsilon)^2,</span>
+
+<span class="sd">        where :math:`\epsilon = E_{min} + (E_{max} - E_{min}) \times \epsilon_{rel}`</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            n: System size.</span>
+<span class="sd">            h: Disorder strength.</span>
+<span class="sd">            chi: The bond dimensions.</span>
+<span class="sd">            seed: Random seed used to initialize the pseudo-random number generator.</span>
+<span class="sd">                If not given (None), current time will be used as the seed.</span>
+<span class="sd">            penalty: Penalty strength (or Lagrangian multiplier).</span>
+<span class="sd">            s_target: The targeting total Sz charge sector.</span>
+<span class="sd">            max_en: An estimated upper bound of the spectrum.</span>
+<span class="sd">                Default :class:`~numpy.nan` for not performing spectral folding.</span>
+<span class="sd">            min_en: An estimated lower bound of the spectrum.</span>
+<span class="sd">                Default :class:`~numpy.nan` for not performing spectral folding.</span>
+<span class="sd">            relative_offset: A relative shift to the spectrum with respect to</span>
+<span class="sd">                ``max_en`` and ``min_en``.</span>
+<span class="sd">            method: Keep the highest or lowest ``chi`` eigenvectors in projection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">trial_id</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span>
         <span class="n">seed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">())</span> <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">seed</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">([</span><span class="n">max_en</span><span class="p">,</span> <span class="n">min_en</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
@@ -534,6 +608,21 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="RandomHeisenbergFoldingTSDRG.compute_df"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.random_heisenberg.html#mbl.experiment.random_heisenberg.RandomHeisenbergFoldingTSDRG.compute_df">[docs]</a>    <span class="nd">@check_output</span><span class="p">(</span><span class="n">RandomHeisenbergFoldingTSDRGSchema</span><span class="o">.</span><span class="n">to_schema</span><span class="p">(),</span> <span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">compute_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Summarize the experiment with these physical quantities,</span>
+
+<span class="sd">        * Energies</span>
+<span class="sd">        * Energy variance</span>
+<span class="sd">        * Total :math:`S^z`</span>
+<span class="sd">        * The edge entropy</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A dataframe containing input parameters and the physical quantities.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            :class:`pandera.errors.SchemaError`: If data is inconsistent with</span>
+<span class="sd">             the schema, :class:`mbl.schema.RandomHeisenbergFoldingTSDRGSchema`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">n_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdrg</span><span class="o">.</span><span class="n">chi</span>
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
             <span class="p">{</span>

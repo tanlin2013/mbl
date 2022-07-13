@@ -387,7 +387,19 @@ title="Fullscreen mode"
         <span class="n">tsdrg_table</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;folding_tsdrg&quot;</span></div>
 
 <div class="viewcode-block" id="LevelStatistic.__init__"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.analysis.level_statistic.LevelStatistic.html#mbl.analysis.level_statistic.LevelStatistic.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyze the level statistic on :math:`K`-rounds of experiment (disorder trials),</span>
+<span class="sd">        with each having :math:`N` levels,</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \langle r \rangle = \mathbb{E}_{k, n}\, r_n^{(k)},</span>
+
+<span class="sd">        where :math:`r` is the gap ratio parameter defined in :func:`~gap_ratio`.</span>
+
+<span class="sd">        Note that the order of taking average does matter when</span>
+<span class="sd">        constraining in certain charge sector only,</span>
+<span class="sd">        instead of the full spectrum.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            raw_df: The raw data. If provided, local queries will be executed.</span>

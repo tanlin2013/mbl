@@ -33,6 +33,8 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="2.2. mbl.experiment.random_heisenberg" href="mbl.experiment.random_heisenberg.html" />
@@ -418,13 +420,13 @@ title="Print to PDF"
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mbl.experiment.algorithm.EDExperiment" title="mbl.experiment.algorithm.EDExperiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EDExperiment</span></code></a>(model)</p></td>
-<td><p></p></td>
+<td><p>Run an exact diagonalization experiment against the <code class="docutils literal notranslate"><span class="pre">model</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#mbl.experiment.algorithm.Experiment1D" title="mbl.experiment.algorithm.Experiment1D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Experiment1D</span></code></a>(model)</p></td>
-<td><p></p></td>
+<td><p>Abstractive class for running algorithm against the 1-dimensional model.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mbl.experiment.algorithm.TSDRGExperiment" title="mbl.experiment.algorithm.TSDRGExperiment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TSDRGExperiment</span></code></a>(model, chi[, method])</p></td>
-<td><p></p></td>
+<td><p>Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment against the <code class="docutils literal notranslate"><span class="pre">model</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -432,24 +434,30 @@ title="Print to PDF"
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.Experiment1D">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mbl.experiment.algorithm.</span></span><span class="sig-name descname"><span class="pre">Experiment1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#Experiment1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.Experiment1D" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstractive class for running algorithm against the 1-dimensional model.
+One should inherit this class and implement
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">Experiment1D._mpo_run_method()</span></code> and <a class="reference internal" href="#mbl.experiment.algorithm.Experiment1D.compute_df" title="mbl.experiment.algorithm.Experiment1D.compute_df"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Experiment1D.compute_df()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> (<em>tnpy.model.model_1d.Model1D</em>) – </p>
+<dd class="field-odd"><p><strong>model</strong> (<a class="reference external" href="https://tanlin2013.github.io/tnpy/model/_autosummary/tnpy.model.Model1D.html#tnpy.model.Model1D" title="(in tnpy v0.1.1a3)"><em>tnpy.model.model_1d.Model1D</em></a>) – An 1d model.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.Experiment1D.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#Experiment1D.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.Experiment1D.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Abstractive class for running algorithm against the 1-dimensional model.
+One should inherit this class and implement
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">Experiment1D._mpo_run_method()</span></code> and <a class="reference internal" href="#mbl.experiment.algorithm.Experiment1D.compute_df" title="mbl.experiment.algorithm.Experiment1D.compute_df"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Experiment1D.compute_df()</span></code></a>.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> (<em>tnpy.model.model_1d.Model1D</em>) – </p>
+<dd class="field-odd"><p><strong>model</strong> (<a class="reference external" href="https://tanlin2013.github.io/tnpy/model/_autosummary/tnpy.model.Model1D.html#tnpy.model.Model1D" title="(in tnpy v0.1.1a3)"><em>tnpy.model.model_1d.Model1D</em></a>) – An 1d model.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.Experiment1D.model">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tnpy.model.model_1d.Model1D</span></em><a class="headerlink" href="#mbl.experiment.algorithm.Experiment1D.model" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://tanlin2013.github.io/tnpy/model/_autosummary/tnpy.model.Model1D.html#tnpy.model.Model1D" title="(in tnpy v0.1.1a3)"><span class="pre">tnpy.model.model_1d.Model1D</span></a></em><a class="headerlink" href="#mbl.experiment.algorithm.Experiment1D.model" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -457,7 +465,7 @@ title="Print to PDF"
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#Experiment1D.compute_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.Experiment1D.compute_df" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)">pandas.core.frame.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -468,45 +476,59 @@ title="Print to PDF"
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.EDExperiment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mbl.experiment.algorithm.</span></span><span class="sig-name descname"><span class="pre">EDExperiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#EDExperiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.EDExperiment" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mbl.experiment.algorithm.Experiment1D" title="mbl.experiment.algorithm.Experiment1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbl.experiment.algorithm.Experiment1D</span></code></a></p>
+<p>Run an exact diagonalization experiment against the <code class="docutils literal notranslate"><span class="pre">model</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> (<em>tnpy.model.model_1d.Model1D</em>) – </p>
+<dd class="field-odd"><p><strong>model</strong> (<a class="reference external" href="https://tanlin2013.github.io/tnpy/model/_autosummary/tnpy.model.Model1D.html#tnpy.model.Model1D" title="(in tnpy v0.1.1a3)"><em>tnpy.model.model_1d.Model1D</em></a>) – An 1d model.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.EDExperiment.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#EDExperiment.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.EDExperiment.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Run an exact diagonalization experiment against the <code class="docutils literal notranslate"><span class="pre">model</span></code>.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>model</strong> (<em>tnpy.model.model_1d.Model1D</em>) – </p>
+<dd class="field-odd"><p><strong>model</strong> (<a class="reference external" href="https://tanlin2013.github.io/tnpy/model/_autosummary/tnpy.model.Model1D.html#tnpy.model.Model1D" title="(in tnpy v0.1.1a3)"><em>tnpy.model.model_1d.Model1D</em></a>) – An 1d model.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.EDExperiment.ed">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tnpy.exact_diagonalization.ExactDiagonalization</span></em><a class="headerlink" href="#mbl.experiment.algorithm.EDExperiment.ed" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://tanlin2013.github.io/tnpy/algorithm/_autosummary/tnpy.exact_diagonalization.ExactDiagonalization.html#tnpy.exact_diagonalization.ExactDiagonalization" title="(in tnpy v0.1.1a3)"><span class="pre">tnpy.exact_diagonalization.ExactDiagonalization</span></a></em><a class="headerlink" href="#mbl.experiment.algorithm.EDExperiment.ed" title="Permalink to this definition">#</a></dt>
+<dd><p>A reference to the exact diagonalization solver.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.EDExperiment.evals">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#mbl.experiment.algorithm.EDExperiment.evals" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#mbl.experiment.algorithm.EDExperiment.evals" title="Permalink to this definition">#</a></dt>
+<dd><p>Eigenvalues in ascending order.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.EDExperiment.total_sz">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_sz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#mbl.experiment.algorithm.EDExperiment.total_sz" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_sz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#mbl.experiment.algorithm.EDExperiment.total_sz" title="Permalink to this definition">#</a></dt>
+<dd><p>The total <span class="math notranslate nohighlight">\(S^z\)</span> for every eigenvectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An array in the order same as the eigenvalues.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.EDExperiment.entanglement_entropy">
 <span class="sig-name descname"><span class="pre">entanglement_entropy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#EDExperiment.entanglement_entropy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.EDExperiment.entanglement_entropy" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Compute the von Neumann entanglement entropy for every eigenvectors.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>site</strong> (<em>int</em>) – </p>
+<dd class="field-odd"><p><strong>site</strong> (<em>int</em>) – The site to which the bi-partition is taken.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>numpy.ndarray</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An array in the order same as the eigenvalues.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -516,7 +538,7 @@ title="Print to PDF"
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#EDExperiment.compute_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.EDExperiment.compute_df" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)">pandas.core.frame.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -527,24 +549,28 @@ title="Print to PDF"
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.TSDRGExperiment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mbl.experiment.algorithm.</span></span><span class="sig-name descname"><span class="pre">TSDRGExperiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#TSDRGExperiment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#mbl.experiment.algorithm.Experiment1D" title="mbl.experiment.algorithm.Experiment1D"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbl.experiment.algorithm.Experiment1D</span></code></a></p>
+<p>Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment
+against the <code class="docutils literal notranslate"><span class="pre">model</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>tnpy.model.model_1d.Model1D</em>) – </p></li>
-<li><p><strong>chi</strong> (<em>int</em>) – </p></li>
-<li><p><strong>method</strong> (<em>str</em>) – </p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://tanlin2013.github.io/tnpy/model/_autosummary/tnpy.model.Model1D.html#tnpy.model.Model1D" title="(in tnpy v0.1.1a3)"><em>tnpy.model.model_1d.Model1D</em></a>) – An 1d model.</p></li>
+<li><p><strong>chi</strong> (<em>int</em>) – The bond dimensions.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Keep the highest or lowest <code class="docutils literal notranslate"><span class="pre">chi</span></code> eigenvectors in projection.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.TSDRGExperiment.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#TSDRGExperiment.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment
+against the <code class="docutils literal notranslate"><span class="pre">model</span></code>.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>model</strong> (<em>tnpy.model.model_1d.Model1D</em>) – </p></li>
-<li><p><strong>chi</strong> (<em>int</em>) – </p></li>
-<li><p><strong>method</strong> (<em>str</em>) – </p></li>
+<li><p><strong>model</strong> (<a class="reference external" href="https://tanlin2013.github.io/tnpy/model/_autosummary/tnpy.model.Model1D.html#tnpy.model.Model1D" title="(in tnpy v0.1.1a3)"><em>tnpy.model.model_1d.Model1D</em></a>) – An 1d model.</p></li>
+<li><p><strong>chi</strong> (<em>int</em>) – The bond dimensions.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Keep the highest or lowest <code class="docutils literal notranslate"><span class="pre">chi</span></code> eigenvectors in projection.</p></li>
 </ul>
 </dd>
 </dl>
@@ -552,35 +578,58 @@ title="Print to PDF"
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.TSDRGExperiment.tsdrg">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tsdrg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tnpy.tsdrg.TreeTensorNetworkSDRG</span></em><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.tsdrg" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tsdrg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://tanlin2013.github.io/tnpy/algorithm/_autosummary/tnpy.tsdrg.TreeTensorNetworkSDRG.html#tnpy.tsdrg.TreeTensorNetworkSDRG" title="(in tnpy v0.1.1a3)"><span class="pre">tnpy.tsdrg.TreeTensorNetworkSDRG</span></a></em><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.tsdrg" title="Permalink to this definition">#</a></dt>
+<dd><p>A reference to the TSDRG solver.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.TSDRGExperiment.evals">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.evals" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.evals" title="Permalink to this definition">#</a></dt>
+<dd><p>Eigenvalues in ascending order.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.TSDRGExperiment.variance">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">variance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.variance" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">variance</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.variance" title="Permalink to this definition">#</a></dt>
+<dd><p>Energy variance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An array in the order same as the eigenvalues.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.TSDRGExperiment.total_sz">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_sz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.total_sz" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_sz</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.total_sz" title="Permalink to this definition">#</a></dt>
+<dd><p>The total <span class="math notranslate nohighlight">\(S^z\)</span> for every eigenvectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An array in the order same as the eigenvalues.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.TSDRGExperiment.edge_entropy">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">edge_entropy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.edge_entropy" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">edge_entropy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a></em><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.edge_entropy" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the von Neumann entanglement entropy for every eigenvectors,
+where the bi-partition is taken on the 1st bond.
+That is, part <span class="math notranslate nohighlight">\(A\)</span> contains only one site,
+leaving the rest of sites in part <span class="math notranslate nohighlight">\(B\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>An array in the order same as the eigenvalues.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.TSDRGExperiment.compute_df">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#TSDRGExperiment.compute_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.compute_df" title="Permalink to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)">pandas.core.frame.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -588,11 +637,14 @@ title="Print to PDF"
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.algorithm.TSDRGExperiment.save_tree">
 <span class="sig-name descname"><span class="pre">save_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/algorithm.html#TSDRGExperiment.save_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.algorithm.TSDRGExperiment.save_tree" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Serialize the <a class="reference external" href="https://tanlin2013.github.io/tnpy/algorithm/_autosummary/tnpy.tsdrg.TensorTree.html#tnpy.tsdrg.TensorTree" title="(in tnpy v0.1.1a3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorTree</span></code></a> as a pickle binary.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – </p>
 </dd>
 </dl>
+<p class="rubric">References</p>
+<p><a class="reference external" href="https://docs.python.org/3/library/pickle.html">https://docs.python.org/3/library/pickle.html</a></p>
 </dd></dl>
 
 </dd></dl>

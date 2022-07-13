@@ -376,6 +376,14 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="Experiment1D"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.Experiment1D">[docs]</a><span class="k">class</span> <span class="nc">Experiment1D</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
 <div class="viewcode-block" id="Experiment1D.__init__"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.Experiment1D.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model1D</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Abstractive class for running algorithm against the 1-dimensional model.</span>
+<span class="sd">        One should inherit this class and implement</span>
+<span class="sd">        :meth:`Experiment1D._mpo_run_method` and :meth:`Experiment1D.compute_df`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: An 1d model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span></div>
 
     <span class="nd">@property</span>
@@ -393,12 +401,21 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="EDExperiment"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.EDExperiment">[docs]</a><span class="k">class</span> <span class="nc">EDExperiment</span><span class="p">(</span><span class="n">Experiment1D</span><span class="p">):</span>
 <div class="viewcode-block" id="EDExperiment.__init__"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.EDExperiment.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model1D</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run an exact diagonalization experiment against the ``model``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: An 1d model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ed</span> <span class="o">=</span> <span class="n">ExactDiagonalization</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mpo_run_method</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_evals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ed</span><span class="o">.</span><span class="n">evals</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">ed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExactDiagonalization</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A reference to the exact diagonalization solver.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ed</span>
 
     <span class="k">def</span> <span class="nf">_mpo_run_method</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MatrixProductOperator</span><span class="p">:</span>
@@ -406,14 +423,32 @@ title="Fullscreen mode"
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">evals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Eigenvalues in ascending order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evals</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">total_sz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The total :math:`S^z` for every eigenvectors.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An array in the order same as the eigenvalues.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">_total_sz</span> <span class="o">=</span> <span class="n">FullHamiltonian</span><span class="p">(</span><span class="n">TotalSz</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">mpo</span><span class="p">)</span><span class="o">.</span><span class="n">matrix</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">evecs</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">_total_sz</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">evecs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EDExperiment.entanglement_entropy"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.EDExperiment.entanglement_entropy">[docs]</a>    <span class="k">def</span> <span class="nf">entanglement_entropy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">site</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the von Neumann entanglement entropy for every eigenvectors.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            site: The site to which the bi-partition is taken.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An array in the order same as the eigenvalues.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">entanglement_entropy</span><span class="p">(</span><span class="n">site</span><span class="p">,</span> <span class="n">level_idx</span><span class="p">)</span>
@@ -428,6 +463,15 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="TSDRGExperiment"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.TSDRGExperiment">[docs]</a><span class="k">class</span> <span class="nc">TSDRGExperiment</span><span class="p">(</span><span class="n">Experiment1D</span><span class="p">):</span>
 <div class="viewcode-block" id="TSDRGExperiment.__init__"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.TSDRGExperiment.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model1D</span><span class="p">,</span> <span class="n">chi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment</span>
+<span class="sd">        against the ``model``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: An 1d model.</span>
+<span class="sd">            chi: The bond dimensions.</span>
+<span class="sd">            method: Keep the highest or lowest ``chi`` eigenvectors in projection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tsdrg</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="n">TreeTensorNetworkSDRG</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mpo_run_method</span><span class="p">(),</span> <span class="n">chi</span><span class="o">=</span><span class="n">chi</span><span class="p">),</span>
@@ -443,14 +487,26 @@ title="Fullscreen mode"
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">tsdrg</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeTensorNetworkSDRG</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A reference to the TSDRG solver.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tsdrg</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">evals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Eigenvalues in ascending order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evals</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_sorting_order</span><span class="p">]</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>  <span class="c1"># TODO: check off-diagonal warning</span>
+    <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Energy variance.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An array in the order same as the eigenvalues.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdrg</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">expectation_value</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mpo</span><span class="o">.</span><span class="n">square</span><span class="p">()</span>
         <span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tsdrg</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">expectation_value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mpo</span><span class="p">))</span>
@@ -458,12 +514,27 @@ title="Fullscreen mode"
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">total_sz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The total :math:`S^z` for every eigenvectors.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An array in the order same as the eigenvalues.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsdrg</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">expectation_value</span><span class="p">(</span><span class="n">TotalSz</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">mpo</span><span class="p">)[</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sorting_order</span>
         <span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">edge_entropy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the von Neumann entanglement entropy for every eigenvectors,</span>
+<span class="sd">        where the bi-partition is taken on the 1st bond.</span>
+<span class="sd">        That is, part :math:`A` contains only one site,</span>
+<span class="sd">        leaving the rest of sites in part :math:`B`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            An array in the order same as the eigenvalues.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="p">[</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tsdrg</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">entanglement_entropy</span><span class="p">(</span>
@@ -478,6 +549,15 @@ title="Fullscreen mode"
         <span class="k">return</span> <span class="bp">NotImplemented</span></div>
 
 <div class="viewcode-block" id="TSDRGExperiment.save_tree"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.TSDRGExperiment.save_tree">[docs]</a>    <span class="k">def</span> <span class="nf">save_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serialize the :class:`~tnpy.tsdrg.TensorTree` as a pickle binary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename:</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            `&lt;https://docs.python.org/3/library/pickle.html&gt;`_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">assert</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.p&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dumping tree into file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>

@@ -33,6 +33,8 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="3. Data Validation" href="../data_validation.html" />
@@ -418,18 +420,13 @@ title="Print to PDF"
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mbl.experiment.random_heisenberg.RandomHeisenbergED" title="mbl.experiment.random_heisenberg.RandomHeisenbergED"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomHeisenbergED</span></code></a>(n, h[, seed, penalty, ...])</p></td>
-<td><p><dl class="field-list simple">
-<dt class="field-odd">param n</dt>
-<dd class="field-odd"><p>System size.</p>
-</dd>
-</dl>
-</p></td>
+<td><p>Run an exact diagonalization experiment against the random Heisenberg model.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#mbl.experiment.random_heisenberg.RandomHeisenbergFoldingTSDRG" title="mbl.experiment.random_heisenberg.RandomHeisenbergFoldingTSDRG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomHeisenbergFoldingTSDRG</span></code></a>(n, h, chi[, ...])</p></td>
-<td><p></p></td>
+<td><p>Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment against the random Heisenberg model with spectral folding,</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#mbl.experiment.random_heisenberg.RandomHeisenbergTSDRG" title="mbl.experiment.random_heisenberg.RandomHeisenbergTSDRG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomHeisenbergTSDRG</span></code></a>(n, h, chi[, seed, ...])</p></td>
-<td><p></p></td>
+<td><p>Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment against the random Heisenberg model.</p></td>
 </tr>
 </tbody>
 </table>
@@ -437,30 +434,34 @@ title="Print to PDF"
 <dt class="sig sig-object py" id="mbl.experiment.random_heisenberg.RandomHeisenbergED">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mbl.experiment.random_heisenberg.</span></span><span class="sig-name descname"><span class="pre">RandomHeisenbergED</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/random_heisenberg.html#RandomHeisenbergED"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.random_heisenberg.RandomHeisenbergED" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mbl.experiment.algorithm.html#mbl.experiment.algorithm.EDExperiment" title="mbl.experiment.algorithm.EDExperiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbl.experiment.algorithm.EDExperiment</span></code></a></p>
+<p>Run an exact diagonalization experiment against the random Heisenberg model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<em>int</em>) – System size.</p></li>
 <li><p><strong>h</strong> (<em>float</em>) – Disorder strength.</p></li>
-<li><p><strong>seed</strong> (<em>int</em>) – Random seed used to initialize the pseudo-random number generator.</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – Random seed used to initialize the pseudo-random number generator.
+If not given (None), current time will be used as the seed.</p></li>
 <li><p><strong>penalty</strong> (<em>float</em>) – Penalty strength (or Lagrangian multiplier).</p></li>
 <li><p><strong>s_target</strong> (<em>int</em>) – The targeting total Sz charge sector.</p></li>
-<li><p><strong>offset</strong> (<em>float</em>) – </p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – An overall shift to the spectrum.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.random_heisenberg.RandomHeisenbergED.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/random_heisenberg.html#RandomHeisenbergED.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.random_heisenberg.RandomHeisenbergED.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Run an exact diagonalization experiment against the random Heisenberg model.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<em>int</em>) – System size.</p></li>
 <li><p><strong>h</strong> (<em>float</em>) – Disorder strength.</p></li>
-<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Random seed used to initialize the pseudo-random number generator.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Random seed used to initialize the pseudo-random number generator.
+If not given (None), current time will be used as the seed.</p></li>
 <li><p><strong>penalty</strong> (<em>float</em>) – Penalty strength (or Lagrangian multiplier).</p></li>
 <li><p><strong>s_target</strong> (<em>int</em>) – The targeting total Sz charge sector.</p></li>
-<li><p><strong>offset</strong> (<em>float</em>) – </p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – An overall shift to the spectrum.</p></li>
 </ul>
 </dd>
 </dl>
@@ -469,9 +470,23 @@ title="Print to PDF"
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.random_heisenberg.RandomHeisenbergED.compute_df">
 <span class="sig-name descname"><span class="pre">compute_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/random_heisenberg.html#RandomHeisenbergED.compute_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.random_heisenberg.RandomHeisenbergED.compute_df" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Summarize the experiment with these physical quantities,</p>
+<ul class="simple">
+<li><p>Energies</p></li>
+<li><p>Total <span class="math notranslate nohighlight">\(S^z\)</span></p></li>
+<li><p>The edge entropy</p></li>
+<li><p>The bi-partition entropy</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dataframe containing input parameters and the physical quantities.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://pandera.readthedocs.io/en/stable/reference/generated/pandera.errors.SchemaError.html#pandera.errors.SchemaError" title="(in pandera)"><strong>pandera.errors.SchemaError</strong></a> – If data is inconsistent with
+    the schema, <a class="reference internal" href="mbl.schema.RandomHeisenbergEDSchema.html#mbl.schema.RandomHeisenbergEDSchema" title="mbl.schema.RandomHeisenbergEDSchema"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbl.schema.RandomHeisenbergEDSchema</span></code></a>.</p>
+</dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)">pandas.core.frame.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -482,36 +497,42 @@ title="Print to PDF"
 <dt class="sig sig-object py" id="mbl.experiment.random_heisenberg.RandomHeisenbergTSDRG">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mbl.experiment.random_heisenberg.</span></span><span class="sig-name descname"><span class="pre">RandomHeisenbergTSDRG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/random_heisenberg.html#RandomHeisenbergTSDRG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.random_heisenberg.RandomHeisenbergTSDRG" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mbl.experiment.algorithm.html#mbl.experiment.algorithm.TSDRGExperiment" title="mbl.experiment.algorithm.TSDRGExperiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbl.experiment.algorithm.TSDRGExperiment</span></code></a></p>
+<p>Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment
+against the random Heisenberg model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n</strong> (<em>int</em>) – </p></li>
-<li><p><strong>h</strong> (<em>float</em>) – </p></li>
-<li><p><strong>chi</strong> (<em>int</em>) – </p></li>
-<li><p><strong>seed</strong> (<em>int</em>) – </p></li>
-<li><p><strong>penalty</strong> (<em>float</em>) – </p></li>
-<li><p><strong>s_target</strong> (<em>int</em>) – </p></li>
-<li><p><strong>offset</strong> (<em>float</em>) – </p></li>
-<li><p><strong>overall_const</strong> (<em>float</em>) – </p></li>
-<li><p><strong>method</strong> (<em>str</em>) – </p></li>
+<li><p><strong>n</strong> (<em>int</em>) – System size.</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Disorder strength.</p></li>
+<li><p><strong>chi</strong> (<em>int</em>) – The bond dimensions.</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – Random seed used to initialize the pseudo-random number generator.
+If not given (None), current time will be used as the seed.</p></li>
+<li><p><strong>penalty</strong> (<em>float</em>) – Penalty strength (or Lagrangian multiplier).</p></li>
+<li><p><strong>s_target</strong> (<em>int</em>) – The targeting total Sz charge sector.</p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – An overall shift to the spectrum.</p></li>
+<li><p><strong>overall_const</strong> (<em>float</em>) – An overall constant multiplied on the spectrum.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Keep the highest or lowest <code class="docutils literal notranslate"><span class="pre">chi</span></code> eigenvectors in projection.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.random_heisenberg.RandomHeisenbergTSDRG.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/random_heisenberg.html#RandomHeisenbergTSDRG.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.random_heisenberg.RandomHeisenbergTSDRG.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment
+against the random Heisenberg model.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n</strong> (<em>int</em>) – </p></li>
-<li><p><strong>h</strong> (<em>float</em>) – </p></li>
-<li><p><strong>chi</strong> (<em>int</em>) – </p></li>
-<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – </p></li>
-<li><p><strong>penalty</strong> (<em>float</em>) – </p></li>
-<li><p><strong>s_target</strong> (<em>int</em>) – </p></li>
-<li><p><strong>offset</strong> (<em>float</em>) – </p></li>
-<li><p><strong>overall_const</strong> (<em>float</em>) – </p></li>
-<li><p><strong>method</strong> (<em>str</em>) – </p></li>
+<li><p><strong>n</strong> (<em>int</em>) – System size.</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Disorder strength.</p></li>
+<li><p><strong>chi</strong> (<em>int</em>) – The bond dimensions.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Random seed used to initialize the pseudo-random number generator.
+If not given (None), current time will be used as the seed.</p></li>
+<li><p><strong>penalty</strong> (<em>float</em>) – Penalty strength (or Lagrangian multiplier).</p></li>
+<li><p><strong>s_target</strong> (<em>int</em>) – The targeting total Sz charge sector.</p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – An overall shift to the spectrum.</p></li>
+<li><p><strong>overall_const</strong> (<em>float</em>) – An overall constant multiplied on the spectrum.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Keep the highest or lowest <code class="docutils literal notranslate"><span class="pre">chi</span></code> eigenvectors in projection.</p></li>
 </ul>
 </dd>
 </dl>
@@ -520,9 +541,23 @@ title="Print to PDF"
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.random_heisenberg.RandomHeisenbergTSDRG.compute_df">
 <span class="sig-name descname"><span class="pre">compute_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/random_heisenberg.html#RandomHeisenbergTSDRG.compute_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.random_heisenberg.RandomHeisenbergTSDRG.compute_df" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Summarize the experiment with these physical quantities,</p>
+<ul class="simple">
+<li><p>Energies</p></li>
+<li><p>Energy variance</p></li>
+<li><p>Total <span class="math notranslate nohighlight">\(S^z\)</span></p></li>
+<li><p>The edge entropy</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dataframe containing input parameters and the physical quantities.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://pandera.readthedocs.io/en/stable/reference/generated/pandera.errors.SchemaError.html#pandera.errors.SchemaError" title="(in pandera)"><strong>pandera.errors.SchemaError</strong></a> – If data is inconsistent with
+    the schema, <a class="reference internal" href="mbl.schema.RandomHeisenbergTSDRGSchema.html#mbl.schema.RandomHeisenbergTSDRGSchema" title="mbl.schema.RandomHeisenbergTSDRGSchema"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbl.schema.RandomHeisenbergTSDRGSchema</span></code></a>.</p>
+</dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)">pandas.core.frame.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -533,38 +568,56 @@ title="Print to PDF"
 <dt class="sig sig-object py" id="mbl.experiment.random_heisenberg.RandomHeisenbergFoldingTSDRG">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mbl.experiment.random_heisenberg.</span></span><span class="sig-name descname"><span class="pre">RandomHeisenbergFoldingTSDRG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/random_heisenberg.html#RandomHeisenbergFoldingTSDRG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.random_heisenberg.RandomHeisenbergFoldingTSDRG" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mbl.experiment.algorithm.html#mbl.experiment.algorithm.TSDRGExperiment" title="mbl.experiment.algorithm.TSDRGExperiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbl.experiment.algorithm.TSDRGExperiment</span></code></a></p>
+<p>Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment
+against the random Heisenberg model with spectral folding,</p>
+<div class="math notranslate nohighlight">
+\[H \rightarrow (H - \epsilon)^2,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\epsilon = E_{min} + (E_{max} - E_{min}) \times \epsilon_{rel}\)</span></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n</strong> (<em>int</em>) – </p></li>
-<li><p><strong>h</strong> (<em>float</em>) – </p></li>
-<li><p><strong>chi</strong> (<em>int</em>) – </p></li>
-<li><p><strong>seed</strong> (<em>int</em>) – </p></li>
-<li><p><strong>penalty</strong> (<em>float</em>) – </p></li>
-<li><p><strong>s_target</strong> (<em>int</em>) – </p></li>
-<li><p><strong>max_en</strong> (<em>float</em>) – </p></li>
-<li><p><strong>min_en</strong> (<em>float</em>) – </p></li>
-<li><p><strong>relative_offset</strong> (<em>float</em>) – </p></li>
-<li><p><strong>method</strong> (<em>str</em>) – </p></li>
+<li><p><strong>n</strong> (<em>int</em>) – System size.</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Disorder strength.</p></li>
+<li><p><strong>chi</strong> (<em>int</em>) – The bond dimensions.</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – Random seed used to initialize the pseudo-random number generator.
+If not given (None), current time will be used as the seed.</p></li>
+<li><p><strong>penalty</strong> (<em>float</em>) – Penalty strength (or Lagrangian multiplier).</p></li>
+<li><p><strong>s_target</strong> (<em>int</em>) – The targeting total Sz charge sector.</p></li>
+<li><p><strong>max_en</strong> (<em>float</em>) – An estimated upper bound of the spectrum.
+Default <code class="xref py py-class docutils literal notranslate"><span class="pre">nan</span></code> for not performing spectral folding.</p></li>
+<li><p><strong>min_en</strong> (<em>float</em>) – An estimated lower bound of the spectrum.
+Default <code class="xref py py-class docutils literal notranslate"><span class="pre">nan</span></code> for not performing spectral folding.</p></li>
+<li><p><strong>relative_offset</strong> (<em>float</em>) – A relative shift to the spectrum with respect to
+<code class="docutils literal notranslate"><span class="pre">max_en</span></code> and <code class="docutils literal notranslate"><span class="pre">min_en</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Keep the highest or lowest <code class="docutils literal notranslate"><span class="pre">chi</span></code> eigenvectors in projection.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.random_heisenberg.RandomHeisenbergFoldingTSDRG.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/random_heisenberg.html#RandomHeisenbergFoldingTSDRG.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.random_heisenberg.RandomHeisenbergFoldingTSDRG.__init__" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment
+against the random Heisenberg model with spectral folding,</p>
+<div class="math notranslate nohighlight">
+\[H \rightarrow (H - \epsilon)^2,\]</div>
+<p>where <span class="math notranslate nohighlight">\(\epsilon = E_{min} + (E_{max} - E_{min}) \times \epsilon_{rel}\)</span></p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n</strong> (<em>int</em>) – </p></li>
-<li><p><strong>h</strong> (<em>float</em>) – </p></li>
-<li><p><strong>chi</strong> (<em>int</em>) – </p></li>
-<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – </p></li>
-<li><p><strong>penalty</strong> (<em>float</em>) – </p></li>
-<li><p><strong>s_target</strong> (<em>int</em>) – </p></li>
-<li><p><strong>max_en</strong> (<em>float</em>) – </p></li>
-<li><p><strong>min_en</strong> (<em>float</em>) – </p></li>
-<li><p><strong>relative_offset</strong> (<em>float</em>) – </p></li>
-<li><p><strong>method</strong> (<em>str</em>) – </p></li>
+<li><p><strong>n</strong> (<em>int</em>) – System size.</p></li>
+<li><p><strong>h</strong> (<em>float</em>) – Disorder strength.</p></li>
+<li><p><strong>chi</strong> (<em>int</em>) – The bond dimensions.</p></li>
+<li><p><strong>seed</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Random seed used to initialize the pseudo-random number generator.
+If not given (None), current time will be used as the seed.</p></li>
+<li><p><strong>penalty</strong> (<em>float</em>) – Penalty strength (or Lagrangian multiplier).</p></li>
+<li><p><strong>s_target</strong> (<em>int</em>) – The targeting total Sz charge sector.</p></li>
+<li><p><strong>max_en</strong> (<em>float</em>) – An estimated upper bound of the spectrum.
+Default <code class="xref py py-class docutils literal notranslate"><span class="pre">nan</span></code> for not performing spectral folding.</p></li>
+<li><p><strong>min_en</strong> (<em>float</em>) – An estimated lower bound of the spectrum.
+Default <code class="xref py py-class docutils literal notranslate"><span class="pre">nan</span></code> for not performing spectral folding.</p></li>
+<li><p><strong>relative_offset</strong> (<em>float</em>) – A relative shift to the spectrum with respect to
+<code class="docutils literal notranslate"><span class="pre">max_en</span></code> and <code class="docutils literal notranslate"><span class="pre">min_en</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Keep the highest or lowest <code class="docutils literal notranslate"><span class="pre">chi</span></code> eigenvectors in projection.</p></li>
 </ul>
 </dd>
 </dl>
@@ -573,9 +626,23 @@ title="Print to PDF"
 <dl class="py method">
 <dt class="sig sig-object py" id="mbl.experiment.random_heisenberg.RandomHeisenbergFoldingTSDRG.compute_df">
 <span class="sig-name descname"><span class="pre">compute_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/experiment/random_heisenberg.html#RandomHeisenbergFoldingTSDRG.compute_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.experiment.random_heisenberg.RandomHeisenbergFoldingTSDRG.compute_df" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Summarize the experiment with these physical quantities,</p>
+<ul class="simple">
+<li><p>Energies</p></li>
+<li><p>Energy variance</p></li>
+<li><p>Total <span class="math notranslate nohighlight">\(S^z\)</span></p></li>
+<li><p>The edge entropy</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dataframe containing input parameters and the physical quantities.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://pandera.readthedocs.io/en/stable/reference/generated/pandera.errors.SchemaError.html#pandera.errors.SchemaError" title="(in pandera)"><strong>pandera.errors.SchemaError</strong></a> – If data is inconsistent with
+    the schema, <a class="reference internal" href="mbl.schema.RandomHeisenbergFoldingTSDRGSchema.html#mbl.schema.RandomHeisenbergFoldingTSDRGSchema" title="mbl.schema.RandomHeisenbergFoldingTSDRGSchema"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbl.schema.RandomHeisenbergFoldingTSDRGSchema</span></code></a>.</p>
+</dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pandas.core.frame.DataFrame</p>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)">pandas.core.frame.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
