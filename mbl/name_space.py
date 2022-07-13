@@ -3,6 +3,10 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Columns:
+    """
+    Allowed column names for :class:`~pandas.DataFrame`.
+    """
+
     level_id: str = "level_id"
     en: str = "en"
     variance: str = "variance"

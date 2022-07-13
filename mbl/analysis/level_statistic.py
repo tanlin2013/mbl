@@ -25,7 +25,19 @@ class LevelStatistic:
         tsdrg_table: str = "folding_tsdrg"
 
     def __init__(self, raw_df: pd.DataFrame = None):
-        """
+        r"""
+        Analyze the level statistic on :math:`K`-rounds of experiment (disorder trials),
+        with each having :math:`N` levels,
+
+        .. math::
+
+            \langle r \rangle = \mathbb{E}_{k, n}\, r_n^{(k)},
+
+        where :math:`r` is the gap ratio parameter defined in :func:`~gap_ratio`.
+
+        Note that the order of taking average does matter when
+        constraining in certain charge sector only,
+        instead of the full spectrum.
 
         Args:
             raw_df: The raw data. If provided, local queries will be executed.
