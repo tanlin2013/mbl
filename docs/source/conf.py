@@ -70,6 +70,7 @@ intersphinx_mapping = {
     "awswrangler": ("https://aws-data-wrangler.readthedocs.io/en/stable/", None),
     "ray": ("https://docs.ray.io/en/latest/", None),
     "pandera": ("https://pandera.readthedocs.io/en/stable/", None),
+    "tnpy": ("https://tanlin2013.github.io/tnpy/", None),
 }
 
 # Mathjax
