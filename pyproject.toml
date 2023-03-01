@@ -6,28 +6,28 @@ authors = ["taolin <tanlin2013@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9, <3.11"
+python = ">=3.9.15, <3.11"
 tqdm = "^4.63.0"
 PyYAML = "^6.0"
-numpy = ">=1.18, <1.23"
-pandas = "1.4.2"
-pandera = "0.11.0"
-awswrangler = "2.15.1"
+numpy = "^1.22"
+pandas = "^1.5.0"
+pandera = "^0.13.4"
+awswrangler = "^2.20.0"
 tnpy = "0.1.1a3"
-scikit-learn = "^1.1.2"
-apache-airflow = { version = "2.3.2", optional = true }
-mlflow = { version = "1.26.1", optional = true }
-protobuf = { version = "3.20.1", optional = true }
-ray = { extras = ["default", "tune"], version = "1.12.1", optional = true }
+scikit-learn = "^1.2.1"
+apache-airflow = { version = "^2.5.1", optional = true }
+mlflow = { version = "^2.1.1", optional = true }
+protobuf = { version = "^3.12.0", optional = true }
+ray = { extras = ["default", "tune"], version = "^2.0.0", optional = true }
 #tensorboard = { version= "2.9.1", optional = true }
-dask = { version = "2022.6.0", optional = true }
-distributed = { version = "2022.6.0", optional = true }
-dask-jobqueue = { version = "0.7.3", optional = true }
-modin = { extras = ["ray"], version = "0.15.0", optional = true}
-streamlit = { version = "1.10.0", optional = true }
-orjson = { version = "3.7.2", optional = true }
-plotly = { version = "5.8.2", optional = true }
-pandas-profiling = { version = "3.1.0", optional = true }
+dask = { version = "^2023.2.1", optional = true }
+distributed = { version = "^2023.2.1", optional = true }
+dask-jobqueue = { version = "^0.8.1", optional = true }
+modin = { extras = ["ray"], version = "^0.17.0", optional = true}
+streamlit = { version = "^1.19.0", optional = true }
+orjson = { version = "^3.8.7", optional = true }
+plotly = { version = "^5.13.1", optional = true }
+pandas-profiling = { version = "^3.6.6", optional = true }
 
 [tool.poetry.extras]
 mlops = ["mlflow"]
@@ -43,6 +43,7 @@ pylint = "^2.13.7"
 jupyter = "^1.0.0"
 moto = "^3.1.12"
 pre-commit = "^2.19.0"
+cruft = "^2.12.0"
 
 [tool.poetry.group.docs]
 optional = true
