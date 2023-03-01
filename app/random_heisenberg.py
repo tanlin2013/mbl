@@ -26,7 +26,7 @@ st.markdown("* What is the role of disorder in MBL transition?")
 
 # Quantum avalanche theory
 st.header("2. Quantum avalanche theory")
-image = Image.open(Path.cwd() / "app/images/quantum_avalanche.png")
+image = Image.open(Path(__file__).parent / "images/quantum_avalanche.png")
 with st.container():
     st.image(
         image,
@@ -146,7 +146,7 @@ st.table(
 
 # Some known results
 st.header("6. Some known results")
-image = Image.open(Path.cwd() / "app/images/mbl-participation_coefficient.png")
+image = Image.open(Path(__file__).parent / "images/mbl-participation_coefficient.png")
 with st.container():
     st.image(
         image,

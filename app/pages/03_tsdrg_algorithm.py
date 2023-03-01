@@ -19,7 +19,7 @@ st.latex(r"\dim \tilde{H} \ll \dim H")
 
 st.markdown("#")
 st.markdown("#")
-image = Image.open(Path.cwd() / "app/images/tsdrg_measurements.png")
+image = Image.open(Path(__file__).parents[1] / "images/tsdrg_measurements.png")
 with st.container():
     st.image(
         image,
@@ -31,7 +31,7 @@ with st.container():
     )
 
 st.markdown("#")
-image = Image.open(Path.cwd() / "app/images/tsdrg_algorithm.png")
+image = Image.open(Path(__file__).parents[1] / "images/tsdrg_algorithm.png")
 with st.container():
     st.image(
         image,
