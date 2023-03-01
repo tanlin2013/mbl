@@ -156,6 +156,7 @@ class LevelStatistic:
             n, h, penalty, s_target, seed, chi, relative_offset, total_sz, tol
         )
         table = cls.Metadata.ed_table if chi is None else cls.Metadata.tsdrg_table
+        # TODO: maybe it will be better to select only the essential columns
         return wr.athena.read_sql_query(
             f"SELECT * FROM {table} WHERE {' AND '.join(query)}",
             database=cls.Metadata.database,

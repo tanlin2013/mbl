@@ -70,7 +70,9 @@ class EnergyBounds:
             database=cls.Metadata.database,
             boto3_session=boto3_session,
             **kwargs,
-        )[key][0]
+        )[key][
+            0
+        ]  # TODO: just get the one with maximum available chi
 
     @classmethod
     def retrieve(
