@@ -4,10 +4,12 @@ from importlib import metadata
 import awswrangler as wr
 from botocore.config import Config
 
-# -- Version ----------------------
+# -- Version -----------------------------------------------------------------
+
 __version__ = metadata.version(__name__)
 
-# -- Define logger and the associated formatter and handler -------------
+# -- Define logger and the associated formatter and handler ------------------
+
 formatter = logging.Formatter(
     "%(asctime)s [%(filename)s] %(levelname)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
 )

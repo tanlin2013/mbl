@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to mbl's documentation!
-===============================
+=============================================================
 
 .. mdinclude:: ../../README.md
 
