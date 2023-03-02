@@ -1,14 +1,25 @@
-# MBL: many-body localization
-[![docker-build](https://github.com/tanlin2013/mbl/actions/workflows/build.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/build.yml)
-[![tests](https://github.com/tanlin2013/mbl/actions/workflows/tests.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/tests.yml)
+# mbl: Many-body localization
+
+_________________
+
+[![PyPI version](https://badge.fury.io/py/mbl.svg)](http://badge.fury.io/py/mbl)
+[![Downloads](https://pepy.tech/badge/mbl)](https://pepy.tech/project/mbl)
+[![codecov](https://codecov.io/gh/tanlin2013/mbl/branch/main/graph/badge.svg)](https://codecov.io/gh/tanlin2013/mbl)
+[![Join the chat at https://gitter.im/tanlin2013/mbl](https://badges.gitter.im/tanlin2013/mbl.svg)](https://gitter.im/tanlin2013/mbl?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://timothycrosley.github.io/isort/)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://pypi.python.org/pypi/mbl/)
+[![Docker build](https://github.com/tanlin2013/mbl/actions/workflows/build.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/build.yml)
+[![Test Status](https://github.com/tanlin2013/mbl/actions/workflows/test.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/test.yml)
+[![Lint Status](https://github.com/tanlin2013/mbl/actions/workflows/lint.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/lint.yml)
 [![job-deploy](https://github.com/tanlin2013/mbl/actions/workflows/job-deploy.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/job-deploy.yml)
 [![service-deploy](https://github.com/tanlin2013/mbl/actions/workflows/service-deploy.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/service-deploy.yml)
 [![cdk-deploy](https://github.com/tanlin2013/mbl/actions/workflows/aws-cdk.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/aws-cdk.yml)
-[![CodeQL](https://github.com/tanlin2013/mbl/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/tanlin2013/mbl/actions/workflows/codeql-analysis.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+_________________
 
-[Dashboard](https://streamlit-mbl.herokuapp.com/) |
-[Documentation](https://tanlin2013.github.io/mbl/)
+[Documentation](https://tanlin2013.github.io/mbl/) |
+[Dashboard](https://streamlit-mbl.herokuapp.com/)
+_________________
 
 MBL is a research program aims at studying the delocalization transitions with numerical methods,
 currently with exact diagonalization (ED) and tree tensor strong-disorder RG (tSDRG).
