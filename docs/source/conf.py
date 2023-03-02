@@ -50,7 +50,47 @@ extensions = [
     "m2r2",
 ]
 
-# Turn on sphinx.ext.autosummary
+# Add any paths that contain templates here, relative to this directory.
+templates_path = ["_templates"]
+
+# The suffix(es) of source filenames.
+# You can specify multiple suffix as a list of string:
+source_suffix = [".rst", ".md"]
+
+# List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+# This pattern also affects html_static_path and html_extra_path.
+exclude_patterns = []
+
+# Allowing docstring in both __init__ and right under class definition
+autoclass_content = "both"
+
+# -- Options for HTML output -------------------------------------------------
+
+# The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
+html_theme = "sphinx_book_theme"
+
+# Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named "default.css" will overwrite the builtin "default.css".
+html_static_path = ["_static"]
+
+# Theme options are theme-specific and customize the look and feel of a theme
+# further.  For a list of options available for each theme, see the
+# documentation.
+html_theme_options = {
+    "github_url": "https://github.com/tanlin2013/mbl",
+    "repository_url": "https://github.com/tanlin2013/mbl",
+    "use_repository_button": True,
+    "use_issues_button": True,
+    "use_edit_page_button": True,
+    "path_to_docs": "docs",
+    "use_fullscreen_button": False,
+    "use_download_button": False,
+}
+
+# -- Options for Sphinx autosummary ------------------------------------------
 autodoc_default_options = {
     "members": True,
     "member-order": "bysource",
@@ -61,51 +101,28 @@ autodoc_default_options = {
     "show-inheritance": True,
 }
 autodoc_typehints = "description"
+# autosummary_generate = True
+# autosummary_imported_members = True
+# numpydoc_show_class_members = False
 
-# Looks for objects in external projects
+# -- Options for Mathjax -----------------------------------------------------
+# mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/node-main.min.js"
+# mathjax2_config = {
+#     "tex": {
+#         "inlineMath": [["$", "$"], ["\\(", "\\)"]],
+#         "displayMath": [["$$", "$$"]],
+#         "processEscapes": True,
+#     },
+#     "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}
+# }
+
+# -- Link with documentation of external projects ----------------------------
 intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
     "pandas": ("https://pandas.pydata.org/docs/", None),
     "awswrangler": ("https://aws-data-wrangler.readthedocs.io/en/stable/", None),
     "ray": ("https://docs.ray.io/en/latest/", None),
     "pandera": ("https://pandera.readthedocs.io/en/stable/", None),
     "tnpy": ("https://tanlin2013.github.io/tnpy/", None),
 }
-
-# Mathjax
-# mathjax_path = (
-#     "https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-# )
-# mathjax2_config = {
-#     "tex2jax": {
-#         "inlineMath": [["$", "$"], ["\\(", "\\)"]],
-#         "displayMath": [["$$", "$$"]],
-#         "processEscapes": True,
-#         "ignoreClass": "document",
-#         "processClass": "math|output_area",
-#     }
-# }
-
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ["_templates"]
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
-
-# Allowing docstring in both __init__ and right under class definition
-autoclass_content = "both"
-
-
-# -- Options for HTML output -------------------------------------------------
-
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = "sphinx_book_theme"
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
