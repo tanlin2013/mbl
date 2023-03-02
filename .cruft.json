@@ -1,0 +1,17 @@
+{
+  "template": "https://github.com/tanlin2013/cookiecutter-python/",
+  "commit": "e5b8e103da6de7df44600e33b4b4535bb285bb53",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "full_name": "Tan Tao-Lin",
+      "email": "tanlin2013@gmail.com",
+      "github_username": "tanlin2013",
+      "project_name": "mbl",
+      "description": "Many-body localization",
+      "version": "0.2.1",
+      "_template": "https://github.com/tanlin2013/cookiecutter-python/"
+    }
+  },
+  "directory": null
+}
