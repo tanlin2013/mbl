@@ -21,7 +21,7 @@
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -31,7 +31,7 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -324,59 +324,61 @@ title="Toggle navigation"
         
     </div>
     <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
+<div class="menu-dropdown menu-dropdown-repository-buttons">
   <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
   </button>
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/index.rst.txt"
+        <a href="https://github.com/tanlin2013/mbl"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
-title="Download source file"
+title="Source repository"
 >
   
 
 <span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
+  <i class="fab fa-github"></i>
   </span>
-<span class="headerbtn__text-container">.rst</span>
+<span class="headerbtn__text-container">repository</span>
 </a>
 
       </li>
       
       <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
+        <a href="https://github.com/tanlin2013/mbl/issues/new?title=Issue%20on%20page%20%2Findex.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
 data-placement="left"
-title="Print to PDF"
+title="Open an issue"
 >
   
 
 <span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
+  <i class="fas fa-lightbulb"></i>
   </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/tanlin2013/mbl/edit/master/docs/index.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
 
       </li>
       
@@ -412,7 +414,7 @@ title="Print to PDF"
  </li>
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#mbl-many-body-localization">
-   MBL: many-body localization
+   mbl: Many-body localization
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
@@ -426,8 +428,13 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#installation">
+     Installation
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#getting-started">
-     Getting Started
+     Getting started
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
@@ -480,7 +487,7 @@ title="Print to PDF"
  </li>
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#mbl-many-body-localization">
-   MBL: many-body localization
+   mbl: Many-body localization
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h2 nav-item toc-entry">
@@ -494,8 +501,13 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#installation">
+     Installation
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
     <a class="reference internal nav-link" href="#getting-started">
-     Getting Started
+     Getting started
     </a>
    </li>
    <li class="toc-h2 nav-item toc-entry">
@@ -536,16 +548,25 @@ title="Print to PDF"
 <h1>Welcome to mbl’s documentation!<a class="headerlink" href="#welcome-to-mbl-s-documentation" title="Permalink to this headline">#</a></h1>
 </section>
 <section id="mbl-many-body-localization">
-<h1>MBL: many-body localization<a class="headerlink" href="#mbl-many-body-localization" title="Permalink to this headline">#</a></h1>
-<a class="reference external image-reference" href="https://github.com/tanlin2013/mbl/actions/workflows/build.yml"><img alt="docker-build" src="https://github.com/tanlin2013/mbl/actions/workflows/build.yml/badge.svg" /></a>
-<a class="reference external image-reference" href="https://github.com/tanlin2013/mbl/actions/workflows/tests.yml"><img alt="tests" src="https://github.com/tanlin2013/mbl/actions/workflows/tests.yml/badge.svg" /></a>
+<h1>mbl: Many-body localization<a class="headerlink" href="#mbl-many-body-localization" title="Permalink to this headline">#</a></h1>
+<hr class="docutils" />
+<a class="reference external image-reference" href="http://badge.fury.io/py/mbl"><img alt="PyPI version" src="https://badge.fury.io/py/mbl.svg" /></a>
+<a class="reference external image-reference" href="https://pepy.tech/project/mbl"><img alt="Downloads" src="https://pepy.tech/badge/mbl" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/tanlin2013/mbl"><img alt="codecov" src="https://codecov.io/gh/tanlin2013/mbl/branch/main/graph/badge.svg" /></a>
+<a class="reference external image-reference" href="https://gitter.im/tanlin2013/mbl?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img alt="Join the chat at https://gitter.im/tanlin2013/mbl" src="https://badges.gitter.im/tanlin2013/mbl.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
+<a class="reference external image-reference" href="https://timothycrosley.github.io/isort/"><img alt="Imports: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&amp;labelColor=ef8336" /></a>
+<a class="reference external image-reference" href="https://pypi.python.org/pypi/mbl/"><img alt="License" src="https://img.shields.io/github/license/mashape/apistatus.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/tanlin2013/mbl/actions/workflows/build.yml"><img alt="Docker build" src="https://github.com/tanlin2013/mbl/actions/workflows/build.yml/badge.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/tanlin2013/mbl/actions/workflows/test.yml"><img alt="Test Status" src="https://github.com/tanlin2013/mbl/actions/workflows/test.yml/badge.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/tanlin2013/mbl/actions/workflows/lint.yml"><img alt="Lint Status" src="https://github.com/tanlin2013/mbl/actions/workflows/lint.yml/badge.svg" /></a>
 <a class="reference external image-reference" href="https://github.com/tanlin2013/mbl/actions/workflows/job-deploy.yml"><img alt="job-deploy" src="https://github.com/tanlin2013/mbl/actions/workflows/job-deploy.yml/badge.svg" /></a>
 <a class="reference external image-reference" href="https://github.com/tanlin2013/mbl/actions/workflows/service-deploy.yml"><img alt="service-deploy" src="https://github.com/tanlin2013/mbl/actions/workflows/service-deploy.yml/badge.svg" /></a>
 <a class="reference external image-reference" href="https://github.com/tanlin2013/mbl/actions/workflows/aws-cdk.yml"><img alt="cdk-deploy" src="https://github.com/tanlin2013/mbl/actions/workflows/aws-cdk.yml/badge.svg" /></a>
-<a class="reference external image-reference" href="https://github.com/tanlin2013/mbl/actions/workflows/codeql-analysis.yml"><img alt="CodeQL" src="https://github.com/tanlin2013/mbl/actions/workflows/codeql-analysis.yml/badge.svg" /></a>
-<a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
-<p><a class="reference external" href="https://streamlit-mbl.herokuapp.com/">Dashboard</a> |
-<a class="reference external" href="https://tanlin2013.github.io/mbl/">Documentation</a></p>
+<hr class="docutils" />
+<p><a class="reference external" href="https://tanlin2013.github.io/mbl/">Documentation</a> |
+<a class="reference external" href="https://streamlit-mbl.herokuapp.com/">Dashboard</a></p>
+<hr class="docutils" />
 <p>MBL is a research program aims at studying the delocalization transitions with numerical methods,
 currently with exact diagonalization (ED) and tree tensor strong-disorder RG (tSDRG).
 And the support of matrix product state (MPS) is under planning.</p>
@@ -566,10 +587,8 @@ this repo highly relies on <a class="reference external" href="https://aws-data-
 and <a class="reference external" href="https://mlflow.org/docs/latest/tracking.html">mlflow tracking</a>.
 For backend algorithms, one may refer to <a class="reference external" href="https://tanlin2013.github.io/tnpy/">tnpy</a>.</p>
 </section>
-<section id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">#</a></h2>
-<ol class="arabic">
-<li><p>Installation</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h2>
 <ul>
 <li><p>using Docker:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>docker run --rm -it -v $(PWD)/data:/home/data tanlin2013/mbl
@@ -582,20 +601,19 @@ For backend algorithms, one may refer to <a class="reference external" href="htt
 </div>
 </li>
 </ul>
-</li>
-<li><p>Run a sampler</p>
-<blockquote>
-<div><p>with parallel runs supported by <a class="reference external" href="https://ray.io/">ray</a>.</p>
-</div></blockquote>
+</section>
+<section id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">#</a></h2>
+<p>Run a sampler (with parallel runs supported by <a class="reference external" href="https://ray.io/">ray</a>).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scripts</span><span class="o">/</span><span class="n">sampler</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-</li>
-</ol>
 </section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">#</a></h2>
-<p>© Tan Tao-Lin, 2021. Licensed under a <a class="reference external" href="https://github.com/tanlin2013/mbl/master/LICENSE">MIT</a> license.</p>
+<p>© Tan Tao-Lin, 2021. Licensed under
+a <a class="reference external" href="https://github.com/tanlin2013/mbl/master/LICENSE">MIT</a>
+license.</p>
 </section>
 <section id="reference">
 <h2>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">#</a></h2>

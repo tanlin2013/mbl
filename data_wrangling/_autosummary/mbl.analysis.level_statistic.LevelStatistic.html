@@ -21,7 +21,7 @@
     href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -31,7 +31,7 @@
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -327,59 +327,61 @@ title="Toggle navigation"
         
     </div>
     <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
+<div class="menu-dropdown menu-dropdown-repository-buttons">
   <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
   </button>
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../../_sources/data_wrangling/_autosummary/mbl.analysis.level_statistic.LevelStatistic.rst.txt"
+        <a href="https://github.com/tanlin2013/mbl"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
-title="Download source file"
+title="Source repository"
 >
   
 
 <span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
+  <i class="fab fa-github"></i>
   </span>
-<span class="headerbtn__text-container">.rst</span>
+<span class="headerbtn__text-container">repository</span>
 </a>
 
       </li>
       
       <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
+        <a href="https://github.com/tanlin2013/mbl/issues/new?title=Issue%20on%20page%20%2Fdata_wrangling/_autosummary/mbl.analysis.level_statistic.LevelStatistic.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
 data-placement="left"
-title="Print to PDF"
+title="Open an issue"
 >
   
 
 <span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
+  <i class="fas fa-lightbulb"></i>
   </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/tanlin2013/mbl/edit/master/docs/data_wrangling/_autosummary/mbl.analysis.level_statistic.LevelStatistic.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
 
       </li>
       
@@ -426,7 +428,7 @@ constraining in certain charge sector only,
 instead of the full spectrum.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>raw_df</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)"><em>pandas.core.frame.DataFrame</em></a>) – The raw data. If provided, local queries will be executed.
+<dd class="field-odd"><p><strong>raw_df</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.core.frame.DataFrame</em></a>) – The raw data. If provided, local queries will be executed.
 Default None to extract data from AWS Athena.</p>
 </dd>
 </dl>
@@ -448,7 +450,7 @@ constraining in certain charge sector only,
 instead of the full spectrum.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>raw_df</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)"><em>pandas.core.frame.DataFrame</em></a><em>]</em>) – The raw data. If provided, local queries will be executed.
+<dd class="field-odd"><p><strong>raw_df</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.core.frame.DataFrame</em></a><em>]</em>) – The raw data. If provided, local queries will be executed.
 Default None to extract data from AWS Athena.</p>
 </dd>
 </dl>
@@ -579,7 +581,7 @@ constraining in certain charge sector only,
 instead of the full spectrum.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>raw_df</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)"><em>pandas.core.frame.DataFrame</em></a><em>]</em>) – The raw data. If provided, local queries will be executed.
+<dd class="field-odd"><p><strong>raw_df</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.core.frame.DataFrame</em></a><em>]</em>) – The raw data. If provided, local queries will be executed.
 Default None to extract data from AWS Athena.</p>
 </dd>
 </dl>
@@ -592,7 +594,7 @@ Default None to extract data from AWS Athena.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mbl.analysis.level_statistic.LevelStatistic.raw_df">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw_df</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)"><span class="pre">pandas.core.frame.DataFrame</span></a></em><a class="headerlink" href="#mbl.analysis.level_statistic.LevelStatistic.raw_df" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw_df</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><span class="pre">pandas.core.frame.DataFrame</span></a></em><a class="headerlink" href="#mbl.analysis.level_statistic.LevelStatistic.raw_df" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -646,7 +648,7 @@ Default None to extract data from AWS Athena.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)">pandas.core.frame.DataFrame</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)">pandas.core.frame.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -669,7 +671,7 @@ Default None to extract data from AWS Athena.</p>
 </ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)">pandas.core.frame.DataFrame</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)">pandas.core.frame.DataFrame</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -712,10 +714,10 @@ then compute the energy gap and the gap ratio parameter.</p>
 <p>where <span class="math notranslate nohighlight">\(\delta_n = E_{n+1} - E_n\)</span> is the n-th energy gap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>gap</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><em>numpy.ndarray</em></a>) – </p>
+<dd class="field-odd"><p><strong>gap</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)"><em>numpy.ndarray</em></a>) – </p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)">numpy.ndarray</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
 </dd>
 </dl>
 <p>Returns:</p>

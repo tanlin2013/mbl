@@ -20,7 +20,7 @@
     href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -30,7 +30,7 @@
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -322,19 +322,50 @@ title="Toggle navigation"
         
     </div>
     <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/tanlin2013/mbl"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
 >
   
 
 <span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
+  <i class="fab fa-github"></i>
   </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
 
-</button>
+      </li>
+      
+      <li>
+        <a href="https://github.com/tanlin2013/mbl/issues/new?title=Issue%20on%20page%20%2F_modules/mbl/analysis/energy_bounds.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
 
     </div>
 </div>
@@ -424,15 +455,17 @@ title="Fullscreen mode"
         <span class="n">key</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Columns</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">_en&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wr</span><span class="o">.</span><span class="n">athena</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">            SELECT </span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">Columns</span><span class="o">.</span><span class="n">en</span><span class="si">}</span><span class="s2">) as </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">            FROM </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">Metadata</span><span class="o">.</span><span class="n">table</span><span class="si">}</span><span class="s2"></span>
-<span class="s2">            WHERE </span><span class="si">{</span><span class="s1">&#39; AND &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">query_elements</span><span class="p">)</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">            SELECT </span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">Columns</span><span class="o">.</span><span class="n">en</span><span class="si">}</span><span class="s2">) as </span><span class="si">{</span><span class="n">key</span><span class="si">}</span>
+<span class="s2">            FROM </span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">Metadata</span><span class="o">.</span><span class="n">table</span><span class="si">}</span>
+<span class="s2">            WHERE </span><span class="si">{</span><span class="s1">&#39; AND &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">query_elements</span><span class="p">)</span><span class="si">}</span>
 <span class="s2">            LIMIT 1</span>
 <span class="s2">            &quot;&quot;&quot;</span><span class="p">,</span>
             <span class="n">database</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">Metadata</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
             <span class="n">boto3_session</span><span class="o">=</span><span class="n">boto3_session</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-        <span class="p">)[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+        <span class="p">)[</span><span class="n">key</span><span class="p">][</span>
+            <span class="mi">0</span>
+        <span class="p">]</span>  <span class="c1"># TODO: just get the one with maximum available chi</span></div>
 
 <div class="viewcode-block" id="EnergyBounds.retrieve"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.analysis.energy_bounds.EnergyBounds.html#mbl.analysis.energy_bounds.EnergyBounds.retrieve">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">retrieve</span><span class="p">(</span>
@@ -447,7 +480,7 @@ title="Fullscreen mode"
         <span class="n">boto3_session</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Naive setup for energy bounds without considering</span>
 <span class="sd">        the effect of truncation errors and finite-size effect.</span>
 

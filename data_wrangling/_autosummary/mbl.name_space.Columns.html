@@ -21,7 +21,7 @@
     href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -31,7 +31,7 @@
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -325,59 +325,61 @@ title="Toggle navigation"
         
     </div>
     <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-
-<div class="menu-dropdown menu-dropdown-download-buttons">
+<div class="menu-dropdown menu-dropdown-repository-buttons">
   <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Download this page">
-      <i class="fas fa-download"></i>
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
   </button>
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../../_sources/data_wrangling/_autosummary/mbl.name_space.Columns.rst.txt"
+        <a href="https://github.com/tanlin2013/mbl"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
-title="Download source file"
+title="Source repository"
 >
   
 
 <span class="headerbtn__icon-container">
-  <i class="fas fa-file"></i>
+  <i class="fab fa-github"></i>
   </span>
-<span class="headerbtn__text-container">.rst</span>
+<span class="headerbtn__text-container">repository</span>
 </a>
 
       </li>
       
       <li>
-        
-<button onclick="printPdf(this)"
-  class="headerbtn"
-  data-toggle="tooltip"
+        <a href="https://github.com/tanlin2013/mbl/issues/new?title=Issue%20on%20page%20%2Fdata_wrangling/_autosummary/mbl.name_space.Columns.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
 data-placement="left"
-title="Print to PDF"
+title="Open an issue"
 >
   
 
 <span class="headerbtn__icon-container">
-  <i class="fas fa-file-pdf"></i>
+  <i class="fas fa-lightbulb"></i>
   </span>
-<span class="headerbtn__text-container">.pdf</span>
-</button>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/tanlin2013/mbl/edit/master/docs/data_wrangling/_autosummary/mbl.name_space.Columns.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
 
       </li>
       
@@ -414,7 +416,7 @@ title="Print to PDF"
 <dt class="sig sig-object py" id="mbl.name_space.Columns">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mbl.name_space.</span></span><span class="sig-name descname"><span class="pre">Columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'level_id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'en'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'variance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_sz</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'total_sz'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_entropy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'edge_entropy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bipartite_entropy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bipartite_entropy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truncation_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'truncation_dim'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'system_size'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disorder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'disorder'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trial_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'trial_id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'seed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'penalty'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s_target'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'offset'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_gap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'energy_gap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gap_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gap_ratio'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'overall_const'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max_en'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_en</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'min_en'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'relative_offset'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'method'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'algorithm'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'avg_order'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/mbl/name_space.html#Columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mbl.name_space.Columns" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Allowed column names for <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.4.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a>.</p>
+<p>Allowed column names for <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

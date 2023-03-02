@@ -20,7 +20,7 @@
     href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -30,7 +30,7 @@
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -322,19 +322,50 @@ title="Toggle navigation"
         
     </div>
     <div class="header-article__right">
-<button onclick="toggleFullScreen()"
-  class="headerbtn"
-  data-toggle="tooltip"
-data-placement="bottom"
-title="Fullscreen mode"
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/tanlin2013/mbl"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
 >
   
 
 <span class="headerbtn__icon-container">
-  <i class="fas fa-expand"></i>
+  <i class="fab fa-github"></i>
   </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
 
-</button>
+      </li>
+      
+      <li>
+        <a href="https://github.com/tanlin2013/mbl/issues/new?title=Issue%20on%20page%20%2F_modules/mbl/experiment/algorithm.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
 
     </div>
 </div>
@@ -376,7 +407,7 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="Experiment1D"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.Experiment1D">[docs]</a><span class="k">class</span> <span class="nc">Experiment1D</span><span class="p">(</span><span class="n">abc</span><span class="o">.</span><span class="n">ABC</span><span class="p">):</span>
 <div class="viewcode-block" id="Experiment1D.__init__"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.Experiment1D.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model1D</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Abstractive class for running algorithm against the 1-dimensional model.</span>
 <span class="sd">        One should inherit this class and implement</span>
 <span class="sd">        :meth:`Experiment1D._mpo_run_method` and :meth:`Experiment1D.compute_df`.</span>
@@ -401,7 +432,7 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="EDExperiment"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.EDExperiment">[docs]</a><span class="k">class</span> <span class="nc">EDExperiment</span><span class="p">(</span><span class="n">Experiment1D</span><span class="p">):</span>
 <div class="viewcode-block" id="EDExperiment.__init__"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.EDExperiment.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model1D</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Run an exact diagonalization experiment against the ``model``.</span>
 
 <span class="sd">        Args:</span>
@@ -413,7 +444,7 @@ title="Fullscreen mode"
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">ed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExactDiagonalization</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A reference to the exact diagonalization solver.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ed</span>
@@ -423,14 +454,14 @@ title="Fullscreen mode"
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">evals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Eigenvalues in ascending order.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evals</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">total_sz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The total :math:`S^z` for every eigenvectors.</span>
 
 <span class="sd">        Returns:</span>
@@ -440,7 +471,7 @@ title="Fullscreen mode"
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">evecs</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">_total_sz</span> <span class="o">@</span> <span class="bp">self</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">evecs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EDExperiment.entanglement_entropy"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.EDExperiment.entanglement_entropy">[docs]</a>    <span class="k">def</span> <span class="nf">entanglement_entropy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">site</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the von Neumann entanglement entropy for every eigenvectors.</span>
 
 <span class="sd">        Args:</span>
@@ -463,7 +494,7 @@ title="Fullscreen mode"
 
 <div class="viewcode-block" id="TSDRGExperiment"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.TSDRGExperiment">[docs]</a><span class="k">class</span> <span class="nc">TSDRGExperiment</span><span class="p">(</span><span class="n">Experiment1D</span><span class="p">):</span>
 <div class="viewcode-block" id="TSDRGExperiment.__init__"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.TSDRGExperiment.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">Model1D</span><span class="p">,</span> <span class="n">chi</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;min&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Run a Tree Tensor Strong-Disorder Renormalization Group (tSDRG) experiment</span>
 <span class="sd">        against the ``model``.</span>
 
@@ -487,21 +518,21 @@ title="Fullscreen mode"
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">tsdrg</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TreeTensorNetworkSDRG</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A reference to the TSDRG solver.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tsdrg</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">evals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Eigenvalues in ascending order.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evals</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_sorting_order</span><span class="p">]</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">variance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Energy variance.</span>
 
 <span class="sd">        Returns:</span>
@@ -514,7 +545,7 @@ title="Fullscreen mode"
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">total_sz</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        The total :math:`S^z` for every eigenvectors.</span>
 
 <span class="sd">        Returns:</span>
@@ -526,7 +557,7 @@ title="Fullscreen mode"
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">edge_entropy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the von Neumann entanglement entropy for every eigenvectors,</span>
 <span class="sd">        where the bi-partition is taken on the 1st bond.</span>
 <span class="sd">        That is, part :math:`A` contains only one site,</span>
@@ -549,7 +580,7 @@ title="Fullscreen mode"
         <span class="k">return</span> <span class="bp">NotImplemented</span></div>
 
 <div class="viewcode-block" id="TSDRGExperiment.save_tree"><a class="viewcode-back" href="../../../data_wrangling/_autosummary/mbl.experiment.algorithm.html#mbl.experiment.algorithm.TSDRGExperiment.save_tree">[docs]</a>    <span class="k">def</span> <span class="nf">save_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Serialize the :class:`~tnpy.tsdrg.TensorTree` as a pickle binary.</span>
 
 <span class="sd">        Args:</span>
