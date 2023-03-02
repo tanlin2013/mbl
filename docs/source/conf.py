@@ -12,11 +12,10 @@
 #
 import os
 import sys
+from importlib import metadata
 
-sys.path.insert(0, os.path.abspath("."))
+sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("../../mbl"))
-from mbl import __version__  # noqa: E402
-
 
 # -- Project information -----------------------------------------------------
 
@@ -25,9 +24,9 @@ copyright = "2022, Tan Tao-Lin"
 author = "Tan Tao-Lin"
 
 # The short X.Y version
-version = __version__
+version = metadata.version("mbl")
 # The full version, including alpha/beta/rc tags
-release = __version__
+release = metadata.version("mbl")
 
 # -- General configuration ---------------------------------------------------
 
