@@ -39,31 +39,31 @@ this repo highly relies on [aws data wrangler](https://aws-data-wrangler.readthe
 and [mlflow tracking](https://mlflow.org/docs/latest/tracking.html).
 For backend algorithms, one may refer to [tnpy](https://tanlin2013.github.io/tnpy/).
 
-Getting Started
+
+Installation
+------------
+* using Docker:
+  ```
+  docker run --rm -it -v $(PWD)/data:/home/data tanlin2013/mbl
+  ```
+* using pip:
+  ```
+  pip install git+https://github.com/tanlin2013/mbl@main
+  ```
+
+Getting started
 ---------------
+Run a sampler (with parallel runs supported by [ray](https://ray.io/)).
 
-1. Installation
-
-    * using Docker:
-        ```
-        docker run --rm -it -v $(PWD)/data:/home/data tanlin2013/mbl
-        ```
-    * using pip:
-        ```
-        pip install git+https://github.com/tanlin2013/mbl@main
-        ```
-
-2. Run a sampler
-
-    with parallel runs supported by [ray](https://ray.io/).
-
-    ```
-    python scripts/sampler.py
-    ```
+```
+python scripts/sampler.py
+```
 
 License
 -------
-© Tan Tao-Lin, 2021. Licensed under a [MIT](https://github.com/tanlin2013/mbl/master/LICENSE) license.
+© Tan Tao-Lin, 2021. Licensed under
+a [MIT](https://github.com/tanlin2013/mbl/master/LICENSE)
+license.
 
 Reference
 -------
