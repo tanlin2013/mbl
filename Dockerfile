@@ -1,25 +1,28 @@
-FROM python:3.9
-MAINTAINER "TaoLin" <tanlin2013@gmail.com>
+FROM python:3.9.15 as python
+LABEL maintainer="TaoLin tanlin2013@gmail.com"
 
-ARG WORKDIR=/home/mbl
+ARG WORKDIR=/home
 ENV PYTHONPATH="${PYTHONPATH}:$WORKDIR" \
-    PATH="/root/.local/bin:$PATH"
+    PATH="/root/.local/bin:$PATH" \
+    PYTHONUNBUFFERED=true
 WORKDIR $WORKDIR
+
+
+FROM python as runtime
 COPY . $WORKDIR
+
+RUN apt update && \
+    apt-get install -y --no-install-recommends \
+    gfortran libblas-dev liblapack-dev graphviz
+
+RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.3.2 &&  \
+    poetry config virtualenvs.create false --local &&  \
+    poetry install -vvv --without dev --all-extras
+
+RUN apt-get -y clean &&  \
+    rm -rf /var/lib/apt/lists/*
 
 # Ray dashboard
 EXPOSE 8265
-
-# Install fortran, blas, lapack
-RUN apt update && \
-    apt-get install -y --no-install-recommends \
-      gfortran libblas-dev liblapack-dev graphviz
-RUN apt-get -y clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install required python packages
-RUN curl -sSL https://install.python-poetry.org | python3 - && \
-    poetry config virtualenvs.create false --local && \
-    poetry install --without dev --extras "mlops distributed"
 
 ENTRYPOINT /bin/bash
