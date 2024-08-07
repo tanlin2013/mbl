@@ -2,4 +2,4 @@ cryptography==37.0.2
 boto3==1.24.10
 mlflow==1.26.1
 pymysql==1.0.2
-protobuf==3.20.1
+protobuf==3.20.2
